@@ -38,6 +38,8 @@ class Settings(BaseSettings):
     evaluation_saturated_oldest_age_seconds: float = 30.0
     evaluation_critical_queue_depth: int = 500
     evaluation_service_rate_window_seconds: float = 30.0
+    # Opt-in interactive-path profiling (X-CF-Profile response header).
+    request_profiling_enabled: bool = False
 
 
 @lru_cache

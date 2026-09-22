@@ -460,26 +460,29 @@ class EvaluationRepository:
         Bounded bypass means this is not a guaranteed execution position.
         RUNNING evaluations are not included.
         """
-        row = await self.session.get(EvaluationRow, evaluation_id)
-        if row is None or row.status != "queued":
-            return None
-        ahead = (
-            await self.session.execute(
-                select(func.count())
-                .select_from(EvaluationRow)
-                .where(
-                    EvaluationRow.status == "queued",
-                    (
-                        (EvaluationRow.created_at < row.created_at)
-                        | (
-                            (EvaluationRow.created_at == row.created_at)
-                            & (EvaluationRow.id < row.id)
-                        )
-                    ),
+        from challengeforge.request_profile import timed_stage
+
+        with timed_stage("queue_position"):
+            row = await self.session.get(EvaluationRow, evaluation_id)
+            if row is None or row.status != "queued":
+                return None
+            ahead = (
+                await self.session.execute(
+                    select(func.count())
+                    .select_from(EvaluationRow)
+                    .where(
+                        EvaluationRow.status == "queued",
+                        (
+                            (EvaluationRow.created_at < row.created_at)
+                            | (
+                                (EvaluationRow.created_at == row.created_at)
+                                & (EvaluationRow.id < row.id)
+                            )
+                        ),
+                    )
                 )
-            )
-        ).scalar_one()
-        return int(ahead)
+            ).scalar_one()
+            return int(ahead)
 
     async def list_queued_fifo(self, *, limit: int = 100) -> list[Evaluation]:
         stmt = (

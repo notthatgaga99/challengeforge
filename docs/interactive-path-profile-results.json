@@ -1,0 +1,4657 @@
+{
+  "metadata": {
+    "started_at": "2026-09-22T10:35:40.176002+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 807.6
+    },
+    "python": "3.11.0",
+    "database_mode": "embedded PostgreSQL",
+    "target_request_rate": 40.0,
+    "duration_seconds": 6.0,
+    "concurrent_clients": 40,
+    "endpoints": [
+      "challenge_read",
+      "evaluation_status",
+      "participant_history",
+      "submission_creation"
+    ],
+    "datasets": [
+      "small",
+      "realistic",
+      "large"
+    ],
+    "worker_modes": [
+      0,
+      1
+    ],
+    "db_pool_size": 8,
+    "db_max_overflow": 4,
+    "request_profiling_enabled": true,
+    "safety": {
+      "max_duration_seconds": 15.0,
+      "max_requests": 800,
+      "max_clients": 80
+    },
+    "postgresql_version": "16.2",
+    "completed_at": "2026-09-22T10:40:52.370896+00:00"
+  },
+  "scenarios": {
+    "small_workers_0": {
+      "name": "small_workers_0",
+      "dataset": {
+        "challenge_id": "a721b01d-f69f-4498-af36-6dda6db9f26d",
+        "statuses": [
+          [
+            {
+              "X-User-Id": "a2b5e648-403f-577f-9840-7d0e48303747"
+            },
+            "e31fcdbe-3579-49ac-8bcb-4914cc592815"
+          ],
+          [
+            {
+              "X-User-Id": "f00af924-3012-586d-b2f9-e66f2c64e98e"
+            },
+            "a6b4f8ab-ab4e-44fb-833b-db98bfab991f"
+          ],
+          [
+            {
+              "X-User-Id": "e3a57cf5-f140-5435-b239-a8e583f46a4d"
+            },
+            "2fa98cc7-e23a-4bdd-823a-ad033ebbb7cd"
+          ],
+          [
+            {
+              "X-User-Id": "8fd12d4a-c489-546b-9356-bdaef0bbdc19"
+            },
+            "10ba3c66-072b-4f5e-85f0-1d4519de124e"
+          ],
+          [
+            {
+              "X-User-Id": "c9565782-f360-56a0-bf5d-949e91a26bac"
+            },
+            "b25ba86e-e6e6-481c-a412-3ac2a15edf0b"
+          ],
+          [
+            {
+              "X-User-Id": "0c76357e-c5b0-5b4e-b4a3-75d64e73e8c0"
+            },
+            "7287bc41-efb2-47f2-89c2-5e2d0a2103fd"
+          ],
+          [
+            {
+              "X-User-Id": "04eb673f-15ce-5774-a715-f27e2748ce7b"
+            },
+            "9ba14b3f-d1b3-404d-944c-31750b1980da"
+          ],
+          [
+            {
+              "X-User-Id": "c3f41eaf-c87f-51fe-909d-568387f832d8"
+            },
+            "033b3e76-d93a-4219-a718-b366a4e3ad7c"
+          ],
+          [
+            {
+              "X-User-Id": "303f5b66-8187-5fa3-a11b-536acae5149a"
+            },
+            "01789202-fd4a-430f-bfd2-fb9e453ea052"
+          ],
+          [
+            {
+              "X-User-Id": "6c4fcdde-a5a4-5b6d-bd58-c7fed66bccb6"
+            },
+            "b52c4549-62f0-45d8-af95-d96db5cb24e3"
+          ],
+          [
+            {
+              "X-User-Id": "ff2470b5-e121-5a37-b251-adba6b6bb59f"
+            },
+            "f2d2e395-881f-4459-9e9f-1b56c170fbb6"
+          ],
+          [
+            {
+              "X-User-Id": "21c866d9-876f-5f92-9b39-8594eac0dfd2"
+            },
+            "1380be56-e9ef-4813-89c2-53a5b2308981"
+          ]
+        ],
+        "probe_submission_id": "e31fcdbe-3579-49ac-8bcb-4914cc592815",
+        "dataset": "small",
+        "submission_count": 12,
+        "queued_extra": 0
+      },
+      "workers": 0,
+      "interactive": {
+        "attempted": 240,
+        "elapsed_seconds": 39.26,
+        "achieved_requests_per_second": 6.113,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 180,
+          "201": 60
+        },
+        "client_latency_ms": {
+          "mean_ms": 4566.16,
+          "p50_ms": 3725.91,
+          "p95_ms": 11782.12,
+          "p99_ms": 14152.66,
+          "max_ms": 23609.8
+        },
+        "server_total_ms": {
+          "mean_ms": 102.39,
+          "p50_ms": 43.03,
+          "p95_ms": 251.77,
+          "p99_ms": 1035.96,
+          "max_ms": 2511.89
+        },
+        "pool_wait_ms": {
+          "mean_ms": 25.92,
+          "p50_ms": 4.52,
+          "p95_ms": 12.56,
+          "p99_ms": 961.73,
+          "max_ms": 2320.92
+        },
+        "sql_ms": {
+          "mean_ms": 13.9,
+          "p50_ms": 11.03,
+          "p95_ms": 36.27,
+          "p99_ms": 51.21,
+          "max_ms": 80.62
+        },
+        "non_db_ms": {
+          "mean_ms": 62.57,
+          "p50_ms": 26.37,
+          "p95_ms": 199.07,
+          "p99_ms": 286.16,
+          "max_ms": 344.04
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 3706.34,
+              "p50_ms": 3280.68,
+              "p95_ms": 8798.67,
+              "p99_ms": 12532.44,
+              "max_ms": 12532.44
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 68.84,
+              "p50_ms": 44.61,
+              "p95_ms": 101.28,
+              "p99_ms": 1035.96,
+              "max_ms": 1035.96
+            },
+            "pool_wait_ms": {
+              "mean_ms": 21.97,
+              "p50_ms": 4.83,
+              "p95_ms": 18.24,
+              "p99_ms": 961.73,
+              "max_ms": 961.73
+            },
+            "sql_ms": {
+              "mean_ms": 15.1,
+              "p50_ms": 11.36,
+              "p95_ms": 36.27,
+              "p99_ms": 51.21,
+              "max_ms": 51.21
+            },
+            "non_db_ms": {
+              "mean_ms": 31.76,
+              "p50_ms": 27.52,
+              "p95_ms": 50.97,
+              "p99_ms": 69.89,
+              "max_ms": 69.89
+            },
+            "identity_ms": {
+              "mean_ms": 6.06,
+              "p50_ms": 4.75,
+              "p95_ms": 11.24,
+              "p99_ms": 24.65,
+              "max_ms": 24.65
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 4860.66,
+              "p50_ms": 3236.73,
+              "p95_ms": 12603.38,
+              "p99_ms": 23609.8,
+              "max_ms": 23609.8
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 39.23,
+              "p50_ms": 32.6,
+              "p95_ms": 68.34,
+              "p99_ms": 137.68,
+              "max_ms": 137.68
+            },
+            "pool_wait_ms": {
+              "mean_ms": 5.85,
+              "p50_ms": 4.66,
+              "p95_ms": 10.42,
+              "p99_ms": 24.14,
+              "max_ms": 24.14
+            },
+            "sql_ms": {
+              "mean_ms": 10.33,
+              "p50_ms": 7.27,
+              "p95_ms": 28.12,
+              "p99_ms": 43.62,
+              "max_ms": 43.62
+            },
+            "non_db_ms": {
+              "mean_ms": 23.05,
+              "p50_ms": 19.87,
+              "p95_ms": 41.37,
+              "p99_ms": 72.39,
+              "max_ms": 72.39
+            },
+            "identity_ms": {
+              "mean_ms": 6.14,
+              "p50_ms": 4.84,
+              "p95_ms": 15.7,
+              "p99_ms": 18.68,
+              "max_ms": 18.68
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 4927.88,
+              "p50_ms": 4161.67,
+              "p95_ms": 10195.05,
+              "p99_ms": 16228.7,
+              "max_ms": 16228.7
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 64.84,
+              "p50_ms": 30.78,
+              "p95_ms": 84.4,
+              "p99_ms": 1675.17,
+              "max_ms": 1675.17
+            },
+            "pool_wait_ms": {
+              "mean_ms": 32.29,
+              "p50_ms": 4.24,
+              "p95_ms": 14.09,
+              "p99_ms": 1607.05,
+              "max_ms": 1607.05
+            },
+            "sql_ms": {
+              "mean_ms": 9.92,
+              "p50_ms": 7.16,
+              "p95_ms": 25.78,
+              "p99_ms": 39.27,
+              "max_ms": 39.27
+            },
+            "non_db_ms": {
+              "mean_ms": 22.62,
+              "p50_ms": 18.72,
+              "p95_ms": 39.25,
+              "p99_ms": 66.29,
+              "max_ms": 66.29
+            },
+            "identity_ms": {
+              "mean_ms": 6.41,
+              "p50_ms": 5.0,
+              "p95_ms": 10.97,
+              "p99_ms": 37.36,
+              "max_ms": 37.36
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 4769.78,
+              "p50_ms": 3654.31,
+              "p95_ms": 12449.3,
+              "p99_ms": 14152.66,
+              "max_ms": 14152.66
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 236.68,
+              "p50_ms": 194.2,
+              "p95_ms": 312.56,
+              "p99_ms": 2511.89,
+              "max_ms": 2511.89
+            },
+            "pool_wait_ms": {
+              "mean_ms": 43.59,
+              "p50_ms": 4.43,
+              "p95_ms": 8.68,
+              "p99_ms": 2320.92,
+              "max_ms": 2320.92
+            },
+            "sql_ms": {
+              "mean_ms": 20.23,
+              "p50_ms": 16.58,
+              "p95_ms": 39.61,
+              "p99_ms": 80.62,
+              "max_ms": 80.62
+            },
+            "non_db_ms": {
+              "mean_ms": 172.86,
+              "p50_ms": 169.12,
+              "p95_ms": 254.32,
+              "p99_ms": 344.04,
+              "max_ms": 344.04
+            },
+            "identity_ms": {
+              "mean_ms": 5.69,
+              "p50_ms": 4.91,
+              "p95_ms": 9.88,
+              "p99_ms": 15.42,
+              "max_ms": 15.42
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 92.2,
+          "rss_mb": 93.47
+        },
+        "load_generator_note": "Client and server share one laptop process/host in this harness"
+      },
+      "queue_position_bench": {
+        "10": {
+          "jobs_ahead": 9,
+          "latency_ms": {
+            "mean_ms": 13.26,
+            "p50_ms": 12.0,
+            "p95_ms": 19.33,
+            "p99_ms": 19.33,
+            "max_ms": 19.33
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 25.85,
+                "Total Cost": 25.86,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.15,
+                    "Total Cost": 8.17,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '726d7f19-b7ce-4ad6-bc87-5e1edc0ad98c'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.15,
+                    "Total Cost": 8.17,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '726d7f19-b7ce-4ad6-bc87-5e1edc0ad98c'::uuid)"
+                  },
+                  {
+                    "Node Type": "Bitmap Heap Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 4.16,
+                    "Total Cost": 9.52,
+                    "Plan Rows": 1,
+                    "Plan Width": 0,
+                    "Recheck Cond": "(status = 'queued'::text)",
+                    "Filter": "((created_at < $0) OR ((created_at = $1) AND (id < '726d7f19-b7ce-4ad6-bc87-5e1edc0ad98c'::uuid)))",
+                    "Plans": [
+                      {
+                        "Node Type": "Bitmap Index Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Index Name": "ix_evaluations_status_created",
+                        "Startup Cost": 0.0,
+                        "Total Cost": 4.16,
+                        "Plan Rows": 2,
+                        "Plan Width": 0,
+                        "Index Cond": "(status = 'queued'::text)"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "100": {
+          "jobs_ahead": 99,
+          "latency_ms": {
+            "mean_ms": 12.77,
+            "p50_ms": 12.14,
+            "p95_ms": 17.85,
+            "p99_ms": 17.85,
+            "max_ms": 17.85
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 25.85,
+                "Total Cost": 25.86,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.15,
+                    "Total Cost": 8.17,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'fd994944-e837-4672-9862-989406a73cd6'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.15,
+                    "Total Cost": 8.17,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'fd994944-e837-4672-9862-989406a73cd6'::uuid)"
+                  },
+                  {
+                    "Node Type": "Bitmap Heap Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 4.16,
+                    "Total Cost": 9.52,
+                    "Plan Rows": 1,
+                    "Plan Width": 0,
+                    "Recheck Cond": "(status = 'queued'::text)",
+                    "Filter": "((created_at < $0) OR ((created_at = $1) AND (id < 'fd994944-e837-4672-9862-989406a73cd6'::uuid)))",
+                    "Plans": [
+                      {
+                        "Node Type": "Bitmap Index Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Index Name": "ix_evaluations_status_created",
+                        "Startup Cost": 0.0,
+                        "Total Cost": 4.16,
+                        "Plan Rows": 2,
+                        "Plan Width": 0,
+                        "Index Cond": "(status = 'queued'::text)"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "1000": {
+          "jobs_ahead": 999,
+          "latency_ms": {
+            "mean_ms": 19.74,
+            "p50_ms": 12.26,
+            "p95_ms": 51.24,
+            "p99_ms": 51.24,
+            "max_ms": 51.24
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 53.42,
+                "Total Cost": 53.43,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '65f4e576-1cbc-476b-ac1e-f339d8444128'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '65f4e576-1cbc-476b-ac1e-f339d8444128'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 36.0,
+                    "Plan Rows": 334,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < '65f4e576-1cbc-476b-ac1e-f339d8444128'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "small_workers_1": {
+      "name": "small_workers_1",
+      "dataset": {
+        "challenge_id": "340cf727-6642-4d26-bc06-5c0f874fcc33",
+        "statuses": [
+          [
+            {
+              "X-User-Id": "a2b5e648-403f-577f-9840-7d0e48303747"
+            },
+            "db78d262-8584-47c4-8d01-526d4ddd9760"
+          ],
+          [
+            {
+              "X-User-Id": "f00af924-3012-586d-b2f9-e66f2c64e98e"
+            },
+            "d491f3c2-9942-4d88-ae1c-bd3759bfce6d"
+          ],
+          [
+            {
+              "X-User-Id": "e3a57cf5-f140-5435-b239-a8e583f46a4d"
+            },
+            "4bd8eeae-ea73-414a-8113-8837a10464aa"
+          ],
+          [
+            {
+              "X-User-Id": "8fd12d4a-c489-546b-9356-bdaef0bbdc19"
+            },
+            "2d1d2fc4-8776-4dc3-aad3-7dff88b617f3"
+          ],
+          [
+            {
+              "X-User-Id": "c9565782-f360-56a0-bf5d-949e91a26bac"
+            },
+            "3c087385-1b45-4178-a3f3-ab0d5a6c9d54"
+          ],
+          [
+            {
+              "X-User-Id": "0c76357e-c5b0-5b4e-b4a3-75d64e73e8c0"
+            },
+            "53cff72a-c7fc-4fd1-b495-c9d2995f6fa2"
+          ],
+          [
+            {
+              "X-User-Id": "04eb673f-15ce-5774-a715-f27e2748ce7b"
+            },
+            "8571b901-475d-4038-b122-b009eec15674"
+          ],
+          [
+            {
+              "X-User-Id": "c3f41eaf-c87f-51fe-909d-568387f832d8"
+            },
+            "ca660349-c019-4dd6-9baf-940f27fea431"
+          ],
+          [
+            {
+              "X-User-Id": "303f5b66-8187-5fa3-a11b-536acae5149a"
+            },
+            "5ef521f6-c2af-4b82-be42-be0f3a4b4427"
+          ],
+          [
+            {
+              "X-User-Id": "6c4fcdde-a5a4-5b6d-bd58-c7fed66bccb6"
+            },
+            "bbd2afde-b065-405e-8a36-d6202db7a3ad"
+          ],
+          [
+            {
+              "X-User-Id": "ff2470b5-e121-5a37-b251-adba6b6bb59f"
+            },
+            "f5429ab3-285c-49fe-9351-0af3d5c99aed"
+          ],
+          [
+            {
+              "X-User-Id": "21c866d9-876f-5f92-9b39-8594eac0dfd2"
+            },
+            "dd8bc554-84c2-4634-90bf-8248b9ac36a3"
+          ]
+        ],
+        "probe_submission_id": "db78d262-8584-47c4-8d01-526d4ddd9760",
+        "dataset": "small",
+        "submission_count": 12,
+        "queued_extra": 0
+      },
+      "workers": 1,
+      "interactive": {
+        "attempted": 240,
+        "elapsed_seconds": 33.047,
+        "achieved_requests_per_second": 7.262,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 180,
+          "201": 60
+        },
+        "client_latency_ms": {
+          "mean_ms": 3639.03,
+          "p50_ms": 2784.74,
+          "p95_ms": 9597.7,
+          "p99_ms": 12241.81,
+          "max_ms": 14405.18
+        },
+        "server_total_ms": {
+          "mean_ms": 71.26,
+          "p50_ms": 37.36,
+          "p95_ms": 215.73,
+          "p99_ms": 255.48,
+          "max_ms": 259.6
+        },
+        "pool_wait_ms": {
+          "mean_ms": 4.81,
+          "p50_ms": 4.4,
+          "p95_ms": 7.32,
+          "p99_ms": 12.09,
+          "max_ms": 19.81
+        },
+        "sql_ms": {
+          "mean_ms": 10.86,
+          "p50_ms": 9.57,
+          "p95_ms": 19.7,
+          "p99_ms": 39.64,
+          "max_ms": 41.47
+        },
+        "non_db_ms": {
+          "mean_ms": 55.59,
+          "p50_ms": 23.8,
+          "p95_ms": 195.31,
+          "p99_ms": 216.28,
+          "max_ms": 244.08
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 3603.53,
+              "p50_ms": 2681.86,
+              "p95_ms": 9597.7,
+              "p99_ms": 10732.88,
+              "max_ms": 10732.88
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 42.26,
+              "p50_ms": 39.97,
+              "p95_ms": 50.44,
+              "p99_ms": 82.87,
+              "max_ms": 82.87
+            },
+            "pool_wait_ms": {
+              "mean_ms": 4.5,
+              "p50_ms": 4.27,
+              "p95_ms": 6.1,
+              "p99_ms": 8.7,
+              "max_ms": 8.7
+            },
+            "sql_ms": {
+              "mean_ms": 11.61,
+              "p50_ms": 10.48,
+              "p95_ms": 15.21,
+              "p99_ms": 33.33,
+              "max_ms": 33.33
+            },
+            "non_db_ms": {
+              "mean_ms": 26.15,
+              "p50_ms": 25.22,
+              "p95_ms": 33.09,
+              "p99_ms": 41.11,
+              "max_ms": 41.11
+            },
+            "identity_ms": {
+              "mean_ms": 5.08,
+              "p50_ms": 4.72,
+              "p95_ms": 6.81,
+              "p99_ms": 10.34,
+              "max_ms": 10.34
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 3362.67,
+              "p50_ms": 2148.54,
+              "p95_ms": 10558.82,
+              "p99_ms": 14405.18,
+              "max_ms": 14405.18
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 32.6,
+              "p50_ms": 30.12,
+              "p95_ms": 46.18,
+              "p99_ms": 68.66,
+              "max_ms": 68.66
+            },
+            "pool_wait_ms": {
+              "mean_ms": 4.89,
+              "p50_ms": 4.32,
+              "p95_ms": 7.33,
+              "p99_ms": 15.01,
+              "max_ms": 15.01
+            },
+            "sql_ms": {
+              "mean_ms": 7.24,
+              "p50_ms": 6.63,
+              "p95_ms": 9.72,
+              "p99_ms": 15.36,
+              "max_ms": 15.36
+            },
+            "non_db_ms": {
+              "mean_ms": 20.46,
+              "p50_ms": 18.75,
+              "p95_ms": 30.62,
+              "p99_ms": 38.29,
+              "max_ms": 38.29
+            },
+            "identity_ms": {
+              "mean_ms": 5.17,
+              "p50_ms": 4.73,
+              "p95_ms": 7.37,
+              "p99_ms": 10.15,
+              "max_ms": 10.15
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 3573.68,
+              "p50_ms": 3017.17,
+              "p95_ms": 9235.05,
+              "p99_ms": 12241.81,
+              "max_ms": 12241.81
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 31.57,
+              "p50_ms": 30.14,
+              "p95_ms": 41.62,
+              "p99_ms": 55.39,
+              "max_ms": 55.39
+            },
+            "pool_wait_ms": {
+              "mean_ms": 4.68,
+              "p50_ms": 4.38,
+              "p95_ms": 6.84,
+              "p99_ms": 12.09,
+              "max_ms": 12.09
+            },
+            "sql_ms": {
+              "mean_ms": 7.32,
+              "p50_ms": 6.66,
+              "p95_ms": 11.84,
+              "p99_ms": 22.02,
+              "max_ms": 22.02
+            },
+            "non_db_ms": {
+              "mean_ms": 19.57,
+              "p50_ms": 18.71,
+              "p95_ms": 25.79,
+              "p99_ms": 32.84,
+              "max_ms": 32.84
+            },
+            "identity_ms": {
+              "mean_ms": 5.38,
+              "p50_ms": 4.91,
+              "p95_ms": 7.43,
+              "p99_ms": 15.75,
+              "max_ms": 15.75
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 4016.25,
+              "p50_ms": 3193.24,
+              "p95_ms": 9171.43,
+              "p99_ms": 13291.9,
+              "max_ms": 13291.9
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 178.59,
+              "p50_ms": 180.6,
+              "p95_ms": 244.75,
+              "p99_ms": 259.6,
+              "max_ms": 259.6
+            },
+            "pool_wait_ms": {
+              "mean_ms": 5.18,
+              "p50_ms": 4.9,
+              "p95_ms": 8.45,
+              "p99_ms": 19.81,
+              "max_ms": 19.81
+            },
+            "sql_ms": {
+              "mean_ms": 17.25,
+              "p50_ms": 14.91,
+              "p95_ms": 34.03,
+              "p99_ms": 41.47,
+              "max_ms": 41.47
+            },
+            "non_db_ms": {
+              "mean_ms": 156.16,
+              "p50_ms": 160.48,
+              "p95_ms": 212.61,
+              "p99_ms": 244.08,
+              "max_ms": 244.08
+            },
+            "identity_ms": {
+              "mean_ms": 5.4,
+              "p50_ms": 4.73,
+              "p95_ms": 9.03,
+              "p99_ms": 12.62,
+              "max_ms": 12.62
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 103.9,
+          "rss_mb": 97.58
+        },
+        "load_generator_note": "Client and server share one laptop process/host in this harness"
+      },
+      "queue_position_bench": {
+        "10": {
+          "jobs_ahead": 9,
+          "latency_ms": {
+            "mean_ms": 11.68,
+            "p50_ms": 11.94,
+            "p95_ms": 12.99,
+            "p99_ms": 12.99,
+            "max_ms": 12.99
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 25.85,
+                "Total Cost": 25.86,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.15,
+                    "Total Cost": 8.17,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'bb3e29bf-17af-4927-b0c6-9bffdb585906'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.15,
+                    "Total Cost": 8.17,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'bb3e29bf-17af-4927-b0c6-9bffdb585906'::uuid)"
+                  },
+                  {
+                    "Node Type": "Bitmap Heap Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 4.16,
+                    "Total Cost": 9.52,
+                    "Plan Rows": 1,
+                    "Plan Width": 0,
+                    "Recheck Cond": "(status = 'queued'::text)",
+                    "Filter": "((created_at < $0) OR ((created_at = $1) AND (id < 'bb3e29bf-17af-4927-b0c6-9bffdb585906'::uuid)))",
+                    "Plans": [
+                      {
+                        "Node Type": "Bitmap Index Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Index Name": "ix_evaluations_status_created",
+                        "Startup Cost": 0.0,
+                        "Total Cost": 4.16,
+                        "Plan Rows": 2,
+                        "Plan Width": 0,
+                        "Index Cond": "(status = 'queued'::text)"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "100": {
+          "jobs_ahead": 99,
+          "latency_ms": {
+            "mean_ms": 12.72,
+            "p50_ms": 11.99,
+            "p95_ms": 17.09,
+            "p99_ms": 17.09,
+            "max_ms": 17.09
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 25.85,
+                "Total Cost": 25.86,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.15,
+                    "Total Cost": 8.17,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '22cb8d15-8527-48c8-99d0-e2fb6716db3b'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.15,
+                    "Total Cost": 8.17,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '22cb8d15-8527-48c8-99d0-e2fb6716db3b'::uuid)"
+                  },
+                  {
+                    "Node Type": "Bitmap Heap Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 4.16,
+                    "Total Cost": 9.52,
+                    "Plan Rows": 1,
+                    "Plan Width": 0,
+                    "Recheck Cond": "(status = 'queued'::text)",
+                    "Filter": "((created_at < $0) OR ((created_at = $1) AND (id < '22cb8d15-8527-48c8-99d0-e2fb6716db3b'::uuid)))",
+                    "Plans": [
+                      {
+                        "Node Type": "Bitmap Index Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Index Name": "ix_evaluations_status_created",
+                        "Startup Cost": 0.0,
+                        "Total Cost": 4.16,
+                        "Plan Rows": 2,
+                        "Plan Width": 0,
+                        "Index Cond": "(status = 'queued'::text)"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "1000": {
+          "jobs_ahead": 999,
+          "latency_ms": {
+            "mean_ms": 12.05,
+            "p50_ms": 12.13,
+            "p95_ms": 14.28,
+            "p99_ms": 14.28,
+            "max_ms": 14.28
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 28.92,
+                "Total Cost": 28.93,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.27,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'f068e1c6-29b8-4c17-ac45-c880e329a5ba'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.27,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'f068e1c6-29b8-4c17-ac45-c880e329a5ba'::uuid)"
+                  },
+                  {
+                    "Node Type": "Bitmap Heap Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 4.17,
+                    "Total Cost": 12.33,
+                    "Plan Rows": 1,
+                    "Plan Width": 0,
+                    "Recheck Cond": "(status = 'queued'::text)",
+                    "Filter": "((created_at < $0) OR ((created_at = $1) AND (id < 'f068e1c6-29b8-4c17-ac45-c880e329a5ba'::uuid)))",
+                    "Plans": [
+                      {
+                        "Node Type": "Bitmap Index Scan",
+                        "Parent Relationship": "Outer",
+                        "Parallel Aware": false,
+                        "Async Capable": false,
+                        "Index Name": "ix_evaluations_running_started",
+                        "Startup Cost": 0.0,
+                        "Total Cost": 4.17,
+                        "Plan Rows": 3,
+                        "Plan Width": 0,
+                        "Index Cond": "(status = 'queued'::text)"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "realistic_workers_0": {
+      "name": "realistic_workers_0",
+      "dataset": {
+        "challenge_id": "786d8915-4a75-4a42-ba50-36dc8d475341",
+        "statuses": [
+          [
+            {
+              "X-User-Id": "a2b5e648-403f-577f-9840-7d0e48303747"
+            },
+            "33727326-fb58-400d-91fa-f023b9926e9b"
+          ],
+          [
+            {
+              "X-User-Id": "f00af924-3012-586d-b2f9-e66f2c64e98e"
+            },
+            "ec627040-bdc1-425a-b446-a4b27d1133e6"
+          ],
+          [
+            {
+              "X-User-Id": "e3a57cf5-f140-5435-b239-a8e583f46a4d"
+            },
+            "8009730d-d50b-4b64-8b5d-22e900e48b1c"
+          ],
+          [
+            {
+              "X-User-Id": "8fd12d4a-c489-546b-9356-bdaef0bbdc19"
+            },
+            "eb3a6e1d-eee0-41ec-bb3f-66456fcd3a8c"
+          ],
+          [
+            {
+              "X-User-Id": "c9565782-f360-56a0-bf5d-949e91a26bac"
+            },
+            "c9345523-9259-4e5d-8809-b43eddc05afc"
+          ],
+          [
+            {
+              "X-User-Id": "0c76357e-c5b0-5b4e-b4a3-75d64e73e8c0"
+            },
+            "36746dc2-cc51-4e83-9407-c6ad576d6d1b"
+          ],
+          [
+            {
+              "X-User-Id": "04eb673f-15ce-5774-a715-f27e2748ce7b"
+            },
+            "82107245-48cc-4d25-940a-0e6eefb03b4c"
+          ],
+          [
+            {
+              "X-User-Id": "c3f41eaf-c87f-51fe-909d-568387f832d8"
+            },
+            "4ec21e31-a866-4ee5-a57c-cd7ede97c09e"
+          ],
+          [
+            {
+              "X-User-Id": "303f5b66-8187-5fa3-a11b-536acae5149a"
+            },
+            "a2ef2865-e29e-4caa-844e-eacf360067c7"
+          ],
+          [
+            {
+              "X-User-Id": "6c4fcdde-a5a4-5b6d-bd58-c7fed66bccb6"
+            },
+            "d148ab2d-2d0b-4404-af16-90ee357aee35"
+          ],
+          [
+            {
+              "X-User-Id": "ff2470b5-e121-5a37-b251-adba6b6bb59f"
+            },
+            "8d246b49-f666-45ae-8a5e-94472395c68e"
+          ],
+          [
+            {
+              "X-User-Id": "21c866d9-876f-5f92-9b39-8594eac0dfd2"
+            },
+            "12114479-9a71-4546-971b-8ceef8e4abfb"
+          ],
+          [
+            {
+              "X-User-Id": "75df6aa5-e56a-5117-9971-73175d34ac5e"
+            },
+            "a202f4c3-0028-4924-92da-594c3babbd94"
+          ],
+          [
+            {
+              "X-User-Id": "3542e557-54f9-5f04-9f6c-afd750446ce7"
+            },
+            "843aa762-670f-4f7a-abca-5df063945d62"
+          ],
+          [
+            {
+              "X-User-Id": "6253aa5e-817e-581c-b1d4-01c68666eb0b"
+            },
+            "20df7733-45b8-4ccb-9299-798d779c6699"
+          ],
+          [
+            {
+              "X-User-Id": "f65be3dc-4dbd-537f-b0de-1afc4fab446f"
+            },
+            "18362101-5598-4b35-9cd6-280a1424eedc"
+          ],
+          [
+            {
+              "X-User-Id": "139abbe1-8699-57e2-b82a-92d4f03b5516"
+            },
+            "c9f4006b-7e99-49b0-9d1d-149da2a466da"
+          ],
+          [
+            {
+              "X-User-Id": "58d20851-d37e-5187-b6a5-81e3c58367f8"
+            },
+            "4400e6f4-7cfc-48a0-a28a-16977a6aee86"
+          ],
+          [
+            {
+              "X-User-Id": "11977961-edae-590a-a28e-2a0195ade79c"
+            },
+            "1ad68061-dee9-4daf-966c-98331f1f50d8"
+          ],
+          [
+            {
+              "X-User-Id": "9fa2b458-927b-5374-8807-3ff7fc7721ad"
+            },
+            "9500a374-f0f7-4ba8-b02c-7460928f969c"
+          ],
+          [
+            {
+              "X-User-Id": "87942f42-e9f1-52e8-9b02-47f6880a893e"
+            },
+            "79bef880-fe0c-41e9-be60-14ee699044df"
+          ],
+          [
+            {
+              "X-User-Id": "d8ba0c2a-9df5-5153-a007-f03cc0b7d9a9"
+            },
+            "af8583ac-c019-4567-9144-f9a90f5c1bc9"
+          ],
+          [
+            {
+              "X-User-Id": "2d50952f-7b1f-53b5-98ef-584ac12a98e9"
+            },
+            "3c3d2b74-6cdb-4354-b94b-5927d0b07c27"
+          ],
+          [
+            {
+              "X-User-Id": "cfb67d81-0093-50dc-ad53-ccd3ae81dfbf"
+            },
+            "ddc54f51-24b7-49ec-94a3-c66e12ee6f94"
+          ],
+          [
+            {
+              "X-User-Id": "01695f1a-10c2-58a2-b7ac-f9779fe8bddb"
+            },
+            "15508a6b-dc8a-4313-a6ca-ea7977892889"
+          ],
+          [
+            {
+              "X-User-Id": "4468e55c-f730-5b31-bad2-0caf3b7990f0"
+            },
+            "d2029a37-ab22-412a-8969-c183cb8d4d16"
+          ],
+          [
+            {
+              "X-User-Id": "dcb64f43-4e11-5858-b4c3-c4f056277128"
+            },
+            "bf057953-a6f4-469b-87d4-f950aa0d56bb"
+          ],
+          [
+            {
+              "X-User-Id": "e35ba642-4fde-52cf-985f-e6d4bbd0b052"
+            },
+            "8e0b0408-0c7c-470f-b8cc-3e8b0f16a907"
+          ],
+          [
+            {
+              "X-User-Id": "2ac5446c-1cb1-5f59-9f6d-929eb4673764"
+            },
+            "7525a9ba-f648-4944-8a0b-5cc2561f381c"
+          ],
+          [
+            {
+              "X-User-Id": "9d9b8692-ac45-53a7-8cfc-406cfa260c30"
+            },
+            "65638ac2-dc4c-4181-b987-2178302ec9c2"
+          ],
+          [
+            {
+              "X-User-Id": "e078030b-ae1d-50b7-889a-3d312265c560"
+            },
+            "336c1ece-b887-4a7f-bcf8-a4903b0a5c1e"
+          ],
+          [
+            {
+              "X-User-Id": "28b765d4-2639-53bb-9d05-2e4d1580b0cf"
+            },
+            "f86c17fc-f100-4521-81bc-3a0101bfe5c4"
+          ],
+          [
+            {
+              "X-User-Id": "20d03833-b80f-5c41-9452-835368234843"
+            },
+            "58999d61-a9f7-4519-b1e0-0c47c763acfb"
+          ],
+          [
+            {
+              "X-User-Id": "fa25a39f-982d-5e73-a5db-0858b1f90bc6"
+            },
+            "1a01a6a7-bc42-44de-8d78-d7bcffb95397"
+          ],
+          [
+            {
+              "X-User-Id": "39f5a19c-d210-5e5d-9bec-4acea5ba0be2"
+            },
+            "52e5a91e-6c14-4c5b-aa40-f105c6ccc4ed"
+          ],
+          [
+            {
+              "X-User-Id": "c3117dee-8b53-5188-a668-8bfdef6fc700"
+            },
+            "dcf97d3a-b188-4fec-9c92-f7027179eb92"
+          ],
+          [
+            {
+              "X-User-Id": "ac070f9c-d54f-5f31-979a-d61c217df397"
+            },
+            "e2376a11-8edf-411a-8eab-656bd1b316e2"
+          ],
+          [
+            {
+              "X-User-Id": "249ad20f-3567-5b09-a35b-7110d999b27c"
+            },
+            "e2811ec4-a2b4-4fa7-a6cd-fbb65809e14d"
+          ],
+          [
+            {
+              "X-User-Id": "9a50bead-9674-5f8a-ba78-bb4dcc511700"
+            },
+            "3e5d970b-b366-483a-b232-6a880f63c872"
+          ],
+          [
+            {
+              "X-User-Id": "35a1a302-e02c-5ee4-91cb-6ff0dc8b9261"
+            },
+            "6fde4856-40b2-4c12-9597-fb12e135c99e"
+          ]
+        ],
+        "probe_submission_id": "33727326-fb58-400d-91fa-f023b9926e9b",
+        "dataset": "realistic",
+        "submission_count": 40,
+        "queued_extra": 100
+      },
+      "workers": 0,
+      "interactive": {
+        "attempted": 240,
+        "elapsed_seconds": 33.688,
+        "achieved_requests_per_second": 7.124,
+        "error_count": 1,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 179,
+          "201": 60
+        },
+        "client_latency_ms": {
+          "mean_ms": 3850.35,
+          "p50_ms": 3016.89,
+          "p95_ms": 9517.11,
+          "p99_ms": 12685.5,
+          "max_ms": 16222.97
+        },
+        "server_total_ms": {
+          "mean_ms": 90.08,
+          "p50_ms": 44.15,
+          "p95_ms": 234.81,
+          "p99_ms": 285.12,
+          "max_ms": 1004.39
+        },
+        "pool_wait_ms": {
+          "mean_ms": 14.62,
+          "p50_ms": 4.79,
+          "p95_ms": 19.89,
+          "p99_ms": 43.62,
+          "max_ms": 923.95
+        },
+        "sql_ms": {
+          "mean_ms": 15.06,
+          "p50_ms": 11.27,
+          "p95_ms": 40.54,
+          "p99_ms": 59.34,
+          "max_ms": 81.04
+        },
+        "non_db_ms": {
+          "mean_ms": 60.39,
+          "p50_ms": 25.48,
+          "p95_ms": 197.39,
+          "p99_ms": 227.4,
+          "max_ms": 263.77
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.498,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 3.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 3987.78,
+              "p50_ms": 3711.75,
+              "p95_ms": 9745.13,
+              "p99_ms": 12982.28,
+              "max_ms": 12982.28
+            },
+            "requests": 59,
+            "errors": 1,
+            "timeouts": 0,
+            "server_profiles_captured": 59,
+            "server_total_ms": {
+              "mean_ms": 57.1,
+              "p50_ms": 43.95,
+              "p95_ms": 139.93,
+              "p99_ms": 163.61,
+              "max_ms": 163.61
+            },
+            "pool_wait_ms": {
+              "mean_ms": 7.96,
+              "p50_ms": 5.26,
+              "p95_ms": 20.27,
+              "p99_ms": 41.88,
+              "max_ms": 41.88
+            },
+            "sql_ms": {
+              "mean_ms": 17.41,
+              "p50_ms": 11.31,
+              "p95_ms": 55.8,
+              "p99_ms": 60.85,
+              "max_ms": 60.85
+            },
+            "non_db_ms": {
+              "mean_ms": 31.72,
+              "p50_ms": 26.63,
+              "p95_ms": 61.65,
+              "p99_ms": 69.86,
+              "max_ms": 69.86
+            },
+            "identity_ms": {
+              "mean_ms": 7.34,
+              "p50_ms": 5.57,
+              "p95_ms": 17.14,
+              "p99_ms": 19.11,
+              "max_ms": 19.11
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 3307.13,
+              "p50_ms": 2339.44,
+              "p95_ms": 7727.66,
+              "p99_ms": 8385.63,
+              "max_ms": 8385.63
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 63.24,
+              "p50_ms": 34.56,
+              "p95_ms": 123.55,
+              "p99_ms": 975.73,
+              "max_ms": 975.73
+            },
+            "pool_wait_ms": {
+              "mean_ms": 23.21,
+              "p50_ms": 5.2,
+              "p95_ms": 35.1,
+              "p99_ms": 888.43,
+              "max_ms": 888.43
+            },
+            "sql_ms": {
+              "mean_ms": 14.5,
+              "p50_ms": 8.3,
+              "p95_ms": 38.64,
+              "p99_ms": 47.44,
+              "max_ms": 47.44
+            },
+            "non_db_ms": {
+              "mean_ms": 25.53,
+              "p50_ms": 19.96,
+              "p95_ms": 63.19,
+              "p99_ms": 69.22,
+              "max_ms": 69.22
+            },
+            "identity_ms": {
+              "mean_ms": 7.69,
+              "p50_ms": 5.86,
+              "p95_ms": 15.11,
+              "p99_ms": 28.75,
+              "max_ms": 28.75
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 4424.17,
+              "p50_ms": 3145.98,
+              "p95_ms": 12385.08,
+              "p99_ms": 16222.97,
+              "max_ms": 16222.97
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 55.39,
+              "p50_ms": 31.67,
+              "p95_ms": 98.73,
+              "p99_ms": 1004.39,
+              "max_ms": 1004.39
+            },
+            "pool_wait_ms": {
+              "mean_ms": 22.44,
+              "p50_ms": 4.79,
+              "p95_ms": 19.89,
+              "p99_ms": 923.95,
+              "max_ms": 923.95
+            },
+            "sql_ms": {
+              "mean_ms": 10.04,
+              "p50_ms": 7.29,
+              "p95_ms": 28.35,
+              "p99_ms": 42.13,
+              "max_ms": 42.13
+            },
+            "non_db_ms": {
+              "mean_ms": 22.92,
+              "p50_ms": 19.85,
+              "p95_ms": 46.15,
+              "p99_ms": 52.07,
+              "max_ms": 52.07
+            },
+            "identity_ms": {
+              "mean_ms": 6.51,
+              "p50_ms": 5.57,
+              "p95_ms": 12.87,
+              "p99_ms": 16.86,
+              "max_ms": 16.86
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 3684.61,
+              "p50_ms": 2581.57,
+              "p95_ms": 8462.27,
+              "p99_ms": 9857.97,
+              "max_ms": 9857.97
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 184.05,
+              "p50_ms": 175.46,
+              "p95_ms": 247.15,
+              "p99_ms": 285.12,
+              "max_ms": 285.12
+            },
+            "pool_wait_ms": {
+              "mean_ms": 4.78,
+              "p50_ms": 4.45,
+              "p95_ms": 7.05,
+              "p99_ms": 12.48,
+              "max_ms": 12.48
+            },
+            "sql_ms": {
+              "mean_ms": 18.34,
+              "p50_ms": 15.75,
+              "p95_ms": 29.75,
+              "p99_ms": 81.04,
+              "max_ms": 81.04
+            },
+            "non_db_ms": {
+              "mean_ms": 160.93,
+              "p50_ms": 156.17,
+              "p95_ms": 227.13,
+              "p99_ms": 263.77,
+              "max_ms": 263.77
+            },
+            "identity_ms": {
+              "mean_ms": 5.42,
+              "p50_ms": 5.0,
+              "p95_ms": 8.0,
+              "p99_ms": 12.59,
+              "max_ms": 12.59
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 105.4,
+          "rss_mb": 100.01
+        },
+        "load_generator_note": "Client and server share one laptop process/host in this harness"
+      },
+      "queue_position_bench": {
+        "10": {
+          "jobs_ahead": 9,
+          "latency_ms": {
+            "mean_ms": 10.83,
+            "p50_ms": 10.66,
+            "p95_ms": 13.31,
+            "p99_ms": 13.31,
+            "max_ms": 13.31
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 18.39,
+                "Total Cost": 18.39,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 5.75,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Filter": "(id = '2beffc64-c6e0-4824-b561-671749b7e9be'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 5.75,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Filter": "(id = '2beffc64-c6e0-4824-b561-671749b7e9be'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 6.8,
+                    "Plan Rows": 34,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < '2beffc64-c6e0-4824-b561-671749b7e9be'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "100": {
+          "jobs_ahead": 99,
+          "latency_ms": {
+            "mean_ms": 11.89,
+            "p50_ms": 11.46,
+            "p95_ms": 15.34,
+            "p99_ms": 15.34,
+            "max_ms": 15.34
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 26.65,
+                "Total Cost": 26.66,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.14,
+                    "Total Cost": 8.16,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '453cf154-2369-45ac-ace4-812a5397854e'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.14,
+                    "Total Cost": 8.16,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '453cf154-2369-45ac-ace4-812a5397854e'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 10.2,
+                    "Plan Rows": 50,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < '453cf154-2369-45ac-ace4-812a5397854e'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "1000": {
+          "jobs_ahead": 999,
+          "latency_ms": {
+            "mean_ms": 12.53,
+            "p50_ms": 12.59,
+            "p95_ms": 14.14,
+            "p99_ms": 14.14,
+            "max_ms": 14.14
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 49.28,
+                "Total Cost": 49.29,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'cf889279-b325-41a6-bd4a-9363c5809d9b'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'cf889279-b325-41a6-bd4a-9363c5809d9b'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 32.3,
+                    "Plan Rows": 159,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < 'cf889279-b325-41a6-bd4a-9363c5809d9b'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "realistic_workers_1": {
+      "name": "realistic_workers_1",
+      "dataset": {
+        "challenge_id": "e875d0bd-8d60-47a4-836f-d593291caa4a",
+        "statuses": [
+          [
+            {
+              "X-User-Id": "a2b5e648-403f-577f-9840-7d0e48303747"
+            },
+            "cb59f1b9-9116-4abc-9499-78317151bbb8"
+          ],
+          [
+            {
+              "X-User-Id": "f00af924-3012-586d-b2f9-e66f2c64e98e"
+            },
+            "72e440ee-61fd-4e5c-8909-1f6b4342c9d1"
+          ],
+          [
+            {
+              "X-User-Id": "e3a57cf5-f140-5435-b239-a8e583f46a4d"
+            },
+            "75aad821-3e24-4038-b4cb-b86f34a3ba73"
+          ],
+          [
+            {
+              "X-User-Id": "8fd12d4a-c489-546b-9356-bdaef0bbdc19"
+            },
+            "adda20ba-2d20-4385-bac7-1fd3273ad407"
+          ],
+          [
+            {
+              "X-User-Id": "c9565782-f360-56a0-bf5d-949e91a26bac"
+            },
+            "1212fde3-89dd-429e-9978-1fef32f7c9e3"
+          ],
+          [
+            {
+              "X-User-Id": "0c76357e-c5b0-5b4e-b4a3-75d64e73e8c0"
+            },
+            "67af14d4-84c9-4b20-a7a7-f1c6aadf14f5"
+          ],
+          [
+            {
+              "X-User-Id": "04eb673f-15ce-5774-a715-f27e2748ce7b"
+            },
+            "d6a6b0a5-2628-43a5-80b5-09a5492b4d1c"
+          ],
+          [
+            {
+              "X-User-Id": "c3f41eaf-c87f-51fe-909d-568387f832d8"
+            },
+            "8c272f0e-974a-46d3-bf50-dde384f6aeb8"
+          ],
+          [
+            {
+              "X-User-Id": "303f5b66-8187-5fa3-a11b-536acae5149a"
+            },
+            "410b2469-629f-414e-86c8-f5bbac5ba976"
+          ],
+          [
+            {
+              "X-User-Id": "6c4fcdde-a5a4-5b6d-bd58-c7fed66bccb6"
+            },
+            "9280358f-d39a-4fa4-9c17-8e0a6af8631d"
+          ],
+          [
+            {
+              "X-User-Id": "ff2470b5-e121-5a37-b251-adba6b6bb59f"
+            },
+            "afe9950a-5acf-4879-8ac9-8e9402e9a704"
+          ],
+          [
+            {
+              "X-User-Id": "21c866d9-876f-5f92-9b39-8594eac0dfd2"
+            },
+            "daad9d4e-ab27-4875-8fd2-2e49cad0d334"
+          ],
+          [
+            {
+              "X-User-Id": "75df6aa5-e56a-5117-9971-73175d34ac5e"
+            },
+            "4590b7e6-13cc-4e31-b743-e144c34a9766"
+          ],
+          [
+            {
+              "X-User-Id": "3542e557-54f9-5f04-9f6c-afd750446ce7"
+            },
+            "cd67217c-ab99-4e90-b0e6-eb575c97beac"
+          ],
+          [
+            {
+              "X-User-Id": "6253aa5e-817e-581c-b1d4-01c68666eb0b"
+            },
+            "e589fa20-8fb9-4464-8f70-ec21b68b78fa"
+          ],
+          [
+            {
+              "X-User-Id": "f65be3dc-4dbd-537f-b0de-1afc4fab446f"
+            },
+            "2751b9ec-6e2a-4016-9e70-750ffee39c07"
+          ],
+          [
+            {
+              "X-User-Id": "139abbe1-8699-57e2-b82a-92d4f03b5516"
+            },
+            "dd05126e-bb3e-4c63-b45a-aff415aebd7a"
+          ],
+          [
+            {
+              "X-User-Id": "58d20851-d37e-5187-b6a5-81e3c58367f8"
+            },
+            "baa802ca-9b32-4d61-99ce-7abb84e3f263"
+          ],
+          [
+            {
+              "X-User-Id": "11977961-edae-590a-a28e-2a0195ade79c"
+            },
+            "866ddae9-cab5-4c6f-8065-fe9444ad885d"
+          ],
+          [
+            {
+              "X-User-Id": "9fa2b458-927b-5374-8807-3ff7fc7721ad"
+            },
+            "856d2e5b-a023-4569-9ad1-9da291581dbe"
+          ],
+          [
+            {
+              "X-User-Id": "87942f42-e9f1-52e8-9b02-47f6880a893e"
+            },
+            "9719c3cf-ac65-4fa5-bae3-fa65e9f0684a"
+          ],
+          [
+            {
+              "X-User-Id": "d8ba0c2a-9df5-5153-a007-f03cc0b7d9a9"
+            },
+            "f34b00f9-16ae-45d3-bcc7-690e60756fa7"
+          ],
+          [
+            {
+              "X-User-Id": "2d50952f-7b1f-53b5-98ef-584ac12a98e9"
+            },
+            "e74102fe-8998-460a-853f-607825e79afa"
+          ],
+          [
+            {
+              "X-User-Id": "cfb67d81-0093-50dc-ad53-ccd3ae81dfbf"
+            },
+            "d01a92b9-1a5c-46b0-b518-513c6ff6ee5d"
+          ],
+          [
+            {
+              "X-User-Id": "01695f1a-10c2-58a2-b7ac-f9779fe8bddb"
+            },
+            "7c6b97d7-841c-4498-a9d9-839ac088a198"
+          ],
+          [
+            {
+              "X-User-Id": "4468e55c-f730-5b31-bad2-0caf3b7990f0"
+            },
+            "68681fda-361d-4895-8313-b922afd4f4c4"
+          ],
+          [
+            {
+              "X-User-Id": "dcb64f43-4e11-5858-b4c3-c4f056277128"
+            },
+            "8c35229c-4d2f-4947-911c-aa1855a69e1b"
+          ],
+          [
+            {
+              "X-User-Id": "e35ba642-4fde-52cf-985f-e6d4bbd0b052"
+            },
+            "e01503fd-cfd0-4104-9955-e5211e913fd7"
+          ],
+          [
+            {
+              "X-User-Id": "2ac5446c-1cb1-5f59-9f6d-929eb4673764"
+            },
+            "64bbf940-f0f5-4dfa-919c-baee28fa62f9"
+          ],
+          [
+            {
+              "X-User-Id": "9d9b8692-ac45-53a7-8cfc-406cfa260c30"
+            },
+            "754e6605-761c-4c05-94d9-e0a2fe804a8e"
+          ],
+          [
+            {
+              "X-User-Id": "e078030b-ae1d-50b7-889a-3d312265c560"
+            },
+            "398ca4bd-e0b6-4f51-b677-05f46799aef5"
+          ],
+          [
+            {
+              "X-User-Id": "28b765d4-2639-53bb-9d05-2e4d1580b0cf"
+            },
+            "ce48159a-0bb7-43be-8487-aa69dc3cd227"
+          ],
+          [
+            {
+              "X-User-Id": "20d03833-b80f-5c41-9452-835368234843"
+            },
+            "d6b46f9c-dc76-49af-8bf7-6ff0ff7b1d7a"
+          ],
+          [
+            {
+              "X-User-Id": "fa25a39f-982d-5e73-a5db-0858b1f90bc6"
+            },
+            "b0074d43-7b00-4fab-8d7c-034b1a84e339"
+          ],
+          [
+            {
+              "X-User-Id": "39f5a19c-d210-5e5d-9bec-4acea5ba0be2"
+            },
+            "f7139a84-6caa-46de-983a-df1fa24b900f"
+          ],
+          [
+            {
+              "X-User-Id": "c3117dee-8b53-5188-a668-8bfdef6fc700"
+            },
+            "a2b61a9e-cda5-4dda-a727-48a7bfccb335"
+          ],
+          [
+            {
+              "X-User-Id": "ac070f9c-d54f-5f31-979a-d61c217df397"
+            },
+            "282a563a-160b-45e1-86f0-eb55706cc6bc"
+          ],
+          [
+            {
+              "X-User-Id": "249ad20f-3567-5b09-a35b-7110d999b27c"
+            },
+            "64e598e7-ebd8-4ac4-a74e-ab9c2277ac2e"
+          ],
+          [
+            {
+              "X-User-Id": "9a50bead-9674-5f8a-ba78-bb4dcc511700"
+            },
+            "e43f1d45-c7b1-4b28-8bba-fa0b05a05121"
+          ],
+          [
+            {
+              "X-User-Id": "35a1a302-e02c-5ee4-91cb-6ff0dc8b9261"
+            },
+            "cb10c561-4f3a-4553-96e8-358c57db6b73"
+          ]
+        ],
+        "probe_submission_id": "cb59f1b9-9116-4abc-9499-78317151bbb8",
+        "dataset": "realistic",
+        "submission_count": 40,
+        "queued_extra": 100
+      },
+      "workers": 1,
+      "interactive": {
+        "attempted": 240,
+        "elapsed_seconds": 34.257,
+        "achieved_requests_per_second": 7.006,
+        "error_count": 1,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 180,
+          "201": 59
+        },
+        "client_latency_ms": {
+          "mean_ms": 4159.21,
+          "p50_ms": 2858.4,
+          "p95_ms": 12785.7,
+          "p99_ms": 16908.46,
+          "max_ms": 20433.89
+        },
+        "server_total_ms": {
+          "mean_ms": 86.04,
+          "p50_ms": 45.2,
+          "p95_ms": 221.16,
+          "p99_ms": 273.16,
+          "max_ms": 1068.58
+        },
+        "pool_wait_ms": {
+          "mean_ms": 10.72,
+          "p50_ms": 4.92,
+          "p95_ms": 15.58,
+          "p99_ms": 46.83,
+          "max_ms": 1011.89
+        },
+        "sql_ms": {
+          "mean_ms": 15.06,
+          "p50_ms": 11.68,
+          "p95_ms": 40.02,
+          "p99_ms": 64.03,
+          "max_ms": 116.07
+        },
+        "non_db_ms": {
+          "mean_ms": 60.26,
+          "p50_ms": 26.57,
+          "p95_ms": 189.82,
+          "p99_ms": 244.18,
+          "max_ms": 254.6
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.49,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 3762.58,
+              "p50_ms": 2878.01,
+              "p95_ms": 8819.28,
+              "p99_ms": 16316.29,
+              "max_ms": 16316.29
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 51.4,
+              "p50_ms": 45.17,
+              "p95_ms": 81.76,
+              "p99_ms": 221.16,
+              "max_ms": 221.16
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.23,
+              "p50_ms": 4.46,
+              "p95_ms": 12.06,
+              "p99_ms": 44.42,
+              "max_ms": 44.42
+            },
+            "sql_ms": {
+              "mean_ms": 15.18,
+              "p50_ms": 12.02,
+              "p95_ms": 31.32,
+              "p99_ms": 92.09,
+              "max_ms": 92.09
+            },
+            "non_db_ms": {
+              "mean_ms": 29.98,
+              "p50_ms": 27.64,
+              "p95_ms": 43.5,
+              "p99_ms": 84.65,
+              "max_ms": 84.65
+            },
+            "identity_ms": {
+              "mean_ms": 6.56,
+              "p50_ms": 5.3,
+              "p95_ms": 11.64,
+              "p99_ms": 27.32,
+              "max_ms": 27.32
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 5247.52,
+              "p50_ms": 3153.21,
+              "p95_ms": 15738.85,
+              "p99_ms": 20433.89,
+              "max_ms": 20433.89
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 46.12,
+              "p50_ms": 34.22,
+              "p95_ms": 81.14,
+              "p99_ms": 207.18,
+              "max_ms": 207.18
+            },
+            "pool_wait_ms": {
+              "mean_ms": 7.95,
+              "p50_ms": 5.17,
+              "p95_ms": 18.01,
+              "p99_ms": 46.83,
+              "max_ms": 46.83
+            },
+            "sql_ms": {
+              "mean_ms": 13.48,
+              "p50_ms": 8.31,
+              "p95_ms": 40.56,
+              "p99_ms": 64.03,
+              "max_ms": 64.03
+            },
+            "non_db_ms": {
+              "mean_ms": 24.69,
+              "p50_ms": 19.69,
+              "p95_ms": 35.97,
+              "p99_ms": 102.44,
+              "max_ms": 102.44
+            },
+            "identity_ms": {
+              "mean_ms": 6.69,
+              "p50_ms": 5.26,
+              "p95_ms": 14.75,
+              "p99_ms": 25.55,
+              "max_ms": 25.55
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 3897.16,
+              "p50_ms": 2671.93,
+              "p95_ms": 10843.33,
+              "p99_ms": 14342.23,
+              "max_ms": 14342.23
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 55.59,
+              "p50_ms": 31.77,
+              "p95_ms": 66.86,
+              "p99_ms": 1068.58,
+              "max_ms": 1068.58
+            },
+            "pool_wait_ms": {
+              "mean_ms": 22.92,
+              "p50_ms": 4.56,
+              "p95_ms": 15.58,
+              "p99_ms": 1011.89,
+              "max_ms": 1011.89
+            },
+            "sql_ms": {
+              "mean_ms": 10.46,
+              "p50_ms": 7.16,
+              "p95_ms": 25.88,
+              "p99_ms": 56.79,
+              "max_ms": 56.79
+            },
+            "non_db_ms": {
+              "mean_ms": 22.21,
+              "p50_ms": 19.44,
+              "p95_ms": 30.8,
+              "p99_ms": 78.11,
+              "max_ms": 78.11
+            },
+            "identity_ms": {
+              "mean_ms": 6.51,
+              "p50_ms": 5.29,
+              "p95_ms": 11.3,
+              "p99_ms": 26.48,
+              "max_ms": 26.48
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 3722.3,
+              "p50_ms": 2678.11,
+              "p95_ms": 12720.88,
+              "p99_ms": 15310.22,
+              "max_ms": 15310.22
+            },
+            "requests": 59,
+            "errors": 1,
+            "timeouts": 0,
+            "server_profiles_captured": 59,
+            "server_total_ms": {
+              "mean_ms": 192.82,
+              "p50_ms": 196.49,
+              "p95_ms": 265.63,
+              "p99_ms": 381.48,
+              "max_ms": 381.48
+            },
+            "pool_wait_ms": {
+              "mean_ms": 5.68,
+              "p50_ms": 4.83,
+              "p95_ms": 10.28,
+              "p99_ms": 34.75,
+              "max_ms": 34.75
+            },
+            "sql_ms": {
+              "mean_ms": 21.21,
+              "p50_ms": 16.85,
+              "p95_ms": 40.02,
+              "p99_ms": 116.07,
+              "max_ms": 116.07
+            },
+            "non_db_ms": {
+              "mean_ms": 165.93,
+              "p50_ms": 168.09,
+              "p95_ms": 244.18,
+              "p99_ms": 254.6,
+              "max_ms": 254.6
+            },
+            "identity_ms": {
+              "mean_ms": 6.11,
+              "p50_ms": 5.15,
+              "p95_ms": 10.15,
+              "p99_ms": 35.42,
+              "max_ms": 35.42
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 105.9,
+          "rss_mb": 100.06
+        },
+        "load_generator_note": "Client and server share one laptop process/host in this harness"
+      },
+      "queue_position_bench": {
+        "10": {
+          "jobs_ahead": 9,
+          "latency_ms": {
+            "mean_ms": 12.22,
+            "p50_ms": 12.09,
+            "p95_ms": 14.28,
+            "p99_ms": 14.28,
+            "max_ms": 14.28
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 18.39,
+                "Total Cost": 18.39,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 5.75,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Filter": "(id = 'd908dcdf-7217-42c8-af86-ac8d35d1ebd9'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 5.75,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Filter": "(id = 'd908dcdf-7217-42c8-af86-ac8d35d1ebd9'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 6.8,
+                    "Plan Rows": 34,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < 'd908dcdf-7217-42c8-af86-ac8d35d1ebd9'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "100": {
+          "jobs_ahead": 99,
+          "latency_ms": {
+            "mean_ms": 13.6,
+            "p50_ms": 13.21,
+            "p95_ms": 17.94,
+            "p99_ms": 17.94,
+            "max_ms": 17.94
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 18.39,
+                "Total Cost": 18.39,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 5.75,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Filter": "(id = 'cf6ef1c0-de13-40be-8f1c-5ffcdab6c181'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 5.75,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Filter": "(id = 'cf6ef1c0-de13-40be-8f1c-5ffcdab6c181'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 6.8,
+                    "Plan Rows": 34,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < 'cf6ef1c0-de13-40be-8f1c-5ffcdab6c181'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "1000": {
+          "jobs_ahead": 999,
+          "latency_ms": {
+            "mean_ms": 12.13,
+            "p50_ms": 12.04,
+            "p95_ms": 14.61,
+            "p99_ms": 14.61,
+            "max_ms": 14.61
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 45.84,
+                "Total Cost": 45.85,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '83d578e8-93ff-4fe4-8152-183dd6cb10da'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '83d578e8-93ff-4fe4-8152-183dd6cb10da'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 28.9,
+                    "Plan Rows": 141,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < '83d578e8-93ff-4fe4-8152-183dd6cb10da'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "large_workers_0": {
+      "name": "large_workers_0",
+      "dataset": {
+        "challenge_id": "29bc708e-9510-4da3-9a95-47fbc8454330",
+        "statuses": [
+          [
+            {
+              "X-User-Id": "a2b5e648-403f-577f-9840-7d0e48303747"
+            },
+            "89e4f207-5785-4cc8-9d9f-d37000677176"
+          ],
+          [
+            {
+              "X-User-Id": "f00af924-3012-586d-b2f9-e66f2c64e98e"
+            },
+            "03de686f-c367-4adc-8338-3e5e01403d22"
+          ],
+          [
+            {
+              "X-User-Id": "e3a57cf5-f140-5435-b239-a8e583f46a4d"
+            },
+            "ee5e31ee-844e-440f-896b-4b5f8d425e8b"
+          ],
+          [
+            {
+              "X-User-Id": "8fd12d4a-c489-546b-9356-bdaef0bbdc19"
+            },
+            "39749cb4-33a2-4d16-832f-386ed346c225"
+          ],
+          [
+            {
+              "X-User-Id": "c9565782-f360-56a0-bf5d-949e91a26bac"
+            },
+            "a28bbe05-1438-46f4-8a3d-0a4f4f32dac8"
+          ],
+          [
+            {
+              "X-User-Id": "0c76357e-c5b0-5b4e-b4a3-75d64e73e8c0"
+            },
+            "488dd51e-3a4d-4dc8-a181-12bc76bcf8b5"
+          ],
+          [
+            {
+              "X-User-Id": "04eb673f-15ce-5774-a715-f27e2748ce7b"
+            },
+            "ea512575-8cf8-4a4d-aa24-cd162ad414b4"
+          ],
+          [
+            {
+              "X-User-Id": "c3f41eaf-c87f-51fe-909d-568387f832d8"
+            },
+            "7f5c30d7-948a-4dcb-84e8-6cfa37f03ccc"
+          ],
+          [
+            {
+              "X-User-Id": "303f5b66-8187-5fa3-a11b-536acae5149a"
+            },
+            "bbbf93fc-b417-4a60-8fd5-b2f37e1922e8"
+          ],
+          [
+            {
+              "X-User-Id": "6c4fcdde-a5a4-5b6d-bd58-c7fed66bccb6"
+            },
+            "6a06b903-4a6e-43bf-96a4-70a62de5ddbc"
+          ],
+          [
+            {
+              "X-User-Id": "ff2470b5-e121-5a37-b251-adba6b6bb59f"
+            },
+            "12b5164c-d11a-4f1d-9cdf-c6c955f05f56"
+          ],
+          [
+            {
+              "X-User-Id": "21c866d9-876f-5f92-9b39-8594eac0dfd2"
+            },
+            "ac8a0d6e-9363-494d-be77-196ecfee9d7d"
+          ],
+          [
+            {
+              "X-User-Id": "75df6aa5-e56a-5117-9971-73175d34ac5e"
+            },
+            "8f854563-2609-45b8-ae27-289b321158f3"
+          ],
+          [
+            {
+              "X-User-Id": "3542e557-54f9-5f04-9f6c-afd750446ce7"
+            },
+            "14db5bd8-4844-4e96-a3b9-495e1718a0dd"
+          ],
+          [
+            {
+              "X-User-Id": "6253aa5e-817e-581c-b1d4-01c68666eb0b"
+            },
+            "6f400a20-7083-4ae8-82a4-74529e8749be"
+          ],
+          [
+            {
+              "X-User-Id": "f65be3dc-4dbd-537f-b0de-1afc4fab446f"
+            },
+            "5f551f84-d078-4aba-893f-2abf3bed5cb3"
+          ],
+          [
+            {
+              "X-User-Id": "139abbe1-8699-57e2-b82a-92d4f03b5516"
+            },
+            "e989e8c8-8d78-46fb-8f49-45cfd331a213"
+          ],
+          [
+            {
+              "X-User-Id": "58d20851-d37e-5187-b6a5-81e3c58367f8"
+            },
+            "1e38e2e4-03f6-4226-b249-849bb156e737"
+          ],
+          [
+            {
+              "X-User-Id": "11977961-edae-590a-a28e-2a0195ade79c"
+            },
+            "a4365f25-084d-46c6-a426-643f23e1ff66"
+          ],
+          [
+            {
+              "X-User-Id": "9fa2b458-927b-5374-8807-3ff7fc7721ad"
+            },
+            "4adf656c-3956-4a2c-b729-b1c49b268dd0"
+          ],
+          [
+            {
+              "X-User-Id": "87942f42-e9f1-52e8-9b02-47f6880a893e"
+            },
+            "b93809c9-4e61-4dcc-967b-da057b42c0e7"
+          ],
+          [
+            {
+              "X-User-Id": "d8ba0c2a-9df5-5153-a007-f03cc0b7d9a9"
+            },
+            "77da9687-5535-4f16-8223-3b3f277be8f6"
+          ],
+          [
+            {
+              "X-User-Id": "2d50952f-7b1f-53b5-98ef-584ac12a98e9"
+            },
+            "941cd9f1-a852-40d5-9c30-383ffdeb3ff8"
+          ],
+          [
+            {
+              "X-User-Id": "cfb67d81-0093-50dc-ad53-ccd3ae81dfbf"
+            },
+            "95f110cb-003c-425b-97d6-3e9441e08bae"
+          ],
+          [
+            {
+              "X-User-Id": "01695f1a-10c2-58a2-b7ac-f9779fe8bddb"
+            },
+            "ff441af9-a957-45a7-bdc0-72d66c15f80a"
+          ],
+          [
+            {
+              "X-User-Id": "4468e55c-f730-5b31-bad2-0caf3b7990f0"
+            },
+            "cf5754be-e515-4b37-9d70-538f559e114c"
+          ],
+          [
+            {
+              "X-User-Id": "dcb64f43-4e11-5858-b4c3-c4f056277128"
+            },
+            "ffd8bdce-9871-4665-9f49-6e2ed3ffceab"
+          ],
+          [
+            {
+              "X-User-Id": "e35ba642-4fde-52cf-985f-e6d4bbd0b052"
+            },
+            "d62485d2-5f71-45ba-b734-aa85cbb18204"
+          ],
+          [
+            {
+              "X-User-Id": "2ac5446c-1cb1-5f59-9f6d-929eb4673764"
+            },
+            "fd6c1ff3-7a14-4dc6-9112-829d1dcfe73f"
+          ],
+          [
+            {
+              "X-User-Id": "9d9b8692-ac45-53a7-8cfc-406cfa260c30"
+            },
+            "6df0a663-51e1-411a-aefc-33c3fb164f00"
+          ],
+          [
+            {
+              "X-User-Id": "e078030b-ae1d-50b7-889a-3d312265c560"
+            },
+            "58299d3f-458f-4c06-bf65-5decd94c7e7d"
+          ],
+          [
+            {
+              "X-User-Id": "28b765d4-2639-53bb-9d05-2e4d1580b0cf"
+            },
+            "6aaed3fd-129a-4a20-b2d3-78f07b907820"
+          ],
+          [
+            {
+              "X-User-Id": "20d03833-b80f-5c41-9452-835368234843"
+            },
+            "40073bca-47f7-453c-b752-1fd470997bca"
+          ],
+          [
+            {
+              "X-User-Id": "fa25a39f-982d-5e73-a5db-0858b1f90bc6"
+            },
+            "9a805d28-9263-4c2f-841f-010a2996103a"
+          ],
+          [
+            {
+              "X-User-Id": "39f5a19c-d210-5e5d-9bec-4acea5ba0be2"
+            },
+            "275a3b45-5d8f-48c7-9a56-c5e37421d451"
+          ],
+          [
+            {
+              "X-User-Id": "c3117dee-8b53-5188-a668-8bfdef6fc700"
+            },
+            "76195c68-f1e8-47c2-b719-d690d2ee9d40"
+          ],
+          [
+            {
+              "X-User-Id": "ac070f9c-d54f-5f31-979a-d61c217df397"
+            },
+            "3e23f177-e65f-4ad9-8fd0-f09ce57d8e8f"
+          ],
+          [
+            {
+              "X-User-Id": "249ad20f-3567-5b09-a35b-7110d999b27c"
+            },
+            "12e4e58a-e800-4983-940d-0408492508d2"
+          ],
+          [
+            {
+              "X-User-Id": "9a50bead-9674-5f8a-ba78-bb4dcc511700"
+            },
+            "cb65947c-d3df-43c6-90bf-55fb57113edc"
+          ],
+          [
+            {
+              "X-User-Id": "35a1a302-e02c-5ee4-91cb-6ff0dc8b9261"
+            },
+            "8f92d617-50cb-4233-afd9-71d4a66b12e7"
+          ]
+        ],
+        "probe_submission_id": "89e4f207-5785-4cc8-9d9f-d37000677176",
+        "dataset": "large",
+        "submission_count": 40,
+        "queued_extra": 1000
+      },
+      "workers": 0,
+      "interactive": {
+        "attempted": 240,
+        "elapsed_seconds": 34.025,
+        "achieved_requests_per_second": 7.054,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 180,
+          "201": 60
+        },
+        "client_latency_ms": {
+          "mean_ms": 3722.83,
+          "p50_ms": 2847.28,
+          "p95_ms": 8997.7,
+          "p99_ms": 13010.42,
+          "max_ms": 14384.34
+        },
+        "server_total_ms": {
+          "mean_ms": 82.99,
+          "p50_ms": 42.72,
+          "p95_ms": 226.45,
+          "p99_ms": 308.33,
+          "max_ms": 358.51
+        },
+        "pool_wait_ms": {
+          "mean_ms": 6.2,
+          "p50_ms": 4.75,
+          "p95_ms": 15.6,
+          "p99_ms": 28.12,
+          "max_ms": 36.11
+        },
+        "sql_ms": {
+          "mean_ms": 14.81,
+          "p50_ms": 11.11,
+          "p95_ms": 41.96,
+          "p99_ms": 52.01,
+          "max_ms": 75.55
+        },
+        "non_db_ms": {
+          "mean_ms": 61.98,
+          "p50_ms": 25.39,
+          "p95_ms": 207.63,
+          "p99_ms": 249.0,
+          "max_ms": 336.09
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 3760.85,
+              "p50_ms": 2471.75,
+              "p95_ms": 10512.62,
+              "p99_ms": 14384.34,
+              "max_ms": 14384.34
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 51.56,
+              "p50_ms": 43.08,
+              "p95_ms": 90.15,
+              "p99_ms": 167.66,
+              "max_ms": 167.66
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.48,
+              "p50_ms": 4.9,
+              "p95_ms": 16.8,
+              "p99_ms": 21.4,
+              "max_ms": 21.4
+            },
+            "sql_ms": {
+              "mean_ms": 15.01,
+              "p50_ms": 11.24,
+              "p95_ms": 35.85,
+              "p99_ms": 75.55,
+              "max_ms": 75.55
+            },
+            "non_db_ms": {
+              "mean_ms": 30.07,
+              "p50_ms": 26.77,
+              "p95_ms": 52.32,
+              "p99_ms": 76.08,
+              "max_ms": 76.08
+            },
+            "identity_ms": {
+              "mean_ms": 6.4,
+              "p50_ms": 5.22,
+              "p95_ms": 12.16,
+              "p99_ms": 26.12,
+              "max_ms": 26.12
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 3924.31,
+              "p50_ms": 3510.49,
+              "p95_ms": 8054.45,
+              "p99_ms": 13876.78,
+              "max_ms": 13876.78
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 40.99,
+              "p50_ms": 32.93,
+              "p95_ms": 74.62,
+              "p99_ms": 149.66,
+              "max_ms": 149.66
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.07,
+              "p50_ms": 4.74,
+              "p95_ms": 13.95,
+              "p99_ms": 28.12,
+              "max_ms": 28.12
+            },
+            "sql_ms": {
+              "mean_ms": 12.19,
+              "p50_ms": 7.42,
+              "p95_ms": 41.12,
+              "p99_ms": 50.98,
+              "max_ms": 50.98
+            },
+            "non_db_ms": {
+              "mean_ms": 22.73,
+              "p50_ms": 19.31,
+              "p95_ms": 36.95,
+              "p99_ms": 79.07,
+              "max_ms": 79.07
+            },
+            "identity_ms": {
+              "mean_ms": 6.09,
+              "p50_ms": 5.21,
+              "p95_ms": 10.89,
+              "p99_ms": 23.13,
+              "max_ms": 23.13
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 2980.99,
+              "p50_ms": 2152.88,
+              "p95_ms": 6780.43,
+              "p99_ms": 10014.75,
+              "max_ms": 10014.75
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 41.93,
+              "p50_ms": 33.62,
+              "p95_ms": 115.53,
+              "p99_ms": 152.42,
+              "max_ms": 152.42
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.36,
+              "p50_ms": 4.66,
+              "p95_ms": 17.08,
+              "p99_ms": 36.11,
+              "max_ms": 36.11
+            },
+            "sql_ms": {
+              "mean_ms": 11.12,
+              "p50_ms": 8.21,
+              "p95_ms": 26.84,
+              "p99_ms": 52.01,
+              "max_ms": 52.01
+            },
+            "non_db_ms": {
+              "mean_ms": 24.46,
+              "p50_ms": 20.77,
+              "p95_ms": 49.94,
+              "p99_ms": 77.61,
+              "max_ms": 77.61
+            },
+            "identity_ms": {
+              "mean_ms": 6.69,
+              "p50_ms": 4.95,
+              "p95_ms": 17.79,
+              "p99_ms": 26.68,
+              "max_ms": 26.68
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 4225.17,
+              "p50_ms": 3562.34,
+              "p95_ms": 9176.38,
+              "p99_ms": 12656.39,
+              "max_ms": 12656.39
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 197.48,
+              "p50_ms": 194.92,
+              "p95_ms": 307.19,
+              "p99_ms": 358.51,
+              "max_ms": 358.51
+            },
+            "pool_wait_ms": {
+              "mean_ms": 5.87,
+              "p50_ms": 4.6,
+              "p95_ms": 12.09,
+              "p99_ms": 17.68,
+              "max_ms": 17.68
+            },
+            "sql_ms": {
+              "mean_ms": 20.93,
+              "p50_ms": 16.11,
+              "p95_ms": 49.59,
+              "p99_ms": 52.6,
+              "max_ms": 52.6
+            },
+            "non_db_ms": {
+              "mean_ms": 170.68,
+              "p50_ms": 167.51,
+              "p95_ms": 248.64,
+              "p99_ms": 336.09,
+              "max_ms": 336.09
+            },
+            "identity_ms": {
+              "mean_ms": 6.1,
+              "p50_ms": 5.34,
+              "p95_ms": 12.48,
+              "p99_ms": 16.5,
+              "max_ms": 16.5
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 104.7,
+          "rss_mb": 99.87
+        },
+        "load_generator_note": "Client and server share one laptop process/host in this harness"
+      },
+      "queue_position_bench": {
+        "10": {
+          "jobs_ahead": 9,
+          "latency_ms": {
+            "mean_ms": 12.59,
+            "p50_ms": 12.24,
+            "p95_ms": 15.31,
+            "p99_ms": 15.31,
+            "max_ms": 15.31
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 54.22,
+                "Total Cost": 54.23,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '132250bb-c72f-447d-92e5-d44940324165'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '132250bb-c72f-447d-92e5-d44940324165'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 36.8,
+                    "Plan Rows": 334,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < '132250bb-c72f-447d-92e5-d44940324165'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "100": {
+          "jobs_ahead": 99,
+          "latency_ms": {
+            "mean_ms": 13.3,
+            "p50_ms": 12.91,
+            "p95_ms": 17.33,
+            "p99_ms": 17.33,
+            "max_ms": 17.33
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 58.94,
+                "Total Cost": 58.95,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'a8f89b92-ecb6-41c2-9439-d9f3f7db7db3'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'a8f89b92-ecb6-41c2-9439-d9f3f7db7db3'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 41.4,
+                    "Plan Rows": 378,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < 'a8f89b92-ecb6-41c2-9439-d9f3f7db7db3'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "1000": {
+          "jobs_ahead": 999,
+          "latency_ms": {
+            "mean_ms": 11.24,
+            "p50_ms": 10.8,
+            "p95_ms": 14.13,
+            "p99_ms": 14.13,
+            "max_ms": 14.13
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 89.51,
+                "Total Cost": 89.52,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'cc6c1e55-21d4-4217-9d3f-cd7204c658cf'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'cc6c1e55-21d4-4217-9d3f-cd7204c658cf'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 71.3,
+                    "Plan Rows": 649,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < 'cc6c1e55-21d4-4217-9d3f-cd7204c658cf'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "large_workers_1": {
+      "name": "large_workers_1",
+      "dataset": {
+        "challenge_id": "70899b3b-00bb-4eb9-8351-8089733a3ecd",
+        "statuses": [
+          [
+            {
+              "X-User-Id": "a2b5e648-403f-577f-9840-7d0e48303747"
+            },
+            "3a23c6d2-e977-4084-92c6-a5b01d2a31e1"
+          ],
+          [
+            {
+              "X-User-Id": "f00af924-3012-586d-b2f9-e66f2c64e98e"
+            },
+            "566772ae-13d6-49b6-960e-52a957726dc3"
+          ],
+          [
+            {
+              "X-User-Id": "e3a57cf5-f140-5435-b239-a8e583f46a4d"
+            },
+            "a2494356-4020-438f-bf9e-23618e9a8011"
+          ],
+          [
+            {
+              "X-User-Id": "8fd12d4a-c489-546b-9356-bdaef0bbdc19"
+            },
+            "d7ce7aeb-df2d-4b23-8aa4-9f7c60f6b4e2"
+          ],
+          [
+            {
+              "X-User-Id": "c9565782-f360-56a0-bf5d-949e91a26bac"
+            },
+            "98b09493-572b-42bf-8705-b9632fbc836e"
+          ],
+          [
+            {
+              "X-User-Id": "0c76357e-c5b0-5b4e-b4a3-75d64e73e8c0"
+            },
+            "851c2c8d-85f8-447c-aeb3-6237fe0d44e7"
+          ],
+          [
+            {
+              "X-User-Id": "04eb673f-15ce-5774-a715-f27e2748ce7b"
+            },
+            "066be7b9-8b2d-4ed4-93d7-598dfb6ce049"
+          ],
+          [
+            {
+              "X-User-Id": "c3f41eaf-c87f-51fe-909d-568387f832d8"
+            },
+            "292df4be-a5d9-4676-813d-b987b9c73b93"
+          ],
+          [
+            {
+              "X-User-Id": "303f5b66-8187-5fa3-a11b-536acae5149a"
+            },
+            "3e87d8b6-54da-4678-a0d3-42329dc8d621"
+          ],
+          [
+            {
+              "X-User-Id": "6c4fcdde-a5a4-5b6d-bd58-c7fed66bccb6"
+            },
+            "f3afd488-bc8a-45e9-886b-901c95ec6dbf"
+          ],
+          [
+            {
+              "X-User-Id": "ff2470b5-e121-5a37-b251-adba6b6bb59f"
+            },
+            "cb67b38f-9b28-41d3-b82c-34a049024f2a"
+          ],
+          [
+            {
+              "X-User-Id": "21c866d9-876f-5f92-9b39-8594eac0dfd2"
+            },
+            "98b5a4b4-8895-44bd-8835-3a132ecd3f51"
+          ],
+          [
+            {
+              "X-User-Id": "75df6aa5-e56a-5117-9971-73175d34ac5e"
+            },
+            "ae6bb475-e14c-4fe8-a365-b744a5363f80"
+          ],
+          [
+            {
+              "X-User-Id": "3542e557-54f9-5f04-9f6c-afd750446ce7"
+            },
+            "3869724e-c3b8-45c8-81bc-1bbac5a28969"
+          ],
+          [
+            {
+              "X-User-Id": "6253aa5e-817e-581c-b1d4-01c68666eb0b"
+            },
+            "2dd0cb1c-1ddb-462c-a541-c4bdc71d7718"
+          ],
+          [
+            {
+              "X-User-Id": "f65be3dc-4dbd-537f-b0de-1afc4fab446f"
+            },
+            "6d600196-7c7b-41cf-8755-026d9711ce5a"
+          ],
+          [
+            {
+              "X-User-Id": "139abbe1-8699-57e2-b82a-92d4f03b5516"
+            },
+            "256ec56d-c629-4153-8126-91998e0e5e10"
+          ],
+          [
+            {
+              "X-User-Id": "58d20851-d37e-5187-b6a5-81e3c58367f8"
+            },
+            "e8c511df-a19a-4690-8b31-ec4fbd1ece53"
+          ],
+          [
+            {
+              "X-User-Id": "11977961-edae-590a-a28e-2a0195ade79c"
+            },
+            "31ee9e2e-84de-4741-a953-e28eb09ef870"
+          ],
+          [
+            {
+              "X-User-Id": "9fa2b458-927b-5374-8807-3ff7fc7721ad"
+            },
+            "5e5e441b-98cc-4364-8d5b-566579c37788"
+          ],
+          [
+            {
+              "X-User-Id": "87942f42-e9f1-52e8-9b02-47f6880a893e"
+            },
+            "317f3c39-543a-43b8-a3af-2b60c2ad1b44"
+          ],
+          [
+            {
+              "X-User-Id": "d8ba0c2a-9df5-5153-a007-f03cc0b7d9a9"
+            },
+            "862ff5e1-39b5-441e-bb50-0d591b959026"
+          ],
+          [
+            {
+              "X-User-Id": "2d50952f-7b1f-53b5-98ef-584ac12a98e9"
+            },
+            "660f081c-de28-4b05-9fdf-4df9470bd963"
+          ],
+          [
+            {
+              "X-User-Id": "cfb67d81-0093-50dc-ad53-ccd3ae81dfbf"
+            },
+            "89edced5-b10a-4d2b-8ab5-fa5206ff980e"
+          ],
+          [
+            {
+              "X-User-Id": "01695f1a-10c2-58a2-b7ac-f9779fe8bddb"
+            },
+            "8650793e-d08b-4058-bd3e-2da312320557"
+          ],
+          [
+            {
+              "X-User-Id": "4468e55c-f730-5b31-bad2-0caf3b7990f0"
+            },
+            "4c7b1a68-3b1f-44a4-a922-531366858b46"
+          ],
+          [
+            {
+              "X-User-Id": "dcb64f43-4e11-5858-b4c3-c4f056277128"
+            },
+            "d243c97e-823f-4f46-9a0d-1416c2a977f1"
+          ],
+          [
+            {
+              "X-User-Id": "e35ba642-4fde-52cf-985f-e6d4bbd0b052"
+            },
+            "06478286-200c-46db-a4e6-68ff75fafc14"
+          ],
+          [
+            {
+              "X-User-Id": "2ac5446c-1cb1-5f59-9f6d-929eb4673764"
+            },
+            "e2d72bac-4f6f-46c9-aaa2-946944f1a44c"
+          ],
+          [
+            {
+              "X-User-Id": "9d9b8692-ac45-53a7-8cfc-406cfa260c30"
+            },
+            "27a2d95b-6867-48ee-9298-8728681b7612"
+          ],
+          [
+            {
+              "X-User-Id": "e078030b-ae1d-50b7-889a-3d312265c560"
+            },
+            "b2fbc97e-efcd-4633-bb30-9e79e065cbfa"
+          ],
+          [
+            {
+              "X-User-Id": "28b765d4-2639-53bb-9d05-2e4d1580b0cf"
+            },
+            "d65b70d4-8dbe-4399-9eb4-8dc216682adc"
+          ],
+          [
+            {
+              "X-User-Id": "20d03833-b80f-5c41-9452-835368234843"
+            },
+            "8eced575-1f34-46e1-bea4-1ee897ad0cf5"
+          ],
+          [
+            {
+              "X-User-Id": "fa25a39f-982d-5e73-a5db-0858b1f90bc6"
+            },
+            "1e04b9f6-8d49-42e2-a2b0-ff029255d25c"
+          ],
+          [
+            {
+              "X-User-Id": "39f5a19c-d210-5e5d-9bec-4acea5ba0be2"
+            },
+            "0b27a410-bdb1-4beb-8ff8-18b0b6101658"
+          ],
+          [
+            {
+              "X-User-Id": "c3117dee-8b53-5188-a668-8bfdef6fc700"
+            },
+            "67d11404-936a-4bed-b0fc-40beeb09310a"
+          ],
+          [
+            {
+              "X-User-Id": "ac070f9c-d54f-5f31-979a-d61c217df397"
+            },
+            "5ebdb6a1-e6ff-4e0a-8fe7-d7e721f82d0a"
+          ],
+          [
+            {
+              "X-User-Id": "249ad20f-3567-5b09-a35b-7110d999b27c"
+            },
+            "168c8af9-fb5b-46f6-89f6-c6255a5104d1"
+          ],
+          [
+            {
+              "X-User-Id": "9a50bead-9674-5f8a-ba78-bb4dcc511700"
+            },
+            "40631f2f-1097-4bc5-8f79-91e14f412c4b"
+          ],
+          [
+            {
+              "X-User-Id": "35a1a302-e02c-5ee4-91cb-6ff0dc8b9261"
+            },
+            "6c79afde-0777-4143-83a2-7c75bc1f7eda"
+          ]
+        ],
+        "probe_submission_id": "3a23c6d2-e977-4084-92c6-a5b01d2a31e1",
+        "dataset": "large",
+        "submission_count": 40,
+        "queued_extra": 1000
+      },
+      "workers": 1,
+      "interactive": {
+        "attempted": 240,
+        "elapsed_seconds": 34.499,
+        "achieved_requests_per_second": 6.957,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 180,
+          "201": 60
+        },
+        "client_latency_ms": {
+          "mean_ms": 3880.82,
+          "p50_ms": 3062.08,
+          "p95_ms": 10056.42,
+          "p99_ms": 14459.04,
+          "max_ms": 15447.7
+        },
+        "server_total_ms": {
+          "mean_ms": 81.6,
+          "p50_ms": 41.81,
+          "p95_ms": 224.63,
+          "p99_ms": 389.26,
+          "max_ms": 501.24
+        },
+        "pool_wait_ms": {
+          "mean_ms": 5.84,
+          "p50_ms": 4.8,
+          "p95_ms": 12.29,
+          "p99_ms": 17.81,
+          "max_ms": 20.89
+        },
+        "sql_ms": {
+          "mean_ms": 14.15,
+          "p50_ms": 10.46,
+          "p95_ms": 37.78,
+          "p99_ms": 56.52,
+          "max_ms": 69.67
+        },
+        "non_db_ms": {
+          "mean_ms": 61.61,
+          "p50_ms": 24.47,
+          "p95_ms": 198.46,
+          "p99_ms": 308.49,
+          "max_ms": 426.91
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 3578.91,
+              "p50_ms": 2716.54,
+              "p95_ms": 9791.1,
+              "p99_ms": 15447.7,
+              "max_ms": 15447.7
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 50.09,
+              "p50_ms": 42.33,
+              "p95_ms": 89.08,
+              "p99_ms": 132.44,
+              "max_ms": 132.44
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.36,
+              "p50_ms": 4.67,
+              "p95_ms": 14.71,
+              "p99_ms": 20.89,
+              "max_ms": 20.89
+            },
+            "sql_ms": {
+              "mean_ms": 14.57,
+              "p50_ms": 10.72,
+              "p95_ms": 33.54,
+              "p99_ms": 51.79,
+              "max_ms": 51.79
+            },
+            "non_db_ms": {
+              "mean_ms": 29.16,
+              "p50_ms": 26.62,
+              "p95_ms": 49.16,
+              "p99_ms": 72.39,
+              "max_ms": 72.39
+            },
+            "identity_ms": {
+              "mean_ms": 6.1,
+              "p50_ms": 5.17,
+              "p95_ms": 10.69,
+              "p99_ms": 22.04,
+              "max_ms": 22.04
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 3904.99,
+              "p50_ms": 3006.42,
+              "p95_ms": 9806.11,
+              "p99_ms": 14867.98,
+              "max_ms": 14867.98
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 36.81,
+              "p50_ms": 32.93,
+              "p95_ms": 54.55,
+              "p99_ms": 70.95,
+              "max_ms": 70.95
+            },
+            "pool_wait_ms": {
+              "mean_ms": 5.32,
+              "p50_ms": 4.47,
+              "p95_ms": 9.85,
+              "p99_ms": 18.23,
+              "max_ms": 18.23
+            },
+            "sql_ms": {
+              "mean_ms": 10.25,
+              "p50_ms": 7.71,
+              "p95_ms": 22.21,
+              "p99_ms": 31.76,
+              "max_ms": 31.76
+            },
+            "non_db_ms": {
+              "mean_ms": 21.23,
+              "p50_ms": 19.88,
+              "p95_ms": 31.58,
+              "p99_ms": 46.14,
+              "max_ms": 46.14
+            },
+            "identity_ms": {
+              "mean_ms": 5.56,
+              "p50_ms": 5.08,
+              "p95_ms": 9.87,
+              "p99_ms": 10.54,
+              "max_ms": 10.54
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 3459.63,
+              "p50_ms": 2569.46,
+              "p95_ms": 7146.07,
+              "p99_ms": 10246.89,
+              "max_ms": 10246.89
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 36.63,
+              "p50_ms": 32.0,
+              "p95_ms": 53.22,
+              "p99_ms": 115.54,
+              "max_ms": 115.54
+            },
+            "pool_wait_ms": {
+              "mean_ms": 5.29,
+              "p50_ms": 4.63,
+              "p95_ms": 8.07,
+              "p99_ms": 16.46,
+              "max_ms": 16.46
+            },
+            "sql_ms": {
+              "mean_ms": 9.62,
+              "p50_ms": 7.44,
+              "p95_ms": 22.54,
+              "p99_ms": 42.12,
+              "max_ms": 42.12
+            },
+            "non_db_ms": {
+              "mean_ms": 21.72,
+              "p50_ms": 19.34,
+              "p95_ms": 28.93,
+              "p99_ms": 56.96,
+              "max_ms": 56.96
+            },
+            "identity_ms": {
+              "mean_ms": 5.64,
+              "p50_ms": 4.76,
+              "p95_ms": 9.55,
+              "p99_ms": 14.32,
+              "max_ms": 14.32
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 4579.74,
+              "p50_ms": 3577.01,
+              "p95_ms": 11140.78,
+              "p99_ms": 14459.04,
+              "max_ms": 14459.04
+            },
+            "requests": 60,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 60,
+            "server_total_ms": {
+              "mean_ms": 202.86,
+              "p50_ms": 187.79,
+              "p95_ms": 387.76,
+              "p99_ms": 501.24,
+              "max_ms": 501.24
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.38,
+              "p50_ms": 5.38,
+              "p95_ms": 13.06,
+              "p99_ms": 17.81,
+              "max_ms": 17.81
+            },
+            "sql_ms": {
+              "mean_ms": 22.14,
+              "p50_ms": 17.02,
+              "p95_ms": 46.24,
+              "p99_ms": 69.67,
+              "max_ms": 69.67
+            },
+            "non_db_ms": {
+              "mean_ms": 174.34,
+              "p50_ms": 162.72,
+              "p95_ms": 306.37,
+              "p99_ms": 426.91,
+              "max_ms": 426.91
+            },
+            "identity_ms": {
+              "mean_ms": 6.5,
+              "p50_ms": 5.44,
+              "p95_ms": 11.89,
+              "p99_ms": 15.02,
+              "max_ms": 15.02
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 104.5,
+          "rss_mb": 100.22
+        },
+        "load_generator_note": "Client and server share one laptop process/host in this harness"
+      },
+      "queue_position_bench": {
+        "10": {
+          "jobs_ahead": 9,
+          "latency_ms": {
+            "mean_ms": 12.19,
+            "p50_ms": 11.21,
+            "p95_ms": 17.17,
+            "p99_ms": 17.17,
+            "max_ms": 17.17
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 54.23,
+                "Total Cost": 54.24,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'e60ee41f-9690-47e8-8617-3b5166bb73ca'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = 'e60ee41f-9690-47e8-8617-3b5166bb73ca'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 36.8,
+                    "Plan Rows": 336,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < 'e60ee41f-9690-47e8-8617-3b5166bb73ca'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "100": {
+          "jobs_ahead": 99,
+          "latency_ms": {
+            "mean_ms": 11.61,
+            "p50_ms": 10.75,
+            "p95_ms": 13.4,
+            "p99_ms": 13.4,
+            "max_ms": 13.4
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 54.22,
+                "Total Cost": 54.23,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '3a3782b7-f35a-4c77-90a4-a75a30939269'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '3a3782b7-f35a-4c77-90a4-a75a30939269'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 36.8,
+                    "Plan Rows": 333,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < '3a3782b7-f35a-4c77-90a4-a75a30939269'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "1000": {
+          "jobs_ahead": 999,
+          "latency_ms": {
+            "mean_ms": 12.2,
+            "p50_ms": 12.28,
+            "p95_ms": 13.57,
+            "p99_ms": 13.57,
+            "max_ms": 13.57
+          },
+          "explain_json": [
+            {
+              "Plan": {
+                "Node Type": "Aggregate",
+                "Strategy": "Plain",
+                "Partial Mode": "Simple",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Startup Cost": 84.8,
+                "Total Cost": 84.81,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Plans": [
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 1 (returns $0)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_1",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '34472b00-4b39-46a1-9615-c5a1156863ca'::uuid)"
+                  },
+                  {
+                    "Node Type": "Index Scan",
+                    "Parent Relationship": "InitPlan",
+                    "Subplan Name": "InitPlan 2 (returns $1)",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Scan Direction": "Forward",
+                    "Index Name": "evaluations_pkey",
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations_2",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.29,
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Index Cond": "(id = '34472b00-4b39-46a1-9615-c5a1156863ca'::uuid)"
+                  },
+                  {
+                    "Node Type": "Seq Scan",
+                    "Parent Relationship": "Outer",
+                    "Parallel Aware": false,
+                    "Async Capable": false,
+                    "Relation Name": "evaluations",
+                    "Alias": "evaluations",
+                    "Startup Cost": 0.0,
+                    "Total Cost": 66.7,
+                    "Plan Rows": 604,
+                    "Plan Width": 0,
+                    "Filter": "((status = 'queued'::text) AND ((created_at < $0) OR ((created_at = $1) AND (id < '34472b00-4b39-46a1-9615-c5a1156863ca'::uuid))))"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

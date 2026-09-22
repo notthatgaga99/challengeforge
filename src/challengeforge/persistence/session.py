@@ -26,8 +26,13 @@ def create_engine(settings: Settings | None = None) -> AsyncEngine:
 
 def init_engine(settings: Settings | None = None) -> async_sessionmaker[AsyncSession]:
     global _engine, _session_factory
-    _engine = create_engine(settings)
+    cfg = settings or get_settings()
+    _engine = create_engine(cfg)
     _session_factory = async_sessionmaker(_engine, expire_on_commit=False)
+    if cfg.request_profiling_enabled:
+        from challengeforge.request_profile import install_sqlalchemy_events
+
+        install_sqlalchemy_events(_engine.sync_engine)
     return _session_factory
 
 

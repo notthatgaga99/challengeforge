@@ -1,4 +1,5 @@
 from collections.abc import AsyncIterator
+import time
 
 from fastapi import Depends, Request
 from fastapi.security import APIKeyHeader
@@ -14,20 +15,29 @@ from challengeforge.domain.exceptions import Unauthenticated
 from challengeforge.identity import CurrentUser
 from challengeforge.persistence.repositories import UserRepository
 from challengeforge.persistence.session import get_session_factory
+from challengeforge.request_profile import current_profile, timed_stage
 from challengeforge.storage.base import ArtifactStorage
 from challengeforge.storage.filesystem import LocalFilesystemStorage
 
 USER_HEADER = APIKeyHeader(name="X-User-Id", auto_error=False)
 
 
-async def get_db_session() -> AsyncIterator[AsyncSession]:
-    factory = get_session_factory()
-    async with factory() as session:
-        yield session
-
-
 def get_app_settings(request: Request) -> Settings:
     return request.app.state.settings
+
+
+async def get_db_session(
+    settings: Settings = Depends(get_app_settings),
+) -> AsyncIterator[AsyncSession]:
+    factory = get_session_factory()
+    async with factory() as session:
+        profile = current_profile()
+        if settings.request_profiling_enabled and profile is not None:
+            # Force early checkout so pool wait is separable from SQL time.
+            started = time.perf_counter()
+            await session.connection()
+            profile.pool_wait_ms += (time.perf_counter() - started) * 1000.0
+        yield session
 
 
 def get_storage(settings: Settings = Depends(get_app_settings)) -> ArtifactStorage:
@@ -56,7 +66,8 @@ async def get_current_user(
         user_id = UUID(raw)
     except ValueError as exc:
         raise Unauthenticated("Invalid X-User-Id.") from exc
-    user = await UserRepository(session).get(user_id)
+    with timed_stage("identity"):
+        user = await UserRepository(session).get(user_id)
     if user is None:
         raise Unauthenticated("Unknown development user.")
     return CurrentUser.from_user(user)
