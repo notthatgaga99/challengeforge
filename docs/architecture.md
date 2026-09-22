@@ -127,13 +127,15 @@ Replacing the filesystem with object storage later should not change submission 
 | Signal | Assumption |
 |---|---|
 | Concurrent users | 150–200 |
-| Sustained rps | 10–20 |
-| Burst rps | ~50 |
-| Process | 1 uvicorn worker |
+| Sustained interactive rps | ~20–40 on a quiet laptop with isolated load gen |
+| Burst rps | ~50 (host-limited) |
+| Process | 1 uvicorn API process + optional evaluation worker process(es) |
 | Cache | none |
-| Queue | none |
+| Queue | PostgreSQL evaluations table |
+| Expensive plane | Resource-Aware Runtime v1 (budgets, pressure, adaptive concurrency) |
 
-These numbers fit a single app process and a small Postgres. We will be wrong in a useful way if we measure otherwise.
+See [`interactive-isolated-load-profile.md`](interactive-isolated-load-profile.md) and
+[`resource-aware-runtime.md`](resource-aware-runtime.md).
 
 ## 8. Important failure modes
 
@@ -143,18 +145,21 @@ These numbers fit a single app process and a small Postgres. We will be wrong in
 - Unique/FK violations → mapped to 409 or 404, not 500, when we catch them; unexpected integrity errors still 500 with a request id.
 - Artifact put failure before insert → no submission row (client retries).
 - Unexpected exceptions → `500` with `request_id`, no stack trace in the body; JSON logs include the exception.
+- Evaluation capacity exhaustion → submissions stay durable QUEUED; backlog/pressure APIs tell the truth; workers shrink expensive concurrency.
 
 ## 9. Deliberate non-decisions
 
-Not in this slice, on purpose:
+Not in this iteration, on purpose:
 
 - Real authentication, sessions, SSO
 - Redis, Kafka, Kubernetes, extra app services
 - Object storage, CDN
-- Background workers / evaluation pipeline
-- LLM, retrieval, tools, or an “Agent” type
+- LLM, retrieval, tools, or an “Agent” type (interfaces reserved via `ExpensiveWorkSpec`)
 - Vector database
 - Horizontal scaling, read replicas, in-memory caches
 - A product-grade SPA
 
-AI later: a Challenge Assistant would be a new application service that reads `ChallengeSpecification` and submission evidence (`metadata` + `artifact_key`). It should not own the submission state machine.
+AI later: a Challenge Assistant would be a new expensive-plane capability that
+declares cost/concurrency through the resource-aware runtime, and reads
+`ChallengeSpecification` plus submission evidence. It must not own the
+submission state machine.

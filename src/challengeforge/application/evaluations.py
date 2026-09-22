@@ -38,6 +38,9 @@ class EvaluationBacklogStatus:
     medium_queued_count: int = 0
     heavy_queued_count: int = 0
     worker_capacity: int = 0
+    pressure_state: str = "normal"
+    adaptive_max_workers: int | None = None
+    resource_runtime_enabled: bool = True
 
 
 @dataclass(frozen=True)
@@ -229,6 +232,7 @@ class EvaluationService:
                 "scoring may take a long time, but your submission is durable."
             ),
         }
+        runtime = await self.uow.evaluations.read_runtime_state()
         return EvaluationBacklogStatus(
             health=health,
             queued_count=queued,
@@ -248,6 +252,9 @@ class EvaluationService:
             medium_queued_count=snap["medium_queued"],
             heavy_queued_count=snap["heavy_queued"],
             worker_capacity=settings.evaluation_max_workers,
+            pressure_state=str(runtime.get("pressure_state") or "normal"),
+            adaptive_max_workers=runtime.get("adaptive_max_workers"),
+            resource_runtime_enabled=settings.resource_aware_runtime_enabled,
         )
 
     async def get_organizer_queue(self, actor: CurrentUser) -> EvaluationBacklogStatus:

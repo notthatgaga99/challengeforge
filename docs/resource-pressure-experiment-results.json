@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "started_at": "2026-09-22T16:43:26.068767+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 794.8
+    },
+    "mix": {
+      "light": 12,
+      "medium": 8,
+      "heavy": 4
+    },
+    "interactive_requests": 40,
+    "hypothesis": "Adaptive controller (C) should keep interactive latency competitive while still completing mixed evaluations; A may complete faster but risk higher host pressure; B is a static middle ground.",
+    "postgresql_version": "16.2",
+    "completed_at": "2026-09-22T16:44:02.738247+00:00"
+  },
+  "scenarios": {
+    "A_no_controller": {
+      "name": "A_no_controller",
+      "settings": {
+        "resource_aware_runtime_enabled": false,
+        "evaluation_min_workers": 2,
+        "evaluation_max_workers": 2,
+        "evaluation_scheduling_policy": "bounded_light_bypass"
+      },
+      "enqueued": 24,
+      "completed": 24,
+      "queued_remaining": 0,
+      "running_remaining": 0,
+      "interactive": {
+        "requests": 40,
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 52.25,
+          "p95_ms": 107.11,
+          "p99_ms": 131.86,
+          "mean_ms": 59.7
+        }
+      },
+      "elapsed_seconds": 9.125,
+      "evaluation_throughput_per_second": 2.63,
+      "process": {
+        "cpu_percent": 94.5,
+        "rss_mb": 88.69
+      },
+      "runtime_state": {
+        "pressure_state": "normal",
+        "adaptive_max_workers": 2
+      },
+      "admission_holds": 0,
+      "controller_history_len": 0,
+      "submissions_durable": 24
+    },
+    "B_static_limits": {
+      "name": "B_static_limits",
+      "settings": {
+        "resource_aware_runtime_enabled": true,
+        "evaluation_min_workers": 2,
+        "evaluation_max_workers": 2,
+        "evaluation_scheduling_policy": "bounded_light_bypass"
+      },
+      "enqueued": 24,
+      "completed": 24,
+      "queued_remaining": 0,
+      "running_remaining": 0,
+      "interactive": {
+        "requests": 40,
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 60.43,
+          "p95_ms": 115.51,
+          "p99_ms": 265.14,
+          "mean_ms": 74.85
+        }
+      },
+      "elapsed_seconds": 8.277,
+      "evaluation_throughput_per_second": 2.899,
+      "process": {
+        "cpu_percent": 96.2,
+        "rss_mb": 89.15
+      },
+      "runtime_state": {
+        "pressure_state": "normal",
+        "adaptive_max_workers": 2
+      },
+      "admission_holds": 0,
+      "controller_history_len": 0,
+      "submissions_durable": 24
+    },
+    "C_adaptive": {
+      "name": "C_adaptive",
+      "settings": {
+        "resource_aware_runtime_enabled": true,
+        "evaluation_min_workers": 1,
+        "evaluation_max_workers": 3,
+        "evaluation_scheduling_policy": "resource_aware"
+      },
+      "enqueued": 24,
+      "completed": 24,
+      "queued_remaining": 0,
+      "running_remaining": 0,
+      "interactive": {
+        "requests": 40,
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 60.31,
+          "p95_ms": 108.72,
+          "p99_ms": 251.92,
+          "mean_ms": 73.69
+        }
+      },
+      "elapsed_seconds": 8.045,
+      "evaluation_throughput_per_second": 2.983,
+      "process": {
+        "cpu_percent": 99.0,
+        "rss_mb": 89.43
+      },
+      "runtime_state": {
+        "pressure_state": "normal",
+        "adaptive_max_workers": 3
+      },
+      "admission_holds": 0,
+      "controller_history_len": 2,
+      "submissions_durable": 24
+    }
+  },
+  "scorecard": {
+    "A_no_controller": {
+      "completed_evaluations": 24,
+      "evaluation_throughput_per_second": 2.63,
+      "interactive_p95_ms": 107.11,
+      "interactive_errors": 0,
+      "cpu_percent": 94.5,
+      "rss_mb": 88.69,
+      "admission_holds": 0,
+      "submissions_durable": 24,
+      "useful_work_proxy": 22.407
+    },
+    "B_static_limits": {
+      "completed_evaluations": 24,
+      "evaluation_throughput_per_second": 2.899,
+      "interactive_p95_ms": 115.51,
+      "interactive_errors": 0,
+      "cpu_percent": 96.2,
+      "rss_mb": 89.15,
+      "admission_holds": 0,
+      "submissions_durable": 24,
+      "useful_work_proxy": 20.777
+    },
+    "C_adaptive": {
+      "completed_evaluations": 24,
+      "evaluation_throughput_per_second": 2.983,
+      "interactive_p95_ms": 108.72,
+      "interactive_errors": 0,
+      "cpu_percent": 99.0,
+      "rss_mb": 89.43,
+      "admission_holds": 0,
+      "submissions_durable": 24,
+      "useful_work_proxy": 22.075
+    }
+  }
+}

@@ -122,6 +122,9 @@ class EvaluationBacklogResponse(BaseModel):
     message: str
     submissions_accepted: bool
     estimate_is_approximate: bool = True
+    pressure_state: str = "normal"
+    adaptive_max_workers: int | None = None
+    resource_runtime_enabled: bool = True
 
 
 class OrganizerEvaluationQueueResponse(EvaluationBacklogResponse):

@@ -99,6 +99,9 @@ def serialize_backlog(item: EvaluationBacklogStatus) -> EvaluationBacklogRespons
         message=item.message,
         submissions_accepted=item.submissions_accepted,
         estimate_is_approximate=item.estimate_is_approximate,
+        pressure_state=item.pressure_state,
+        adaptive_max_workers=item.adaptive_max_workers,
+        resource_runtime_enabled=item.resource_runtime_enabled,
     )
 
 

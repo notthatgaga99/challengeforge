@@ -355,12 +355,23 @@ class EvaluationRepository:
         row directly behind it may bypass, and only ``light_bypass_limit`` times.
         """
         max_workers = max(1, max_workers)
-        max_concurrent_heavy = max(1, min(max_concurrent_heavy, max_workers))
+        # 0 is intentional under DEGRADED (block new HEAVY; allow LIGHT bypass).
+        max_concurrent_heavy = max(0, min(max_concurrent_heavy, max_workers))
         light_bypass_limit = max(0, light_bypass_limit)
+        # resource_aware uses the same claim mechanics as bounded LIGHT bypass;
+        # expensive-plane admission / pressure live outside this transaction.
+        if scheduling_policy == "resource_aware":
+            scheduling_policy = "bounded_light_bypass"
 
         await self.session.execute(
             pg_insert(EvaluationSchedulerStateRow)
-            .values(id=1, blocked_heavy_id=None, light_bypass_count=0)
+            .values(
+                id=1,
+                blocked_heavy_id=None,
+                light_bypass_count=0,
+                pressure_state="normal",
+                adaptive_max_workers=None,
+            )
             .on_conflict_do_nothing(index_elements=["id"])
         )
         state = (
@@ -409,7 +420,7 @@ class EvaluationRepository:
                 )
             ).scalar_one()
             heavy_is_blocked = int(active_heavy) >= max_concurrent_heavy
-            if heavy_is_blocked:
+            if heavy_is_blocked or max_concurrent_heavy == 0:
                 if not bounded_policy:
                     return None
                 if state.blocked_heavy_id != oldest.id:
@@ -453,6 +464,47 @@ class EvaluationRepository:
         row.failure_reason = None
         await self.session.flush()
         return evaluation_to_domain(row)
+
+    async def persist_runtime_state(
+        self, *, pressure_state: str, adaptive_max_workers: int
+    ) -> None:
+        """Publish worker pressure / concurrency for API observability."""
+        await self.session.execute(
+            pg_insert(EvaluationSchedulerStateRow)
+            .values(
+                id=1,
+                blocked_heavy_id=None,
+                light_bypass_count=0,
+                pressure_state=pressure_state,
+                adaptive_max_workers=adaptive_max_workers,
+            )
+            .on_conflict_do_nothing(index_elements=["id"])
+        )
+        state = (
+            await self.session.execute(
+                select(EvaluationSchedulerStateRow)
+                .where(EvaluationSchedulerStateRow.id == 1)
+                .with_for_update()
+            )
+        ).scalar_one()
+        state.pressure_state = pressure_state
+        state.adaptive_max_workers = adaptive_max_workers
+        await self.session.flush()
+
+    async def read_runtime_state(self) -> dict:
+        row = (
+            await self.session.execute(
+                select(EvaluationSchedulerStateRow).where(
+                    EvaluationSchedulerStateRow.id == 1
+                )
+            )
+        ).scalar_one_or_none()
+        if row is None:
+            return {"pressure_state": "normal", "adaptive_max_workers": None}
+        return {
+            "pressure_state": row.pressure_state or "normal",
+            "adaptive_max_workers": row.adaptive_max_workers,
+        }
 
     async def queue_position(self, evaluation_id: UUID) -> int | None:
         """Point-in-time count of queued jobs ahead in default FIFO order.
@@ -609,6 +661,36 @@ class EvaluationRepository:
             recovered.append(evaluation_to_domain(row))
 
         return recovered
+
+    async def plane_snapshot(self) -> dict:
+        """Cheap counts for the resource-aware runtime control loop."""
+        from sqlalchemy import func
+
+        counts = await self.count_by_status()
+        running_heavy = (
+            await self.session.execute(
+                select(func.count())
+                .select_from(EvaluationRow)
+                .where(
+                    EvaluationRow.status == "running",
+                    EvaluationRow.workload_class == "heavy",
+                )
+            )
+        ).scalar_one()
+        oldest_class = (
+            await self.session.execute(
+                select(EvaluationRow.workload_class)
+                .where(EvaluationRow.status == "queued")
+                .order_by(EvaluationRow.created_at.asc(), EvaluationRow.id.asc())
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+        return {
+            "queued": int(counts.get("queued", 0)),
+            "running": int(counts.get("running", 0)),
+            "running_heavy": int(running_heavy),
+            "oldest_workload_class": oldest_class,
+        }
 
     async def count_by_status(self) -> dict[str, int]:
         from sqlalchemy import func

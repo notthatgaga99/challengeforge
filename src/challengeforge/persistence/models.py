@@ -222,3 +222,7 @@ class EvaluationSchedulerStateRow(Base):
     light_bypass_count: Mapped[int] = mapped_column(
         Integer, nullable=False, server_default=text("0")
     )
+    pressure_state: Mapped[str] = mapped_column(
+        Text, nullable=False, server_default=text("'normal'")
+    )
+    adaptive_max_workers: Mapped[int | None] = mapped_column(Integer, nullable=True)

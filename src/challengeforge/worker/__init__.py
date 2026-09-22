@@ -21,10 +21,12 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from challengeforge.application.evaluator import EvaluationFailed, evaluate_submission
 from challengeforge.config import Settings, get_settings
+from challengeforge.domain.enums import WorkloadClass
 from challengeforge.observability import configure_logging
 from challengeforge.persistence.mapping import utcnow
 from challengeforge.persistence.repositories import EvaluationRepository, SubmissionRepository
 from challengeforge.persistence.session import dispose_engine, get_session_factory, init_engine
+from challengeforge.runtime import ResourceAwareRuntime, ResourceBudget
 
 logger = structlog.get_logger(__name__)
 
@@ -35,6 +37,7 @@ class EvaluationWorker:
         settings: Settings,
         worker_id: str | None = None,
         session_factory: async_sessionmaker[AsyncSession] | None = None,
+        runtime: ResourceAwareRuntime | None = None,
     ) -> None:
         self.settings = settings
         self.worker_id = worker_id or f"worker-{uuid4().hex[:8]}"
@@ -45,10 +48,23 @@ class EvaluationWorker:
         self.claims = 0
         self.poll_attempts = 0
         self.empty_polls = 0
+        self.admission_holds = 0
         self.crash_after_claim = False
         self.active_evaluations = 0
         self.peak_active = 0
         self.resource_samples: list[dict] = []
+        if runtime is not None:
+            self.runtime = runtime
+        elif settings.resource_aware_runtime_enabled:
+            self.runtime = ResourceAwareRuntime(
+                budget=ResourceBudget.from_settings(settings),
+                enabled=True,
+            )
+        else:
+            self.runtime = ResourceAwareRuntime(
+                budget=ResourceBudget.from_settings(settings),
+                enabled=False,
+            )
 
     def _factory(self) -> async_sessionmaker[AsyncSession]:
         return self._session_factory or get_session_factory()
@@ -108,13 +124,57 @@ class EvaluationWorker:
         """Claim and evaluate one job. Returns True if work was done."""
         factory = self._factory()
         self.poll_attempts += 1
+
+        # Resource-aware gate: may delay evaluation start; never rejects submissions.
+        async with factory() as session:
+            plane = await EvaluationRepository(session).plane_snapshot()
+            await session.rollback()
+        peek = None
+        if plane.get("oldest_workload_class"):
+            try:
+                peek = WorkloadClass(str(plane["oldest_workload_class"]))
+            except ValueError:
+                peek = WorkloadClass.LIGHT
+        tick = self.runtime.tick(
+            queued_evaluations=int(plane["queued"]),
+            running_evaluations=int(plane["running"]),
+            running_heavy=int(plane["running_heavy"]),
+            peek_workload=peek,
+        )
+        admission = tick["admission"]
+        effective_workers = int(tick["effective_max_workers"])
+        pressure = str(tick["pressure"])
+        async with factory() as session:
+            await EvaluationRepository(session).persist_runtime_state(
+                pressure_state=pressure,
+                adaptive_max_workers=effective_workers,
+            )
+            await session.commit()
+        if not admission.allowed:
+            self.admission_holds += 1
+            logger.info(
+                "evaluation_admission_hold",
+                worker_id=self.worker_id,
+                reason=admission.reason,
+                pressure=pressure,
+                effective_max_workers=effective_workers,
+                queued=plane["queued"],
+                running=plane["running"],
+            )
+            return False
+
+        # Under DEGRADED, refuse new HEAVY starts but keep bounded LIGHT bypass.
+        max_heavy = self.settings.evaluation_max_concurrent_heavy
+        if pressure == "degraded":
+            max_heavy = 0
+
         async with factory() as session:
             eval_repo = EvaluationRepository(session)
             claimed = await eval_repo.claim_next(
                 worker_id=self.worker_id,
                 scheduling_policy=self.settings.evaluation_scheduling_policy,
-                max_workers=self.settings.evaluation_max_workers,
-                max_concurrent_heavy=self.settings.evaluation_max_concurrent_heavy,
+                max_workers=effective_workers,
+                max_concurrent_heavy=max_heavy,
                 light_bypass_limit=self.settings.evaluation_light_bypass_limit,
             )
             if claimed is None:
