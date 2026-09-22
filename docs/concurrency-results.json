@@ -1,0 +1,246 @@
+{
+  "metadata": {
+    "started_at": "2026-09-21T15:39:19.921388+00:00",
+    "database_mode": "embedded PostgreSQL",
+    "database_version": "16.2",
+    "transaction_isolation": "read committed",
+    "app_pool_size": 5,
+    "app_max_overflow": 5,
+    "participant_rows": 102,
+    "leaderboard_implemented": false,
+    "completed_at": "2026-09-21T15:39:33.185877+00:00"
+  },
+  "scenarios": {
+    "A_concurrent_duplicate_request": {
+      "result": {
+        "requests": 20,
+        "status_counts": {
+          "201": 1,
+          "200": 19
+        },
+        "errors": [],
+        "latency": {
+          "min_ms": 120.44,
+          "mean_ms": 506.66,
+          "p50_ms": 400.77,
+          "p95_ms": 994.48,
+          "max_ms": 1097.51
+        },
+        "distinct_response_ids": 1,
+        "database_rows": 1,
+        "replayed_responses": 19
+      },
+      "resources": {
+        "samples": 0,
+        "exact_peak_pool_checked_out": 2,
+        "pool_checkouts": 20
+      }
+    },
+    "B_concurrent_independent_submissions": {
+      "result": {
+        "requests": 100,
+        "status_counts": {
+          "201": 100
+        },
+        "successes": 100,
+        "failures": 0,
+        "client_errors": [],
+        "latency": {
+          "min_ms": 405.46,
+          "mean_ms": 2183.43,
+          "p50_ms": 2228.72,
+          "p95_ms": 3728.77,
+          "max_ms": 3944.93
+        },
+        "distinct_response_ids": 100,
+        "database": {
+          "rows": 100,
+          "participants": 100,
+          "distinct_ids": 100,
+          "duplicate_timestamps": 0
+        },
+        "pool_timeout_errors": 0
+      },
+      "resources": {
+        "samples": 22,
+        "max_db_connections": 7,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 89.61,
+        "max_pool_checked_out": 2,
+        "max_pool_size": 5,
+        "max_pool_overflow": 0,
+        "max_app_cpu_percent": 195.3,
+        "max_app_rss_mb": 93.16,
+        "max_db_cpu_percent": 33.4,
+        "max_db_rss_mb": 322.42,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 2,
+        "pool_checkouts": 100
+      }
+    },
+    "C_read_write_contention": {
+      "result": {
+        "writes": {
+          "requests": 60,
+          "status_counts": {
+            "201": 60
+          },
+          "latency": {
+            "min_ms": 298.37,
+            "mean_ms": 1322.41,
+            "p50_ms": 1275.24,
+            "p95_ms": 2378.91,
+            "max_ms": 2563.09
+          },
+          "failures": 0
+        },
+        "reads": {
+          "challenge": {
+            "requests": 8,
+            "status_counts": {
+              "200": 8
+            },
+            "latency": {
+              "min_ms": 45.01,
+              "mean_ms": 328.96,
+              "p50_ms": 94.27,
+              "p95_ms": 1633.3,
+              "max_ms": 1633.3
+            }
+          },
+          "challenge_submissions": {
+            "requests": 9,
+            "status_counts": {
+              "200": 9
+            },
+            "latency": {
+              "min_ms": 48.6,
+              "mean_ms": 313.91,
+              "p50_ms": 113.3,
+              "p95_ms": 1466.57,
+              "max_ms": 1466.57
+            }
+          },
+          "participant_submissions": {
+            "requests": 7,
+            "status_counts": {
+              "200": 7
+            },
+            "latency": {
+              "min_ms": 77.98,
+              "mean_ms": 406.29,
+              "p50_ms": 281.76,
+              "p95_ms": 1455.29,
+              "max_ms": 1455.29
+            }
+          }
+        },
+        "total_read_failures": 0,
+        "observed_submission_counts": [
+          0,
+          0,
+          5,
+          43,
+          56,
+          58,
+          60,
+          60,
+          60
+        ],
+        "non_monotonic_submission_counts": 0,
+        "final_database_rows": 60,
+        "leaderboard": "not implemented"
+      },
+      "resources": {
+        "samples": 17,
+        "max_db_connections": 7,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 104.34,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 5,
+        "max_pool_overflow": 0,
+        "max_app_cpu_percent": 137.5,
+        "max_app_rss_mb": 93.31,
+        "max_db_cpu_percent": 25.2,
+        "max_db_rss_mb": 324.2,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 3,
+        "pool_checkouts": 84
+      }
+    },
+    "D_challenge_closing_race": {
+      "result": {
+        "insert_observed_sleeping_before_close": true,
+        "close_commit_duration_ms": 10.35,
+        "in_flight_status": 201,
+        "in_flight_completed_after_close_ms": 757.1,
+        "request_started_after_close_status": 404,
+        "database_rows": 1,
+        "close_mechanism": "direct SQL because the current API has no close endpoint; the database status value is part of the current model"
+      },
+      "resources": {
+        "samples": 13,
+        "max_db_connections": 7,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 779.27,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 5,
+        "max_pool_overflow": 0,
+        "max_app_cpu_percent": 100.8,
+        "max_app_rss_mb": 93.31,
+        "max_db_cpu_percent": 33.4,
+        "max_db_rss_mb": 325.62,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 2
+      }
+    },
+    "E_lost_response_retry": {
+      "result": {
+        "with_key": {
+          "first_status": 201,
+          "retry_status": 200,
+          "same_response_id": true,
+          "rows_after_retry": 1
+        },
+        "without_key": {
+          "first_status": 201,
+          "retry_status": 201,
+          "same_response_id": false,
+          "additional_rows": 2
+        },
+        "final_database_rows": 3
+      },
+      "resources": {
+        "samples": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 4
+      }
+    },
+    "F_terminal_transition_race": {
+      "result": {
+        "submit_response": {
+          "status": 200,
+          "reported_state": "submitted"
+        },
+        "cancel_response": {
+          "status": 200,
+          "reported_state": "cancelled"
+        },
+        "final_database_state": "submitted",
+        "both_terminal_transitions_accepted": true
+      },
+      "resources": {
+        "samples": 0,
+        "exact_peak_pool_checked_out": 2,
+        "pool_checkouts": 3
+      }
+    }
+  }
+}

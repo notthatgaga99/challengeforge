@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "challengeforge"
+version = "0.1.0"
+description = "AI-assisted technical challenge / hackathon platform (modular monolith)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115,<1",
+    "uvicorn[standard]>=0.32,<1",
+    "sqlalchemy[asyncio]>=2.0.36,<3",
+    "asyncpg>=0.30,<1",
+    "alembic>=1.14,<2",
+    "pydantic-settings>=2.6,<3",
+    "structlog>=24.4,<26",
+    "jinja2>=3.1,<4",
+    "python-multipart>=0.0.12,<1",
+    "httpx>=0.27,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3,<9",
+    "pytest-asyncio>=0.24,<1",
+    "pgserver>=0.1.4,<1",
+    "psutil>=7,<8",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+challengeforge = ["web/templates/*.html", "web/static/*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+pythonpath = ["src", "."]

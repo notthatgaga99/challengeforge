@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Hackathon — ChallengeForge{% endblock %}
+{% block content %}
+<section>
+  <p><a href="/">&larr; All hackathons</a></p>
+  <div id="hackathon"></div>
+  <h2>Challenges</h2>
+  <div id="challenge-list" class="stack"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  const hackathonId = "{{ hackathon_id }}";
+  document.addEventListener("cf:ready", async () => {
+    const h = await CF.api(`/api/v1/hackathons/${hackathonId}`);
+    document.getElementById("hackathon").innerHTML = `
+      <div class="row">
+        <h1>${CF.esc(h.title)}</h1>
+        <span class="status">${CF.esc(h.status)}</span>
+      </div>
+      <p>${CF.esc(h.description)}</p>
+    `;
+    const challenges = await CF.api(`/api/v1/hackathons/${hackathonId}/challenges`);
+    const root = document.getElementById("challenge-list");
+    if (!challenges.length) {
+      root.innerHTML = "<p class='empty'>No challenges yet.</p>";
+      return;
+    }
+    root.innerHTML = challenges.map(c => `
+      <article class="card">
+        <div class="row">
+          <h3><a href="/challenges/${c.id}">${CF.esc(c.title)}</a></h3>
+          <span class="status">${CF.esc(c.status)}</span>
+        </div>
+        <p>${CF.esc(c.description)}</p>
+      </article>
+    `).join("");
+  });
+</script>
+{% endblock %}

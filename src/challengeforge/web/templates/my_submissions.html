@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}My submissions — ChallengeForge{% endblock %}
+{% block content %}
+<section>
+  <h1>My submissions</h1>
+  <div id="list" class="stack"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("cf:ready", async () => {
+    const me = CF.currentUser;
+    const items = await CF.api(`/api/v1/users/${me.id}/submissions`);
+    const root = document.getElementById("list");
+    if (!items.length) {
+      root.innerHTML = "<p class='empty'>No submissions yet.</p>";
+      return;
+    }
+    root.innerHTML = items.map(s => `
+      <article class="card">
+        <div class="row">
+          <a href="/submissions/${s.id}">${s.id}</a>
+          <span class="status">${CF.esc(s.status)}</span>
+        </div>
+        <p>Challenge ${s.challenge_id}</p>
+      </article>
+    `).join("");
+  });
+</script>
+{% endblock %}

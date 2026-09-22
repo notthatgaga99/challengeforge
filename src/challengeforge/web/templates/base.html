@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ChallengeForge{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <a href="/">ChallengeForge</a>
+      <span class="tag">slice 1</span>
+    </div>
+    <nav>
+      <a href="/" class="{% if page == 'hackathons' %}active{% endif %}">Hackathons</a>
+      <a href="/my-submissions" class="{% if page == 'my-submissions' %}active{% endif %}">My submissions</a>
+      <a href="/organizer" class="{% if page == 'organizer' %}active{% endif %}">Organizer</a>
+    </nav>
+    <label class="identity">
+      Act as
+      <select id="user-switcher" aria-label="Development identity"></select>
+    </label>
+  </header>
+  <main>
+    <div id="banner" class="banner" hidden></div>
+    {% block content %}{% endblock %}
+  </main>
+  <script src="/static/app.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

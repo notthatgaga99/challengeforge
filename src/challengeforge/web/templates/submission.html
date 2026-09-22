@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Submission — ChallengeForge{% endblock %}
+{% block content %}
+<section>
+  <div id="submission"></div>
+  <div id="evaluation-panel" class="eval-panel" hidden></div>
+  <div id="actions" class="row"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  const submissionId = "{{ submission_id }}";
+  const POLL_MS = 2500;
+  let pollTimer = null;
+
+  document.addEventListener("cf:ready", async () => {
+    await renderAll();
+  });
+
+  async function renderAll() {
+    const s = await CF.api(`/api/v1/submissions/${submissionId}`);
+    document.getElementById("submission").innerHTML = `
+      <p><a href="/challenges/${s.challenge_id}">&larr; Challenge</a></p>
+      <div class="row">
+        <h1>Submission</h1>
+        <span class="status">${CF.esc(s.status)}</span>
+      </div>
+      <p class="hint">Participant ${s.participant_id}</p>
+      <p class="hint">Created ${CF.esc(s.created_at)} · Updated ${CF.esc(s.updated_at)}</p>
+      <h2>Metadata</h2>
+      <pre class="spec">${CF.esc(JSON.stringify(s.metadata, null, 2))}</pre>
+      <p>Artifact: ${s.artifact_key ? CF.esc(s.artifact_key) : "none"}</p>
+    `;
+
+    const actions = document.getElementById("actions");
+    actions.innerHTML = "";
+    const me = CF.currentUser;
+    if (me && me.id === s.participant_id && s.status === "created") {
+      actions.innerHTML = `
+        <button id="submit-btn">Submit</button>
+        <button id="cancel-btn" class="secondary">Cancel</button>
+      `;
+      document.getElementById("submit-btn").onclick = async () => {
+        const result = await CF.api(`/api/v1/submissions/${submissionId}/submit`, { method: "POST" });
+        CF.banner(result.evaluation_message || "Submission accepted. Evaluation is asynchronous.");
+        await renderAll();
+      };
+      document.getElementById("cancel-btn").onclick = async () => {
+        await CF.api(`/api/v1/submissions/${submissionId}/cancel`, { method: "POST" });
+        location.reload();
+      };
+    }
+
+    if (s.status === "submitted") {
+      await renderEvaluation();
+    } else {
+      stopPolling();
+      document.getElementById("evaluation-panel").hidden = true;
+    }
+  }
+
+  async function renderEvaluation() {
+    const panel = document.getElementById("evaluation-panel");
+    let ev;
+    try {
+      ev = await CF.api(`/api/v1/submissions/${submissionId}/evaluation`);
+    } catch {
+      panel.hidden = true;
+      stopPolling();
+      return;
+    }
+    panel.hidden = false;
+    panel.innerHTML = evaluationHtml(ev);
+    if (ev.status === "queued" || ev.status === "running") {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+  }
+
+  function evaluationHtml(ev) {
+    const accepted = `<p class="eval-line ok">✓ Submission received</p>`;
+    if (ev.status === "queued") {
+      const wait = ev.estimated_wait_seconds == null
+        ? "Estimated wait: unavailable"
+        : `Estimated wait: ~${CF.esc(ev.estimated_wait_seconds)} seconds`;
+      const ahead = ev.estimated_jobs_ahead == null
+        ? ""
+        : `Approximately ${CF.esc(ev.estimated_jobs_ahead)} job(s) ahead`;
+      return `
+        <h2>Evaluation</h2>
+        ${accepted}
+        <p class="eval-status queued">🟡 Queued</p>
+        <p class="hint">${CF.esc(ev.message)}</p>
+        <p>${ahead}</p>
+        <p class="hint">${wait}${ev.estimate_is_approximate ? " (approximate)" : ""}</p>
+      `;
+    }
+    if (ev.status === "running") {
+      return `
+        <h2>Evaluation</h2>
+        ${accepted}
+        <p class="eval-status running">🔵 Running</p>
+        <p class="hint">${CF.esc(ev.message)}</p>
+      `;
+    }
+    if (ev.status === "succeeded") {
+      return `
+        <h2>Evaluation</h2>
+        ${accepted}
+        <p class="eval-status succeeded">🟢 Complete</p>
+        <p class="score">Score: ${CF.esc(ev.score)} / 100</p>
+        <p class="hint">Completed ${CF.esc(ev.completed_at || "")}</p>
+      `;
+    }
+    return `
+      <h2>Evaluation</h2>
+      ${accepted}
+      <p class="eval-status failed">🔴 Evaluation failed</p>
+      <p>${CF.esc(ev.failure_message || "Evaluation could not complete.")}</p>
+      <p class="hint">Your submission remains on record. Completed ${CF.esc(ev.completed_at || "")}</p>
+    `;
+  }
+
+  function startPolling() {
+    if (pollTimer) return;
+    pollTimer = setInterval(() => {
+      renderEvaluation().catch(() => stopPolling());
+    }, POLL_MS);
+  }
+
+  function stopPolling() {
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  }
+
+  window.addEventListener("beforeunload", stopPolling);
+</script>
+{% endblock %}

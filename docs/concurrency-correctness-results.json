@@ -1,0 +1,310 @@
+{
+  "metadata": {
+    "started_at": "2026-09-21T16:58:19.197243+00:00",
+    "database_mode": "embedded PostgreSQL",
+    "database_version": "16.2",
+    "transaction_isolation": "read committed",
+    "app_pool_size": 5,
+    "app_max_overflow": 5,
+    "baseline_file": "docs\\concurrency-results.json",
+    "completed_at": "2026-09-21T16:59:11.590920+00:00"
+  },
+  "scenarios": {
+    "duplicate_requests": {
+      "result": {
+        "requests": 50,
+        "status_counts": {
+          "201": 1,
+          "200": 49
+        },
+        "latency": {
+          "min_ms": 655.4,
+          "mean_ms": 1985.43,
+          "p50_ms": 1952.74,
+          "p95_ms": 3014.63,
+          "p99_ms": 3326.19,
+          "max_ms": 3326.19
+        },
+        "throughput_rps": 14.41,
+        "errors": [],
+        "distinct_response_ids": 1,
+        "database_rows": 1,
+        "replayed": 49
+      },
+      "resources": {
+        "samples": 0,
+        "exact_peak_pool_checked_out": 3,
+        "pool_checkouts": 50
+      }
+    },
+    "independent_writes": {
+      "result": {
+        "requests": 100,
+        "status_counts": {
+          "201": 99,
+          "null": 1
+        },
+        "latency": {
+          "min_ms": 1364.06,
+          "mean_ms": 5811.0,
+          "p50_ms": 5613.76,
+          "p95_ms": 9926.08,
+          "p99_ms": 10331.61,
+          "max_ms": 10531.37
+        },
+        "throughput_rps": 9.24,
+        "errors": [
+          "ReadError('')"
+        ],
+        "database": {
+          "rows": 99,
+          "participants": 99,
+          "distinct_ids": 99,
+          "duplicate_timestamps": 0
+        },
+        "pool_timeout_errors": 0
+      },
+      "resources": {
+        "samples": 22,
+        "max_db_connections": 7,
+        "max_db_active": 1,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 230.9,
+        "max_pool_checked_out": 3,
+        "max_pool_size": 5,
+        "max_pool_overflow": 3,
+        "max_app_cpu_percent": 166.2,
+        "max_app_rss_mb": 94.91,
+        "max_db_cpu_percent": 58.3,
+        "max_db_rss_mb": 301.21,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 5,
+        "pool_checkouts": 99
+      }
+    },
+    "terminal_races": {
+      "result": {
+        "submit_wins": {
+          "iterations": 20,
+          "winner_successes": 20,
+          "loser_conflicts": 20,
+          "final_state_matches_winner": 20
+        },
+        "cancel_wins": {
+          "iterations": 20,
+          "winner_successes": 20,
+          "loser_conflicts": 20,
+          "final_state_matches_winner": 20
+        },
+        "request_metrics": {
+          "requests": 80,
+          "status_counts": {
+            "200": 40,
+            "409": 40
+          },
+          "latency": {
+            "min_ms": 68.18,
+            "mean_ms": 144.12,
+            "p50_ms": 121.11,
+            "p95_ms": 203.71,
+            "p99_ms": 889.9,
+            "max_ms": 889.9
+          },
+          "throughput_rps": 6.12,
+          "errors": []
+        }
+      },
+      "resources": {
+        "samples": 460,
+        "max_db_connections": 8,
+        "max_db_active": 4,
+        "max_db_lock_waiters": 2,
+        "max_transaction_ms": 244.48,
+        "max_pool_checked_out": 2,
+        "max_pool_size": 5,
+        "max_pool_overflow": 0,
+        "max_app_cpu_percent": 293.0,
+        "max_app_rss_mb": 94.95,
+        "max_db_cpu_percent": 104.2,
+        "max_db_rss_mb": 303.98,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 2,
+        "pool_checkouts": 184
+      }
+    },
+    "close_acceptance_races": {
+      "result": {
+        "submission_first": {
+          "iterations": 10,
+          "submission_accepted": 10,
+          "submission_rejected": 0,
+          "close_successes": 10
+        },
+        "close_first": {
+          "iterations": 10,
+          "submission_accepted": 0,
+          "submission_rejected": 10,
+          "close_successes": 10
+        },
+        "request_metrics": {
+          "requests": 40,
+          "status_counts": {
+            "201": 10,
+            "200": 20,
+            "409": 10
+          },
+          "latency": {
+            "min_ms": 91.19,
+            "mean_ms": 127.38,
+            "p50_ms": 124.97,
+            "p95_ms": 164.42,
+            "p99_ms": 178.67,
+            "max_ms": 178.67
+          },
+          "throughput_rps": 5.5,
+          "errors": []
+        }
+      },
+      "resources": {
+        "samples": 254,
+        "max_db_connections": 8,
+        "max_db_active": 3,
+        "max_db_lock_waiters": 2,
+        "max_transaction_ms": 129.33,
+        "max_pool_checked_out": 2,
+        "max_pool_size": 5,
+        "max_pool_overflow": 0,
+        "max_app_cpu_percent": 208.3,
+        "max_app_rss_mb": 93.16,
+        "max_db_cpu_percent": 195.4,
+        "max_db_rss_mb": 323.7,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 2,
+        "pool_checkouts": 120
+      }
+    },
+    "conflicting_idempotency": {
+      "result": {
+        "iterations": 20,
+        "one_create_one_conflict": 20,
+        "database_rows": 20,
+        "request_metrics": {
+          "requests": 40,
+          "status_counts": {
+            "409": 20,
+            "201": 20
+          },
+          "latency": {
+            "min_ms": 87.44,
+            "mean_ms": 110.42,
+            "p50_ms": 101.66,
+            "p95_ms": 144.66,
+            "p99_ms": 146.8,
+            "max_ms": 146.8
+          },
+          "throughput_rps": 16.67,
+          "errors": []
+        }
+      },
+      "resources": {
+        "samples": 49,
+        "max_db_connections": 8,
+        "max_db_active": 1,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 52.56,
+        "max_pool_checked_out": 2,
+        "max_pool_size": 5,
+        "max_pool_overflow": 0,
+        "max_app_cpu_percent": 195.3,
+        "max_app_rss_mb": 93.3,
+        "max_db_cpu_percent": 104.2,
+        "max_db_rss_mb": 324.0,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 2,
+        "pool_checkouts": 64
+      }
+    },
+    "mixed_workload": {
+      "result": {
+        "close_status": 200,
+        "transition_status_counts": {
+          "200": 20,
+          "409": 20
+        },
+        "exactly_one_terminal_success_per_submission": true,
+        "create_status_counts": {
+          "201": 30,
+          "409": 10
+        },
+        "post_close_status_counts": {
+          "409": 10
+        },
+        "post_close_successes": 0,
+        "read_status_counts": {
+          "200": 3,
+          "404": 12
+        },
+        "broken_foreign_keys": 0,
+        "illegal_statuses": 0,
+        "duplicate_key_groups": 0,
+        "final_database_rows": 50
+      },
+      "resources": {
+        "samples": 61,
+        "max_db_connections": 8,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 58.91,
+        "max_pool_checked_out": 2,
+        "max_pool_size": 5,
+        "max_pool_overflow": 0,
+        "max_app_cpu_percent": 199.5,
+        "max_app_rss_mb": 94.58,
+        "max_db_cpu_percent": 97.7,
+        "max_db_rss_mb": 326.45,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 4,
+        "pool_checkouts": 142
+      }
+    }
+  },
+  "before_after": {
+    "duplicate_requests": {
+      "before": {
+        "request_count": 20,
+        "p50_ms": 400.77,
+        "p95_ms": 994.48,
+        "p99_ms": "not captured in baseline"
+      },
+      "after": {
+        "request_count": 50,
+        "p50_ms": 1952.74,
+        "p95_ms": 3014.63,
+        "p99_ms": 3326.19,
+        "throughput_rps": 14.41
+      },
+      "note": "Single laptop runs are noisy; duplicate request counts differ (baseline 20, after 50). Independent writes are both 100."
+    },
+    "independent_writes": {
+      "before": {
+        "request_count": 100,
+        "p50_ms": 2228.72,
+        "p95_ms": 3728.77,
+        "p99_ms": "not captured in baseline"
+      },
+      "after": {
+        "request_count": 100,
+        "p50_ms": 5613.76,
+        "p95_ms": 9926.08,
+        "p99_ms": 10331.61,
+        "throughput_rps": 9.24
+      },
+      "note": "Single laptop runs are noisy; duplicate request counts differ (baseline 20, after 50). Independent writes are both 100."
+    }
+  }
+}

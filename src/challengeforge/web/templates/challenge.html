@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Challenge — ChallengeForge{% endblock %}
+{% block content %}
+<section>
+  <div id="challenge"></div>
+  <form id="submit-form" class="card" hidden>
+    <h2>Create submission</h2>
+    <label>Notes / metadata (JSON object)
+      <textarea id="metadata" rows="5">{"notes":""}</textarea>
+    </label>
+    <button type="submit">Create</button>
+  </form>
+  <h2>Submissions</h2>
+  <p class="hint" id="submissions-hint"></p>
+  <div id="submissions" class="stack"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  const challengeId = "{{ challenge_id }}";
+  document.addEventListener("cf:ready", async () => {
+    const c = await CF.api(`/api/v1/challenges/${challengeId}`);
+    document.getElementById("challenge").innerHTML = `
+      <p><a href="/hackathons/${c.hackathon_id}">&larr; Hackathon</a></p>
+      <div class="row">
+        <h1>${CF.esc(c.title)}</h1>
+        <span class="status">${CF.esc(c.status)}</span>
+      </div>
+      <p>${CF.esc(c.description)}</p>
+      <h2>Specification</h2>
+      <pre class="spec">${CF.esc(c.specification.body)}</pre>
+      <h2>Constraints</h2>
+      <p>${CF.esc(c.constraints || "None specified.")}</p>
+      <h2>Evaluation criteria</h2>
+      <ul>${c.evaluation_criteria.map(e => `<li><strong>${CF.esc(e.name)}</strong> (weight ${e.weight}) — ${CF.esc(e.description)}</li>`).join("")}</ul>
+    `;
+    const me = CF.currentUser;
+    const form = document.getElementById("submit-form");
+    if (me && me.role === "participant" && c.status === "published") {
+      form.hidden = false;
+    }
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      let metadata;
+      try { metadata = JSON.parse(document.getElementById("metadata").value); }
+      catch { CF.banner("Metadata must be valid JSON.", true); return; }
+      const key = crypto.randomUUID();
+      const created = await CF.api(`/api/v1/challenges/${challengeId}/submissions`, {
+        method: "POST",
+        headers: { "Idempotency-Key": key },
+        body: JSON.stringify({ metadata }),
+      });
+      window.location.href = `/submissions/${created.id}`;
+    });
+    await loadSubs(me, c);
+  });
+
+  async function loadSubs(me, challenge) {
+    const root = document.getElementById("submissions");
+    const hint = document.getElementById("submissions-hint");
+    try {
+      if (me.role === "organizer") {
+        hint.textContent = "Organizer view: all submissions for this challenge.";
+        const items = await CF.api(`/api/v1/challenges/${challengeId}/submissions`);
+        root.innerHTML = renderSubs(items);
+      } else {
+        hint.textContent = "Your submissions for every challenge. Filter visually by this challenge.";
+        const items = await CF.api(`/api/v1/users/${me.id}/submissions`);
+        root.innerHTML = renderSubs(items.filter(s => s.challenge_id === challengeId));
+      }
+    } catch (err) {
+      hint.textContent = err.message;
+    }
+  }
+
+  function renderSubs(items) {
+    if (!items.length) return "<p class='empty'>No submissions.</p>";
+    return items.map(s => `
+      <article class="card">
+        <div class="row">
+          <a href="/submissions/${s.id}">${s.id}</a>
+          <span class="status">${CF.esc(s.status)}</span>
+        </div>
+        <p>Updated ${CF.esc(s.updated_at)}</p>
+      </article>
+    `).join("");
+  }
+</script>
+{% endblock %}

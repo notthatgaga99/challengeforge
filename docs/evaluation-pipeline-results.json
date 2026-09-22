@@ -1,0 +1,279 @@
+{
+  "metadata": {
+    "started_at": "2026-09-21T16:27:48.605427+00:00",
+    "database_mode": "embedded PostgreSQL",
+    "database_version": "16.2",
+    "transaction_isolation": "read committed",
+    "completed_at": "2026-09-21T16:28:22.930471+00:00",
+    "all_passed": true
+  },
+  "scenarios": {
+    "A_normal_evaluation": {
+      "result": {
+        "passed": true,
+        "submission_id": "fd929c84-2389-458d-ac2d-b763d5f0f457",
+        "evaluation": {
+          "id": "e171f6cf-be53-434b-82b4-7798cd3aec72",
+          "submission_id": "fd929c84-2389-458d-ac2d-b763d5f0f457",
+          "status": "succeeded",
+          "created_at": "2026-09-21T16:27:49.514021Z",
+          "started_at": "2026-09-21T16:27:50.273352Z",
+          "completed_at": "2026-09-21T16:27:50.324924Z",
+          "attempt_count": 1,
+          "failure_reason": null,
+          "score": 51,
+          "result_metadata": {
+            "evaluator": "deterministic_placeholder_v1",
+            "fingerprint": "a676c837b3801a51",
+            "has_artifact": false,
+            "metadata_keys": [
+              "note"
+            ]
+          }
+        },
+        "worker_claims": 1,
+        "worker_succeeded": 1
+      },
+      "resources": {
+        "samples": 29,
+        "max_db_connections": 5,
+        "max_db_active": 1,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 751.62,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 5,
+        "max_pool_overflow": -4,
+        "max_app_cpu_percent": 104.2,
+        "max_app_rss_mb": 88.28,
+        "max_db_cpu_percent": 100.8,
+        "max_db_rss_mb": 231.98,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 7
+      }
+    },
+    "B_two_workers": {
+      "result": {
+        "passed": true,
+        "claims": 1,
+        "succeeded": 1,
+        "evaluation": {
+          "id": "bcb60ada-9c34-4d9e-a741-4a7844a64528",
+          "submission_id": "67330db9-c32c-47be-b219-11c685e5fdcd",
+          "status": "succeeded",
+          "created_at": "2026-09-21T16:27:52.326459Z",
+          "started_at": "2026-09-21T16:27:52.378488Z",
+          "completed_at": "2026-09-21T16:27:52.429829Z",
+          "attempt_count": 1,
+          "failure_reason": null,
+          "score": 54,
+          "result_metadata": {
+            "evaluator": "deterministic_placeholder_v1",
+            "fingerprint": "5b055b0231c0d010",
+            "has_artifact": false,
+            "metadata_keys": [
+              "note"
+            ]
+          }
+        },
+        "worker_1_claims": 0,
+        "worker_2_claims": 1
+      },
+      "resources": {
+        "samples": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 7
+      }
+    },
+    "C_many_evaluations": {
+      "result": {
+        "passed": true,
+        "queued": 100,
+        "succeeded": 100,
+        "claims": 100,
+        "workers": 4,
+        "wall_seconds": 5.289,
+        "throughput_evaluations_per_second": 18.91,
+        "queue_wait_ms": {
+          "min_ms": 4792.38,
+          "mean_ms": 9126.55,
+          "p50_ms": 9220.1,
+          "p95_ms": 12806.61,
+          "max_ms": 13037.86
+        },
+        "execution_ms": {
+          "min_ms": 16.97,
+          "mean_ms": 44.3,
+          "p50_ms": 41.58,
+          "p95_ms": 65.39,
+          "max_ms": 88.71
+        },
+        "end_to_end_ms": {
+          "min_ms": 4851.77,
+          "mean_ms": 9170.85,
+          "p50_ms": 9256.84,
+          "p95_ms": 12836.7,
+          "max_ms": 13065.13
+        },
+        "per_worker_claims": [
+          29,
+          26,
+          23,
+          22
+        ],
+        "per_worker_succeeded": [
+          29,
+          26,
+          23,
+          22
+        ]
+      },
+      "resources": {
+        "samples": 599,
+        "max_db_connections": 11,
+        "max_db_active": 3,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 1262.67,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 5,
+        "max_pool_overflow": -4,
+        "max_app_cpu_percent": 208.3,
+        "max_app_rss_mb": 89.73,
+        "max_db_cpu_percent": 208.3,
+        "max_db_rss_mb": 289.13,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 204
+      }
+    },
+    "D_evaluator_failure": {
+      "result": {
+        "passed": true,
+        "evaluation": {
+          "id": "0d09d337-4a11-4142-b601-93bb4669eeaa",
+          "submission_id": "82095aa9-88f1-4cd9-8f00-9a478ce52eb1",
+          "status": "failed",
+          "created_at": "2026-09-21T16:28:14.029987Z",
+          "started_at": "2026-09-21T16:28:14.065987Z",
+          "completed_at": "2026-09-21T16:28:14.093387Z",
+          "attempt_count": 1,
+          "failure_reason": "Forced evaluation failure via submission metadata.",
+          "score": null,
+          "result_metadata": {
+            "evaluator": "deterministic_placeholder_v1"
+          }
+        },
+        "jobs_failed": 1
+      },
+      "resources": {
+        "samples": 9,
+        "max_db_connections": 8,
+        "max_db_active": 1,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 16.3,
+        "max_pool_checked_out": 0,
+        "max_pool_size": 5,
+        "max_pool_overflow": -4,
+        "max_app_cpu_percent": 97.7,
+        "max_app_rss_mb": 89.86,
+        "max_db_cpu_percent": 146.5,
+        "max_db_rss_mb": 325.93,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 7
+      }
+    },
+    "E_worker_crash": {
+      "result": {
+        "passed": true,
+        "recovered": 1,
+        "evaluation": {
+          "id": "4662fc48-472e-4646-9bdb-7d68249d4155",
+          "submission_id": "f0b0d1d1-b4fe-40e9-8cf9-08a9f7022c3b",
+          "status": "succeeded",
+          "created_at": "2026-09-21T16:28:16.005951Z",
+          "started_at": "2026-09-21T16:28:16.070255Z",
+          "completed_at": "2026-09-21T16:28:16.102854Z",
+          "attempt_count": 2,
+          "failure_reason": null,
+          "score": 63,
+          "result_metadata": {
+            "evaluator": "deterministic_placeholder_v1",
+            "fingerprint": "6e47ddda665149d4",
+            "has_artifact": false,
+            "metadata_keys": [
+              "note"
+            ]
+          }
+        }
+      },
+      "resources": {
+        "samples": 3,
+        "max_db_connections": 8,
+        "max_db_active": 1,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 19.95,
+        "max_pool_checked_out": 0,
+        "max_pool_size": 5,
+        "max_pool_overflow": -4,
+        "max_app_cpu_percent": 146.5,
+        "max_app_rss_mb": 89.98,
+        "max_db_cpu_percent": 27.0,
+        "max_db_rss_mb": 326.14,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 7
+      }
+    },
+    "F_submission_idempotency": {
+      "result": {
+        "passed": true,
+        "create_status_counts": {
+          "200": 19,
+          "201": 1
+        },
+        "submission_ids": [
+          "4d2f20d5-0459-4ca1-8b77-617a7d83be56"
+        ],
+        "evaluation_ids": [
+          "f6e7b7e3-91a0-4ce1-a5f6-16f801b445de"
+        ],
+        "evaluations_for_submission": 1,
+        "submit_statuses": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200
+        ]
+      },
+      "resources": {
+        "samples": 3,
+        "max_db_connections": 12,
+        "max_db_active": 1,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 106.94,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 5,
+        "max_pool_overflow": 0,
+        "max_app_cpu_percent": 83.1,
+        "max_app_rss_mb": 92.88,
+        "max_db_cpu_percent": 38.1,
+        "max_db_rss_mb": 326.38,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 2,
+        "pool_checkouts": 34
+      }
+    }
+  }
+}

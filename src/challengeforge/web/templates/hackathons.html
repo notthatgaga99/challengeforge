@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Hackathons — ChallengeForge{% endblock %}
+{% block content %}
+<section>
+  <h1>Hackathons</h1>
+  <p class="lede">Published events are visible to participants. Organizers also see drafts.</p>
+  <div id="hackathon-list" class="stack"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("cf:ready", async () => {
+    const items = await CF.api("/api/v1/hackathons");
+    const root = document.getElementById("hackathon-list");
+    if (!items.length) {
+      root.innerHTML = "<p class='empty'>No hackathons yet.</p>";
+      return;
+    }
+    root.innerHTML = items.map(h => `
+      <article class="card">
+        <div class="row">
+          <h2><a href="/hackathons/${h.id}">${CF.esc(h.title)}</a></h2>
+          <span class="status">${CF.esc(h.status)}</span>
+        </div>
+        <p>${CF.esc(h.description)}</p>
+      </article>
+    `).join("");
+  });
+</script>
+{% endblock %}

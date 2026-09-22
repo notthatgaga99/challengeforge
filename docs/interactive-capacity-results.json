@@ -1,0 +1,986 @@
+{
+  "metadata": {
+    "started_at": "2026-09-22T09:20:45.214227+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 1455.9
+    },
+    "python": "3.11.0",
+    "database_mode": "embedded PostgreSQL",
+    "target_request_rate": 100.0,
+    "duration_seconds": 8.0,
+    "concurrent_clients": 100,
+    "traffic_mix_percent": {
+      "challenge_reads": 60,
+      "evaluation_status": 15,
+      "participant_history": 10,
+      "submission_creation": 10,
+      "organizer_operations": 5
+    },
+    "worker_count": 2,
+    "evaluation_workload_scenarios": [
+      "baseline",
+      "normal",
+      "sustained_backlog",
+      "burst",
+      "mixed"
+    ],
+    "safety_limits": {
+      "max_duration_seconds": 20.0,
+      "max_requests_per_scenario": 3000,
+      "max_total_requests": 12000,
+      "max_clients": 150,
+      "max_workers": 2,
+      "max_pressure_evaluations": 48
+    },
+    "postgresql_version": "16.2",
+    "completed_at": "2026-09-22T09:28:29.729570+00:00"
+  },
+  "scenarios": {
+    "baseline": {
+      "name": "baseline",
+      "pressure": {
+        "initial_jobs": 0,
+        "producer_rate": 0.0,
+        "distribution": {
+          "light": 1.0
+        },
+        "initial_jobs_created": 0,
+        "jobs_created_during_window": 0
+      },
+      "interactive": {
+        "attempted": 800,
+        "successful": 799,
+        "errors": 1,
+        "timeouts": 0,
+        "success_rate_percent": 99.875,
+        "error_rate_percent": 0.125,
+        "elapsed_seconds": 77.763,
+        "achieved_requests_per_second": 10.288,
+        "latency": {
+          "mean_ms": 3258.5,
+          "p50_ms": 2407.31,
+          "p95_ms": 8762.39,
+          "p99_ms": 13496.03,
+          "max_ms": 17329.67
+        },
+        "status_codes": {
+          "201": 85,
+          "200": 714,
+          "None": 1
+        },
+        "error_types": {
+          "RemoteProtocolError": 1
+        },
+        "by_category": {
+          "submission_creation": {
+            "requests": 85,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3379.21,
+              "p50_ms": 2451.51,
+              "p95_ms": 8795.59,
+              "p99_ms": 12599.11,
+              "max_ms": 12599.11
+            }
+          },
+          "challenge_reads": {
+            "requests": 474,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3086.52,
+              "p50_ms": 2317.65,
+              "p95_ms": 8296.08,
+              "p99_ms": 13009.75,
+              "max_ms": 17329.67
+            }
+          },
+          "evaluation_status": {
+            "requests": 115,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3394.03,
+              "p50_ms": 2312.79,
+              "p95_ms": 11073.18,
+              "p99_ms": 13496.03,
+              "max_ms": 14948.55
+            }
+          },
+          "organizer_operations": {
+            "requests": 43,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3091.93,
+              "p50_ms": 1722.04,
+              "p95_ms": 15353.51,
+              "p99_ms": 16392.57,
+              "max_ms": 16392.57
+            }
+          },
+          "participant_history": {
+            "requests": 83,
+            "success_rate_percent": 98.795,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 4015.54,
+              "p50_ms": 2889.06,
+              "p95_ms": 10442.22,
+              "p99_ms": 14282.65,
+              "max_ms": 14282.65
+            }
+          }
+        }
+      },
+      "evaluation": {
+        "samples": 43,
+        "max_queue_depth": 0,
+        "ending_queue_depth": 0,
+        "max_active_workers": 0,
+        "max_oldest_queued_age_seconds": 0.0,
+        "completed_during_window": 0,
+        "evaluation_throughput_per_second": 0.0,
+        "completed_total": 0,
+        "queue_wait_ms": {
+          "min_ms": 0.0,
+          "mean_ms": 0.0,
+          "p50_ms": 0.0,
+          "p95_ms": 0.0,
+          "max_ms": 0.0
+        },
+        "execution_ms": {
+          "min_ms": 0.0,
+          "mean_ms": 0.0,
+          "p50_ms": 0.0,
+          "p95_ms": 0.0,
+          "max_ms": 0.0
+        },
+        "by_class": {},
+        "worker_count": 2
+      },
+      "resources": {
+        "samples": 138,
+        "max_db_connections": 12,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 1,
+        "max_transaction_ms": 1637.43,
+        "max_pool_checked_out": 3,
+        "max_pool_size": 8,
+        "max_pool_overflow": -1,
+        "max_app_cpu_percent": 140.2,
+        "max_app_rss_mb": 96.46,
+        "max_db_cpu_percent": 69.2,
+        "max_db_rss_mb": 184.98,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 4,
+        "pool_checkouts": 799
+      },
+      "worker_metrics": {
+        "claims": 0,
+        "completed": 0,
+        "failed": 0,
+        "peak_active": 0
+      }
+    },
+    "normal": {
+      "name": "normal",
+      "pressure": {
+        "initial_jobs": 4,
+        "producer_rate": 0.5,
+        "distribution": {
+          "light": 0.8,
+          "medium": 0.2
+        },
+        "initial_jobs_created": 4,
+        "jobs_created_during_window": 3
+      },
+      "interactive": {
+        "attempted": 800,
+        "successful": 799,
+        "errors": 1,
+        "timeouts": 0,
+        "success_rate_percent": 99.875,
+        "error_rate_percent": 0.125,
+        "elapsed_seconds": 79.677,
+        "achieved_requests_per_second": 10.041,
+        "latency": {
+          "mean_ms": 3272.84,
+          "p50_ms": 2466.96,
+          "p95_ms": 8924.8,
+          "p99_ms": 13986.6,
+          "max_ms": 17470.11
+        },
+        "status_codes": {
+          "200": 712,
+          "201": 87,
+          "None": 1
+        },
+        "error_types": {
+          "ReadError": 1
+        },
+        "by_category": {
+          "challenge_reads": {
+            "requests": 475,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3202.76,
+              "p50_ms": 2485.47,
+              "p95_ms": 8177.39,
+              "p99_ms": 13302.06,
+              "max_ms": 16814.82
+            }
+          },
+          "submission_creation": {
+            "requests": 88,
+            "success_rate_percent": 98.864,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 2991.8,
+              "p50_ms": 2134.2,
+              "p95_ms": 7452.32,
+              "p99_ms": 11850.04,
+              "max_ms": 11850.04
+            }
+          },
+          "evaluation_status": {
+            "requests": 112,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3421.41,
+              "p50_ms": 2455.76,
+              "p95_ms": 9566.75,
+              "p99_ms": 14143.39,
+              "max_ms": 14686.57
+            }
+          },
+          "participant_history": {
+            "requests": 85,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3805.79,
+              "p50_ms": 2720.03,
+              "p95_ms": 10831.56,
+              "p99_ms": 17470.11,
+              "max_ms": 17470.11
+            }
+          },
+          "organizer_operations": {
+            "requests": 40,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3174.75,
+              "p50_ms": 2365.5,
+              "p95_ms": 8924.8,
+              "p99_ms": 15152.18,
+              "max_ms": 15152.18
+            }
+          }
+        }
+      },
+      "evaluation": {
+        "samples": 43,
+        "max_queue_depth": 5,
+        "ending_queue_depth": 0,
+        "max_active_workers": 2,
+        "max_oldest_queued_age_seconds": 16.313,
+        "completed_during_window": 7,
+        "evaluation_throughput_per_second": 0.088,
+        "completed_total": 7,
+        "queue_wait_ms": {
+          "min_ms": 4208.48,
+          "mean_ms": 11294.3,
+          "p50_ms": 11794.31,
+          "p95_ms": 16796.05,
+          "max_ms": 16796.05
+        },
+        "execution_ms": {
+          "min_ms": 2148.63,
+          "mean_ms": 2988.97,
+          "p50_ms": 2659.04,
+          "p95_ms": 4728.78,
+          "max_ms": 4728.78
+        },
+        "by_class": {
+          "light": {
+            "count": 3,
+            "queue_wait_ms": {
+              "min_ms": 4208.48,
+              "mean_ms": 8593.28,
+              "p50_ms": 4775.31,
+              "p95_ms": 16796.05,
+              "max_ms": 16796.05
+            },
+            "execution_ms": {
+              "min_ms": 3314.48,
+              "mean_ms": 3832.7,
+              "p50_ms": 3454.85,
+              "p95_ms": 4728.78,
+              "max_ms": 4728.78
+            }
+          },
+          "medium": {
+            "count": 4,
+            "queue_wait_ms": {
+              "min_ms": 11188.55,
+              "mean_ms": 13320.07,
+              "p50_ms": 11794.31,
+              "p95_ms": 16125.29,
+              "max_ms": 16125.29
+            },
+            "execution_ms": {
+              "min_ms": 2148.63,
+              "mean_ms": 2356.17,
+              "p50_ms": 2178.06,
+              "p95_ms": 2659.04,
+              "max_ms": 2659.04
+            }
+          }
+        },
+        "worker_count": 2
+      },
+      "resources": {
+        "samples": 137,
+        "max_db_connections": 13,
+        "max_db_active": 4,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 1367.64,
+        "max_pool_checked_out": 7,
+        "max_pool_size": 8,
+        "max_pool_overflow": -1,
+        "max_app_cpu_percent": 114.7,
+        "max_app_rss_mb": 97.9,
+        "max_db_cpu_percent": 45.3,
+        "max_db_rss_mb": 325.8,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 7,
+        "pool_checkouts": 808
+      },
+      "worker_metrics": {
+        "claims": 7,
+        "completed": 7,
+        "failed": 0,
+        "peak_active": 1
+      }
+    },
+    "sustained_backlog": {
+      "name": "sustained_backlog",
+      "pressure": {
+        "initial_jobs": 24,
+        "producer_rate": 2.0,
+        "distribution": {
+          "light": 0.5,
+          "medium": 0.25,
+          "heavy": 0.25
+        },
+        "initial_jobs_created": 24,
+        "jobs_created_during_window": 2
+      },
+      "interactive": {
+        "attempted": 800,
+        "successful": 799,
+        "errors": 1,
+        "timeouts": 0,
+        "success_rate_percent": 99.875,
+        "error_rate_percent": 0.125,
+        "elapsed_seconds": 100.607,
+        "achieved_requests_per_second": 7.952,
+        "latency": {
+          "mean_ms": 3993.1,
+          "p50_ms": 3072.98,
+          "p95_ms": 10473.82,
+          "p99_ms": 15519.27,
+          "max_ms": 30407.94
+        },
+        "status_codes": {
+          "200": 724,
+          "201": 75,
+          "None": 1
+        },
+        "error_types": {
+          "ReadError": 1
+        },
+        "by_category": {
+          "participant_history": {
+            "requests": 74,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3798.08,
+              "p50_ms": 3073.87,
+              "p95_ms": 8371.79,
+              "p99_ms": 11064.34,
+              "max_ms": 11064.34
+            }
+          },
+          "challenge_reads": {
+            "requests": 504,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 4007.0,
+              "p50_ms": 3062.79,
+              "p95_ms": 10608.67,
+              "p99_ms": 15519.27,
+              "max_ms": 30407.94
+            }
+          },
+          "submission_creation": {
+            "requests": 76,
+            "success_rate_percent": 98.684,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3923.96,
+              "p50_ms": 2843.81,
+              "p95_ms": 10278.15,
+              "p99_ms": 17538.68,
+              "max_ms": 17538.68
+            }
+          },
+          "evaluation_status": {
+            "requests": 109,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3970.97,
+              "p50_ms": 3046.5,
+              "p95_ms": 10976.49,
+              "p99_ms": 18233.59,
+              "max_ms": 21572.56
+            }
+          },
+          "organizer_operations": {
+            "requests": 37,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 4401.07,
+              "p50_ms": 3863.69,
+              "p95_ms": 12144.04,
+              "p99_ms": 13755.92,
+              "max_ms": 13755.92
+            }
+          }
+        }
+      },
+      "evaluation": {
+        "samples": 44,
+        "max_queue_depth": 25,
+        "ending_queue_depth": 5,
+        "max_active_workers": 2,
+        "max_oldest_queued_age_seconds": 101.062,
+        "completed_during_window": 20,
+        "evaluation_throughput_per_second": 0.199,
+        "completed_total": 22,
+        "queue_wait_ms": {
+          "min_ms": 6870.14,
+          "mean_ms": 52777.14,
+          "p50_ms": 46685.49,
+          "p95_ms": 100979.25,
+          "max_ms": 101188.38
+        },
+        "execution_ms": {
+          "min_ms": 510.55,
+          "mean_ms": 3173.17,
+          "p50_ms": 3078.24,
+          "p95_ms": 4725.91,
+          "max_ms": 5354.86
+        },
+        "by_class": {
+          "heavy": {
+            "count": 7,
+            "queue_wait_ms": {
+              "min_ms": 6870.14,
+              "mean_ms": 55486.7,
+              "p50_ms": 69766.83,
+              "p95_ms": 101188.38,
+              "max_ms": 101188.38
+            },
+            "execution_ms": {
+              "min_ms": 928.24,
+              "mean_ms": 3209.46,
+              "p50_ms": 3168.99,
+              "p95_ms": 5354.86,
+              "max_ms": 5354.86
+            }
+          },
+          "light": {
+            "count": 14,
+            "queue_wait_ms": {
+              "min_ms": 8897.65,
+              "mean_ms": 47979.35,
+              "p50_ms": 41302.96,
+              "p95_ms": 96110.57,
+              "max_ms": 96110.57
+            },
+            "execution_ms": {
+              "min_ms": 1988.4,
+              "mean_ms": 3345.22,
+              "p50_ms": 2962.25,
+              "p95_ms": 4725.91,
+              "max_ms": 4725.91
+            }
+          },
+          "medium": {
+            "count": 1,
+            "queue_wait_ms": {
+              "min_ms": 100979.25,
+              "mean_ms": 100979.25,
+              "p50_ms": 100979.25,
+              "p95_ms": 100979.25,
+              "max_ms": 100979.25
+            },
+            "execution_ms": {
+              "min_ms": 510.55,
+              "mean_ms": 510.55,
+              "p50_ms": 510.55,
+              "p95_ms": 510.55,
+              "max_ms": 510.55
+            }
+          }
+        },
+        "worker_count": 2
+      },
+      "resources": {
+        "samples": 146,
+        "max_db_connections": 12,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 4489.8,
+        "max_pool_checked_out": 4,
+        "max_pool_size": 8,
+        "max_pool_overflow": -1,
+        "max_app_cpu_percent": 133.7,
+        "max_app_rss_mb": 99.27,
+        "max_db_cpu_percent": 37.8,
+        "max_db_rss_mb": 329.95,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 5,
+        "pool_checkouts": 805
+      },
+      "worker_metrics": {
+        "claims": 22,
+        "completed": 22,
+        "failed": 0,
+        "peak_active": 1
+      }
+    },
+    "burst": {
+      "name": "burst",
+      "pressure": {
+        "initial_jobs": 48,
+        "producer_rate": 0.0,
+        "distribution": {
+          "light": 0.75,
+          "medium": 0.15,
+          "heavy": 0.1
+        },
+        "initial_jobs_created": 48,
+        "jobs_created_during_window": 0
+      },
+      "interactive": {
+        "attempted": 800,
+        "successful": 798,
+        "errors": 2,
+        "timeouts": 0,
+        "success_rate_percent": 99.75,
+        "error_rate_percent": 0.25,
+        "elapsed_seconds": 79.474,
+        "achieved_requests_per_second": 10.066,
+        "latency": {
+          "mean_ms": 3356.82,
+          "p50_ms": 2571.22,
+          "p95_ms": 8778.17,
+          "p99_ms": 12719.13,
+          "max_ms": 21949.0
+        },
+        "status_codes": {
+          "200": 715,
+          "201": 83,
+          "None": 2
+        },
+        "error_types": {
+          "RemoteProtocolError": 2
+        },
+        "by_category": {
+          "participant_history": {
+            "requests": 76,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3454.77,
+              "p50_ms": 2742.91,
+              "p95_ms": 8913.57,
+              "p99_ms": 14952.6,
+              "max_ms": 14952.6
+            }
+          },
+          "challenge_reads": {
+            "requests": 482,
+            "success_rate_percent": 99.585,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3253.61,
+              "p50_ms": 2409.55,
+              "p95_ms": 8517.4,
+              "p99_ms": 12839.91,
+              "max_ms": 16747.99
+            }
+          },
+          "evaluation_status": {
+            "requests": 114,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3126.05,
+              "p50_ms": 2167.96,
+              "p95_ms": 8074.28,
+              "p99_ms": 10500.73,
+              "max_ms": 11162.8
+            }
+          },
+          "organizer_operations": {
+            "requests": 45,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 4352.77,
+              "p50_ms": 3311.17,
+              "p95_ms": 10585.56,
+              "p99_ms": 21949.0,
+              "max_ms": 21949.0
+            }
+          },
+          "submission_creation": {
+            "requests": 83,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3643.54,
+              "p50_ms": 2911.57,
+              "p95_ms": 9105.71,
+              "p99_ms": 12683.45,
+              "max_ms": 12683.45
+            }
+          }
+        }
+      },
+      "evaluation": {
+        "samples": 43,
+        "max_queue_depth": 48,
+        "ending_queue_depth": 26,
+        "max_active_workers": 2,
+        "max_oldest_queued_age_seconds": 82.842,
+        "completed_during_window": 20,
+        "evaluation_throughput_per_second": 0.252,
+        "completed_total": 24,
+        "queue_wait_ms": {
+          "min_ms": 9145.22,
+          "mean_ms": 50262.76,
+          "p50_ms": 49880.75,
+          "p95_ms": 82847.42,
+          "max_ms": 82959.33
+        },
+        "execution_ms": {
+          "min_ms": 75.85,
+          "mean_ms": 2182.07,
+          "p50_ms": 2428.11,
+          "p95_ms": 3084.74,
+          "max_ms": 3099.38
+        },
+        "by_class": {
+          "medium": {
+            "count": 1,
+            "queue_wait_ms": {
+              "min_ms": 9145.22,
+              "mean_ms": 9145.22,
+              "p50_ms": 9145.22,
+              "p95_ms": 9145.22,
+              "max_ms": 9145.22
+            },
+            "execution_ms": {
+              "min_ms": 2712.69,
+              "mean_ms": 2712.69,
+              "p50_ms": 2712.69,
+              "p95_ms": 2712.69,
+              "max_ms": 2712.69
+            }
+          },
+          "light": {
+            "count": 21,
+            "queue_wait_ms": {
+              "min_ms": 9762.22,
+              "mean_ms": 52348.77,
+              "p50_ms": 56218.79,
+              "p95_ms": 82847.42,
+              "max_ms": 82959.33
+            },
+            "execution_ms": {
+              "min_ms": 75.85,
+              "mean_ms": 2111.99,
+              "p50_ms": 2428.11,
+              "p95_ms": 3084.74,
+              "max_ms": 3099.38
+            }
+          },
+          "heavy": {
+            "count": 2,
+            "queue_wait_ms": {
+              "min_ms": 42060.31,
+              "mean_ms": 48918.45,
+              "p50_ms": 42060.31,
+              "p95_ms": 55776.59,
+              "max_ms": 55776.59
+            },
+            "execution_ms": {
+              "min_ms": 2360.06,
+              "mean_ms": 2652.7,
+              "p50_ms": 2360.06,
+              "p95_ms": 2945.33,
+              "max_ms": 2945.33
+            }
+          }
+        },
+        "worker_count": 2
+      },
+      "resources": {
+        "samples": 135,
+        "max_db_connections": 12,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 1400.0,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -1,
+        "max_app_cpu_percent": 133.0,
+        "max_app_rss_mb": 97.28,
+        "max_db_cpu_percent": 50.0,
+        "max_db_rss_mb": 316.15,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 6,
+        "pool_checkouts": 798
+      },
+      "worker_metrics": {
+        "claims": 24,
+        "completed": 24,
+        "failed": 0,
+        "peak_active": 1
+      }
+    },
+    "mixed": {
+      "name": "mixed",
+      "pressure": {
+        "initial_jobs": 32,
+        "producer_rate": 0.0,
+        "distribution": {
+          "light": 0.5,
+          "medium": 0.25,
+          "heavy": 0.25
+        },
+        "initial_jobs_created": 32,
+        "jobs_created_during_window": 0
+      },
+      "interactive": {
+        "attempted": 800,
+        "successful": 800,
+        "errors": 0,
+        "timeouts": 0,
+        "success_rate_percent": 100.0,
+        "error_rate_percent": 0.0,
+        "elapsed_seconds": 78.606,
+        "achieved_requests_per_second": 10.177,
+        "latency": {
+          "mean_ms": 3377.13,
+          "p50_ms": 2487.65,
+          "p95_ms": 8954.37,
+          "p99_ms": 13745.48,
+          "max_ms": 22995.49
+        },
+        "status_codes": {
+          "200": 720,
+          "201": 80
+        },
+        "error_types": {},
+        "by_category": {
+          "challenge_reads": {
+            "requests": 485,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3326.25,
+              "p50_ms": 2435.82,
+              "p95_ms": 8546.8,
+              "p99_ms": 12606.11,
+              "max_ms": 15705.97
+            }
+          },
+          "participant_history": {
+            "requests": 71,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 2775.89,
+              "p50_ms": 2315.21,
+              "p95_ms": 7114.33,
+              "p99_ms": 13902.81,
+              "max_ms": 13902.81
+            }
+          },
+          "submission_creation": {
+            "requests": 80,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3703.04,
+              "p50_ms": 2583.65,
+              "p95_ms": 11401.97,
+              "p99_ms": 16517.29,
+              "max_ms": 16517.29
+            }
+          },
+          "evaluation_status": {
+            "requests": 124,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 3847.11,
+              "p50_ms": 2754.13,
+              "p95_ms": 10431.13,
+              "p99_ms": 17996.18,
+              "max_ms": 22995.49
+            }
+          },
+          "organizer_operations": {
+            "requests": 40,
+            "success_rate_percent": 100.0,
+            "timeouts": 0,
+            "latency": {
+              "mean_ms": 2952.46,
+              "p50_ms": 2335.74,
+              "p95_ms": 6130.62,
+              "p99_ms": 10837.39,
+              "max_ms": 10837.39
+            }
+          }
+        }
+      },
+      "evaluation": {
+        "samples": 43,
+        "max_queue_depth": 32,
+        "ending_queue_depth": 10,
+        "max_active_workers": 2,
+        "max_oldest_queued_age_seconds": 79.47,
+        "completed_during_window": 20,
+        "evaluation_throughput_per_second": 0.254,
+        "completed_total": 23,
+        "queue_wait_ms": {
+          "min_ms": 4768.28,
+          "mean_ms": 42821.95,
+          "p50_ms": 42186.79,
+          "p95_ms": 79353.07,
+          "max_ms": 80168.18
+        },
+        "execution_ms": {
+          "min_ms": 229.81,
+          "mean_ms": 2468.03,
+          "p50_ms": 2299.57,
+          "p95_ms": 4036.8,
+          "max_ms": 4259.05
+        },
+        "by_class": {
+          "light": {
+            "count": 10,
+            "queue_wait_ms": {
+              "min_ms": 4768.28,
+              "mean_ms": 46002.08,
+              "p50_ms": 42186.79,
+              "p95_ms": 78660.72,
+              "max_ms": 78660.72
+            },
+            "execution_ms": {
+              "min_ms": 971.89,
+              "mean_ms": 2590.67,
+              "p50_ms": 2013.07,
+              "p95_ms": 4036.8,
+              "max_ms": 4036.8
+            }
+          },
+          "heavy": {
+            "count": 7,
+            "queue_wait_ms": {
+              "min_ms": 5225.47,
+              "mean_ms": 30822.57,
+              "p50_ms": 21362.47,
+              "p95_ms": 79353.07,
+              "max_ms": 79353.07
+            },
+            "execution_ms": {
+              "min_ms": 905.3,
+              "mean_ms": 2582.34,
+              "p50_ms": 2677.48,
+              "p95_ms": 4259.05,
+              "max_ms": 4259.05
+            }
+          },
+          "medium": {
+            "count": 6,
+            "queue_wait_ms": {
+              "min_ms": 15918.41,
+              "mean_ms": 51521.01,
+              "p50_ms": 51905.96,
+              "p95_ms": 80168.18,
+              "max_ms": 80168.18
+            },
+            "execution_ms": {
+              "min_ms": 229.81,
+              "mean_ms": 2130.29,
+              "p50_ms": 2097.9,
+              "p95_ms": 3802.36,
+              "max_ms": 3802.36
+            }
+          }
+        },
+        "worker_count": 2
+      },
+      "resources": {
+        "samples": 138,
+        "max_db_connections": 13,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 2655.41,
+        "max_pool_checked_out": 2,
+        "max_pool_size": 8,
+        "max_pool_overflow": 0,
+        "max_app_cpu_percent": 133.0,
+        "max_app_rss_mb": 98.12,
+        "max_db_cpu_percent": 45.5,
+        "max_db_rss_mb": 318.84,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 7,
+        "pool_checkouts": 800
+      },
+      "worker_metrics": {
+        "claims": 23,
+        "completed": 23,
+        "failed": 0,
+        "peak_active": 1
+      }
+    }
+  }
+}

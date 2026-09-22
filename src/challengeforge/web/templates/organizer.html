@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Organizer — ChallengeForge{% endblock %}
+{% block content %}
+<section>
+  <h1>Organizer</h1>
+  <p class="lede">Create a hackathon, add a challenge with a specification and criteria, then publish both so participants can submit.</p>
+
+  <form id="hackathon-form" class="card">
+    <h2>Create hackathon</h2>
+    <label>Title <input name="title" required></label>
+    <label>Description <textarea name="description" required></textarea></label>
+    <button type="submit">Create hackathon</button>
+  </form>
+
+  <form id="challenge-form" class="card">
+    <h2>Create challenge</h2>
+    <label>Hackathon
+      <select name="hackathon_id" id="hackathon-select" required></select>
+    </label>
+    <label>Title <input name="title" required></label>
+    <label>Description <textarea name="description" required></textarea></label>
+    <label>Constraints <textarea name="constraints"></textarea></label>
+    <label>Specification <textarea name="specification" required rows="8"></textarea></label>
+    <label>Criterion name <input name="criterion_name" required></label>
+    <label>Criterion description <input name="criterion_description" required></label>
+    <label>Weight <input name="weight" type="number" min="1" value="1" required></label>
+    <button type="submit">Create challenge</button>
+  </form>
+
+  <div class="card">
+    <h2>Publish</h2>
+    <label>Draft hackathon
+      <select id="publish-hackathon"></select>
+    </label>
+    <button id="publish-hackathon-btn" type="button">Publish hackathon</button>
+    <label>Draft challenge
+      <select id="publish-challenge"></select>
+    </label>
+    <button id="publish-challenge-btn" type="button">Publish challenge</button>
+  </div>
+
+  <div class="card" id="eval-queue-card">
+    <h2>Evaluation queue</h2>
+    <p class="hint">Point-in-time operational snapshot. Refresh updates counts only.</p>
+    <div id="eval-queue" class="eval-queue">Loading…</div>
+    <button id="refresh-queue-btn" type="button" class="secondary">Refresh queue</button>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.addEventListener("cf:ready", async () => {
+    if (!CF.currentUser || CF.currentUser.role !== "organizer") {
+      CF.banner("Switch to an organizer identity to use this page.", true);
+    }
+    await refreshSelects();
+    await refreshQueue();
+
+    document.getElementById("refresh-queue-btn").onclick = () => refreshQueue();
+
+    document.getElementById("hackathon-form").addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const data = Object.fromEntries(new FormData(ev.target).entries());
+      await CF.api("/api/v1/hackathons", { method: "POST", body: JSON.stringify(data) });
+      CF.banner("Hackathon created as draft.");
+      ev.target.reset();
+      await refreshSelects();
+    });
+
+    document.getElementById("challenge-form").addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const form = new FormData(ev.target);
+      const hackathonId = form.get("hackathon_id");
+      const payload = {
+        title: form.get("title"),
+        description: form.get("description"),
+        constraints: form.get("constraints") || "",
+        specification: { body: form.get("specification") },
+        evaluation_criteria: [{
+          name: form.get("criterion_name"),
+          description: form.get("criterion_description"),
+          weight: Number(form.get("weight")),
+        }],
+      };
+      await CF.api(`/api/v1/hackathons/${hackathonId}/challenges`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      CF.banner("Challenge created as draft.");
+      await refreshSelects();
+    });
+
+    document.getElementById("publish-hackathon-btn").onclick = async () => {
+      const id = document.getElementById("publish-hackathon").value;
+      if (!id) return;
+      await CF.api(`/api/v1/hackathons/${id}/publish`, { method: "POST" });
+      CF.banner("Hackathon published.");
+      await refreshSelects();
+    };
+    document.getElementById("publish-challenge-btn").onclick = async () => {
+      const id = document.getElementById("publish-challenge").value;
+      if (!id) return;
+      await CF.api(`/api/v1/challenges/${id}/publish`, { method: "POST" });
+      CF.banner("Challenge published.");
+      await refreshSelects();
+    };
+  });
+
+  async function refreshSelects() {
+    const hackathons = await CF.api("/api/v1/hackathons");
+    const hSelect = document.getElementById("hackathon-select");
+    const pubH = document.getElementById("publish-hackathon");
+    hSelect.innerHTML = hackathons.map(h => `<option value="${h.id}">${CF.esc(h.title)} (${h.status})</option>`).join("");
+    pubH.innerHTML = hackathons.filter(h => h.status === "draft").map(h => `<option value="${h.id}">${CF.esc(h.title)}</option>`).join("");
+    const pubC = document.getElementById("publish-challenge");
+    const drafts = [];
+    for (const h of hackathons) {
+      const challenges = await CF.api(`/api/v1/hackathons/${h.id}/challenges`);
+      for (const c of challenges) if (c.status === "draft") drafts.push(c);
+    }
+    pubC.innerHTML = drafts.map(c => `<option value="${c.id}">${CF.esc(c.title)}</option>`).join("");
+  }
+
+  async function refreshQueue() {
+    const root = document.getElementById("eval-queue");
+    if (!CF.currentUser || CF.currentUser.role !== "organizer") {
+      root.textContent = "Organizer identity required.";
+      return;
+    }
+    try {
+      const q = await CF.api("/api/v1/organizer/evaluation-queue");
+      const oldest = q.oldest_queue_age_seconds == null
+        ? "—"
+        : `${Number(q.oldest_queue_age_seconds).toFixed(1)}s`;
+      root.innerHTML = `
+        <ul class="queue-stats">
+          <li>Queued: <strong>${q.queued_count}</strong></li>
+          <li>Running: <strong>${q.running_count}</strong></li>
+          <li>LIGHT queued: <strong>${q.light_queued_count}</strong></li>
+          <li>MEDIUM queued: <strong>${q.medium_queued_count}</strong></li>
+          <li>HEAVY queued: <strong>${q.heavy_queued_count}</strong></li>
+          <li>Worker capacity: <strong>${q.worker_capacity}</strong></li>
+          <li>Completed: <strong>${q.succeeded_count}</strong></li>
+          <li>Failed: <strong>${q.failed_count}</strong></li>
+          <li>Oldest queued: <strong>${oldest}</strong></li>
+        </ul>
+        <p class="hint">${CF.esc(q.message)}</p>
+      `;
+    } catch (err) {
+      root.textContent = "Could not load queue.";
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,492 @@
+{
+  "metadata": {
+    "started_at": "2026-09-22T02:16:01.273665+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 701.0
+    },
+    "database": "embedded PostgreSQL",
+    "workers": 2,
+    "max_concurrent_heavy": 1,
+    "light_bypass_limit": 2,
+    "repetitions": 2,
+    "pattern": [
+      "heavy",
+      "heavy",
+      "light",
+      "light",
+      "light",
+      "medium",
+      "light",
+      "heavy",
+      "heavy",
+      "light",
+      "light",
+      "medium",
+      "light",
+      "heavy",
+      "light",
+      "medium"
+    ],
+    "safety": {
+      "max_runtime_seconds_per_run": 90,
+      "max_jobs_per_run": 16
+    },
+    "completed_at": "2026-09-22T02:16:38.341111+00:00"
+  },
+  "runs": [
+    {
+      "policy": "fifo",
+      "repetition": 0,
+      "workers": 2,
+      "bypass_limit": 0,
+      "elapsed_seconds": 8.874,
+      "throughput_per_second": 1.803,
+      "queue_wait_ms": {
+        "min_ms": 910.52,
+        "mean_ms": 4462.0,
+        "p50_ms": 3860.75,
+        "p95_ms": 7564.98,
+        "max_ms": 7564.98
+      },
+      "execution_ms": {
+        "min_ms": 72.54,
+        "mean_ms": 540.04,
+        "p50_ms": 405.24,
+        "p95_ms": 1220.12,
+        "max_ms": 1220.12
+      },
+      "by_class": {
+        "heavy": {
+          "count": 5,
+          "queue_wait_ms": {
+            "min_ms": 910.52,
+            "mean_ms": 3638.51,
+            "p50_ms": 3860.75,
+            "p95_ms": 6413.86,
+            "max_ms": 6413.86
+          },
+          "execution_ms": {
+            "min_ms": 962.12,
+            "mean_ms": 1088.35,
+            "p50_ms": 1068.46,
+            "p95_ms": 1220.12,
+            "max_ms": 1220.12
+          }
+        },
+        "light": {
+          "count": 8,
+          "queue_wait_ms": {
+            "min_ms": 2042.03,
+            "mean_ms": 4533.84,
+            "p50_ms": 3771.08,
+            "p95_ms": 6740.62,
+            "max_ms": 6740.62
+          },
+          "execution_ms": {
+            "min_ms": 72.54,
+            "mean_ms": 265.13,
+            "p50_ms": 96.25,
+            "p95_ms": 570.32,
+            "max_ms": 570.32
+          }
+        },
+        "medium": {
+          "count": 3,
+          "queue_wait_ms": {
+            "min_ms": 3302.48,
+            "mean_ms": 5642.94,
+            "p50_ms": 6061.35,
+            "p95_ms": 7564.98,
+            "max_ms": 7564.98
+          },
+          "execution_ms": {
+            "min_ms": 221.9,
+            "mean_ms": 359.24,
+            "p50_ms": 394.77,
+            "p95_ms": 461.07,
+            "max_ms": 461.07
+          }
+        }
+      },
+      "completion_order": [
+        "heavy",
+        "light",
+        "light",
+        "heavy",
+        "light",
+        "medium",
+        "light",
+        "heavy",
+        "light",
+        "heavy",
+        "light",
+        "medium",
+        "light",
+        "light",
+        "heavy",
+        "medium"
+      ],
+      "worker_utilization_percent": 48.69,
+      "resources": {
+        "samples": 68,
+        "max_db_connections": 6,
+        "max_db_active": 3,
+        "max_db_lock_waiters": 1,
+        "max_transaction_ms": 231.17,
+        "max_pool_checked_out": 0,
+        "max_pool_size": 5,
+        "max_pool_overflow": -4,
+        "max_app_cpu_percent": 148.8,
+        "max_app_rss_mb": 89.07,
+        "max_db_cpu_percent": 66.5,
+        "max_db_rss_mb": 220.35,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0
+      },
+      "starvation_incidents": 0,
+      "completed": 16
+    },
+    {
+      "policy": "bounded_light_bypass",
+      "repetition": 0,
+      "workers": 2,
+      "bypass_limit": 2,
+      "elapsed_seconds": 6.421,
+      "throughput_per_second": 2.492,
+      "queue_wait_ms": {
+        "min_ms": 63.02,
+        "mean_ms": 2698.32,
+        "p50_ms": 2378.95,
+        "p95_ms": 5574.51,
+        "max_ms": 5574.51
+      },
+      "execution_ms": {
+        "min_ms": 72.78,
+        "mean_ms": 485.97,
+        "p50_ms": 323.68,
+        "p95_ms": 1531.7,
+        "max_ms": 1531.7
+      },
+      "by_class": {
+        "heavy": {
+          "count": 5,
+          "queue_wait_ms": {
+            "min_ms": 63.02,
+            "mean_ms": 2255.1,
+            "p50_ms": 2378.95,
+            "p95_ms": 4735.79,
+            "max_ms": 4735.79
+          },
+          "execution_ms": {
+            "min_ms": 712.87,
+            "mean_ms": 942.95,
+            "p50_ms": 854.64,
+            "p95_ms": 1531.7,
+            "max_ms": 1531.7
+          }
+        },
+        "light": {
+          "count": 8,
+          "queue_wait_ms": {
+            "min_ms": 131.06,
+            "mean_ms": 2589.05,
+            "p50_ms": 2044.72,
+            "p95_ms": 5472.01,
+            "max_ms": 5472.01
+          },
+          "execution_ms": {
+            "min_ms": 72.78,
+            "mean_ms": 216.38,
+            "p50_ms": 154.1,
+            "p95_ms": 435.66,
+            "max_ms": 435.66
+          }
+        },
+        "medium": {
+          "count": 3,
+          "queue_wait_ms": {
+            "min_ms": 1926.51,
+            "mean_ms": 3728.4,
+            "p50_ms": 3684.17,
+            "p95_ms": 5574.51,
+            "max_ms": 5574.51
+          },
+          "execution_ms": {
+            "min_ms": 219.8,
+            "mean_ms": 443.26,
+            "p50_ms": 345.6,
+            "p95_ms": 764.38,
+            "max_ms": 764.38
+          }
+        }
+      },
+      "completion_order": [
+        "light",
+        "heavy",
+        "light",
+        "heavy",
+        "light",
+        "medium",
+        "light",
+        "light",
+        "heavy",
+        "light",
+        "medium",
+        "heavy",
+        "light",
+        "heavy",
+        "light",
+        "medium"
+      ],
+      "worker_utilization_percent": 60.55,
+      "resources": {
+        "samples": 42,
+        "max_db_connections": 6,
+        "max_db_active": 1,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 295.54,
+        "max_pool_checked_out": 0,
+        "max_pool_size": 5,
+        "max_pool_overflow": -4,
+        "max_app_cpu_percent": 133.0,
+        "max_app_rss_mb": 89.36,
+        "max_db_cpu_percent": 50.4,
+        "max_db_rss_mb": 257.34,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0
+      },
+      "starvation_incidents": 0,
+      "completed": 16
+    },
+    {
+      "policy": "fifo",
+      "repetition": 1,
+      "workers": 2,
+      "bypass_limit": 0,
+      "elapsed_seconds": 5.915,
+      "throughput_per_second": 2.705,
+      "queue_wait_ms": {
+        "min_ms": 48.74,
+        "mean_ms": 2308.14,
+        "p50_ms": 1760.51,
+        "p95_ms": 4734.19,
+        "max_ms": 4734.19
+      },
+      "execution_ms": {
+        "min_ms": 47.26,
+        "mean_ms": 424.07,
+        "p50_ms": 335.81,
+        "p95_ms": 1279.85,
+        "max_ms": 1279.85
+      },
+      "by_class": {
+        "heavy": {
+          "count": 5,
+          "queue_wait_ms": {
+            "min_ms": 48.74,
+            "mean_ms": 1730.46,
+            "p50_ms": 1760.51,
+            "p95_ms": 3834.86,
+            "max_ms": 3834.86
+          },
+          "execution_ms": {
+            "min_ms": 575.57,
+            "mean_ms": 824.97,
+            "p50_ms": 663.4,
+            "p95_ms": 1279.85,
+            "max_ms": 1279.85
+          }
+        },
+        "light": {
+          "count": 8,
+          "queue_wait_ms": {
+            "min_ms": 918.77,
+            "mean_ms": 2319.47,
+            "p50_ms": 1509.94,
+            "p95_ms": 3846.52,
+            "max_ms": 3846.52
+          },
+          "execution_ms": {
+            "min_ms": 47.26,
+            "mean_ms": 221.14,
+            "p50_ms": 151.08,
+            "p95_ms": 440.97,
+            "max_ms": 440.97
+          }
+        },
+        "medium": {
+          "count": 3,
+          "queue_wait_ms": {
+            "min_ms": 1505.57,
+            "mean_ms": 3240.74,
+            "p50_ms": 3482.46,
+            "p95_ms": 4734.19,
+            "max_ms": 4734.19
+          },
+          "execution_ms": {
+            "min_ms": 189.64,
+            "mean_ms": 297.06,
+            "p50_ms": 272.18,
+            "p95_ms": 429.35,
+            "max_ms": 429.35
+          }
+        }
+      },
+      "completion_order": [
+        "heavy",
+        "heavy",
+        "light",
+        "light",
+        "light",
+        "medium",
+        "light",
+        "heavy",
+        "light",
+        "heavy",
+        "light",
+        "medium",
+        "light",
+        "light",
+        "heavy",
+        "medium"
+      ],
+      "worker_utilization_percent": 57.35,
+      "resources": {
+        "samples": 38,
+        "max_db_connections": 6,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 150.89,
+        "max_pool_checked_out": 0,
+        "max_pool_size": 5,
+        "max_pool_overflow": -4,
+        "max_app_cpu_percent": 133.0,
+        "max_app_rss_mb": 121.61,
+        "max_db_cpu_percent": 33.2,
+        "max_db_rss_mb": 258.02,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0
+      },
+      "starvation_incidents": 0,
+      "completed": 16
+    },
+    {
+      "policy": "bounded_light_bypass",
+      "repetition": 1,
+      "workers": 2,
+      "bypass_limit": 2,
+      "elapsed_seconds": 7.785,
+      "throughput_per_second": 2.055,
+      "queue_wait_ms": {
+        "min_ms": 67.06,
+        "mean_ms": 3293.65,
+        "p50_ms": 3202.54,
+        "p95_ms": 6809.19,
+        "max_ms": 6809.19
+      },
+      "execution_ms": {
+        "min_ms": 52.34,
+        "mean_ms": 644.54,
+        "p50_ms": 431.7,
+        "p95_ms": 1686.5,
+        "max_ms": 1686.5
+      },
+      "by_class": {
+        "heavy": {
+          "count": 5,
+          "queue_wait_ms": {
+            "min_ms": 67.06,
+            "mean_ms": 2990.37,
+            "p50_ms": 3202.54,
+            "p95_ms": 5822.44,
+            "max_ms": 5822.44
+          },
+          "execution_ms": {
+            "min_ms": 957.01,
+            "mean_ms": 1262.07,
+            "p50_ms": 1239.18,
+            "p95_ms": 1686.5,
+            "max_ms": 1686.5
+          }
+        },
+        "light": {
+          "count": 8,
+          "queue_wait_ms": {
+            "min_ms": 82.53,
+            "mean_ms": 3070.76,
+            "p50_ms": 2820.84,
+            "p95_ms": 6256.36,
+            "max_ms": 6256.36
+          },
+          "execution_ms": {
+            "min_ms": 52.34,
+            "mean_ms": 267.96,
+            "p50_ms": 256.38,
+            "p95_ms": 501.75,
+            "max_ms": 501.75
+          }
+        },
+        "medium": {
+          "count": 3,
+          "queue_wait_ms": {
+            "min_ms": 1758.14,
+            "mean_ms": 4393.53,
+            "p50_ms": 4613.26,
+            "p95_ms": 6809.19,
+            "max_ms": 6809.19
+          },
+          "execution_ms": {
+            "min_ms": 306.32,
+            "mean_ms": 619.54,
+            "p50_ms": 758.82,
+            "p95_ms": 793.47,
+            "max_ms": 793.47
+          }
+        }
+      },
+      "completion_order": [
+        "light",
+        "light",
+        "heavy",
+        "light",
+        "medium",
+        "heavy",
+        "light",
+        "light",
+        "heavy",
+        "light",
+        "medium",
+        "heavy",
+        "light",
+        "light",
+        "heavy",
+        "medium"
+      ],
+      "worker_utilization_percent": 66.23,
+      "resources": {
+        "samples": 45,
+        "max_db_connections": 6,
+        "max_db_active": 1,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 234.3,
+        "max_pool_checked_out": 0,
+        "max_pool_size": 5,
+        "max_pool_overflow": -4,
+        "max_app_cpu_percent": 126.0,
+        "max_app_rss_mb": 89.74,
+        "max_db_cpu_percent": 49.6,
+        "max_db_rss_mb": 258.49,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0
+      },
+      "starvation_incidents": 0,
+      "completed": 16
+    }
+  ]
+}

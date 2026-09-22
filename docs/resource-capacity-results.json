@@ -1,0 +1,825 @@
+{
+  "metadata": {
+    "started_at": "2026-09-22T01:50:52.921811+00:00",
+    "database_mode": "embedded PostgreSQL",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 882.6
+    },
+    "safety": {
+      "max_workers": 8,
+      "max_evaluations": 48,
+      "max_runtime_seconds": 120,
+      "max_worker_rss_mb": 512
+    },
+    "workload_profiles": {
+      "light": {
+        "cpu_iterations": 25000,
+        "memory_mb": 1,
+        "min_ms": 20
+      },
+      "medium": {
+        "cpu_iterations": 120000,
+        "memory_mb": 8,
+        "min_ms": 80
+      },
+      "heavy": {
+        "cpu_iterations": 350000,
+        "memory_mb": 32,
+        "min_ms": 200
+      }
+    },
+    "scheduling": "fifo",
+    "database_version": "16.2",
+    "transaction_isolation": "read committed",
+    "completed_at": "2026-09-22T01:53:01.263235+00:00"
+  },
+  "scenarios": {
+    "baseline_1_light": {
+      "name": "baseline_1_light",
+      "workers": 1,
+      "workload": "light",
+      "produced": 16,
+      "completed": 16,
+      "elapsed_seconds": 6.469,
+      "throughput_per_second": 2.473,
+      "queue_wait_ms": {
+        "min_ms": 1721.98,
+        "mean_ms": 2314.68,
+        "p50_ms": 2336.89,
+        "p95_ms": 2736.51,
+        "max_ms": 2736.51
+      },
+      "execution_ms": {
+        "min_ms": 115.61,
+        "mean_ms": 170.97,
+        "p50_ms": 162.59,
+        "p95_ms": 276.81,
+        "max_ms": 276.81
+      },
+      "by_class": {
+        "light": {
+          "count": 16,
+          "queue_wait_ms": {
+            "min_ms": 1721.98,
+            "mean_ms": 2314.68,
+            "p50_ms": 2336.89,
+            "p95_ms": 2736.51,
+            "max_ms": 2736.51
+          },
+          "execution_ms": {
+            "min_ms": 115.61,
+            "mean_ms": 170.97,
+            "p50_ms": 162.59,
+            "p95_ms": 276.81,
+            "max_ms": 276.81
+          }
+        }
+      },
+      "peak_worker_rss_mb": 89.5,
+      "peak_worker_cpu_percent": 0.0,
+      "peak_active_evaluations": 1,
+      "claims": 16,
+      "resources": {
+        "samples": 40,
+        "max_db_connections": 5,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 61.51,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -7,
+        "max_app_cpu_percent": 138.4,
+        "max_app_rss_mb": 89.5,
+        "max_db_cpu_percent": 60.1,
+        "max_db_rss_mb": 227.31,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 52
+      },
+      "api_during_load": null,
+      "safety_stop": false,
+      "safety_reason": null,
+      "process_rss_note": "process RSS from worker process samples (not summed physical RAM)"
+    },
+    "scale_1_light": {
+      "name": "scale_1_light",
+      "workers": 1,
+      "workload": "light",
+      "produced": 24,
+      "completed": 25,
+      "elapsed_seconds": 12.146,
+      "throughput_per_second": 2.058,
+      "queue_wait_ms": {
+        "min_ms": 11.38,
+        "mean_ms": 83.81,
+        "p50_ms": 80.36,
+        "p95_ms": 173.36,
+        "max_ms": 177.38
+      },
+      "execution_ms": {
+        "min_ms": 99.2,
+        "mean_ms": 146.92,
+        "p50_ms": 147.14,
+        "p95_ms": 189.29,
+        "max_ms": 200.59
+      },
+      "by_class": {
+        "light": {
+          "count": 25,
+          "queue_wait_ms": {
+            "min_ms": 11.38,
+            "mean_ms": 83.81,
+            "p50_ms": 80.36,
+            "p95_ms": 173.36,
+            "max_ms": 177.38
+          },
+          "execution_ms": {
+            "min_ms": 99.2,
+            "mean_ms": 146.92,
+            "p50_ms": 147.14,
+            "p95_ms": 189.29,
+            "max_ms": 200.59
+          }
+        }
+      },
+      "peak_worker_rss_mb": 90.25,
+      "peak_worker_cpu_percent": 0.0,
+      "peak_active_evaluations": 1,
+      "claims": 25,
+      "resources": {
+        "samples": 143,
+        "max_db_connections": 5,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 131.47,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -7,
+        "max_app_cpu_percent": 199.5,
+        "max_app_rss_mb": 90.25,
+        "max_db_cpu_percent": 68.0,
+        "max_db_rss_mb": 264.71,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 167
+      },
+      "api_during_load": {
+        "challenge_get": {
+          "min_ms": 64.87,
+          "mean_ms": 92.56,
+          "p50_ms": 79.92,
+          "p95_ms": 188.14,
+          "max_ms": 188.14
+        },
+        "submission_list": {
+          "min_ms": 78.05,
+          "mean_ms": 97.35,
+          "p50_ms": 90.22,
+          "p95_ms": 118.52,
+          "max_ms": 118.52
+        },
+        "evaluation_status": {
+          "min_ms": 71.23,
+          "mean_ms": 84.84,
+          "p50_ms": 82.21,
+          "p95_ms": 99.76,
+          "max_ms": 99.76
+        }
+      },
+      "safety_stop": false,
+      "safety_reason": null,
+      "process_rss_note": "process RSS from worker process samples (not summed physical RAM)"
+    },
+    "scale_2_light": {
+      "name": "scale_2_light",
+      "workers": 2,
+      "workload": "light",
+      "produced": 24,
+      "completed": 24,
+      "elapsed_seconds": 8.645,
+      "throughput_per_second": 2.776,
+      "queue_wait_ms": {
+        "min_ms": 8.09,
+        "mean_ms": 79.32,
+        "p50_ms": 77.51,
+        "p95_ms": 183.32,
+        "max_ms": 236.16
+      },
+      "execution_ms": {
+        "min_ms": 124.38,
+        "mean_ms": 161.79,
+        "p50_ms": 160.1,
+        "p95_ms": 195.65,
+        "max_ms": 201.27
+      },
+      "by_class": {
+        "light": {
+          "count": 24,
+          "queue_wait_ms": {
+            "min_ms": 8.09,
+            "mean_ms": 79.32,
+            "p50_ms": 77.51,
+            "p95_ms": 183.32,
+            "max_ms": 236.16
+          },
+          "execution_ms": {
+            "min_ms": 124.38,
+            "mean_ms": 161.79,
+            "p50_ms": 160.1,
+            "p95_ms": 195.65,
+            "max_ms": 201.27
+          }
+        }
+      },
+      "peak_worker_rss_mb": 90.54,
+      "peak_worker_cpu_percent": 0.0,
+      "peak_active_evaluations": 1,
+      "claims": 24,
+      "resources": {
+        "samples": 84,
+        "max_db_connections": 5,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 128.36,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -7,
+        "max_app_cpu_percent": 160.3,
+        "max_app_rss_mb": 90.54,
+        "max_db_cpu_percent": 66.4,
+        "max_db_rss_mb": 265.25,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 243
+      },
+      "api_during_load": null,
+      "safety_stop": false,
+      "safety_reason": null,
+      "process_rss_note": "process RSS from worker process samples (not summed physical RAM)"
+    },
+    "scale_4_light": {
+      "name": "scale_4_light",
+      "workers": 4,
+      "workload": "light",
+      "produced": 24,
+      "completed": 25,
+      "elapsed_seconds": 15.842,
+      "throughput_per_second": 1.578,
+      "queue_wait_ms": {
+        "min_ms": 12.41,
+        "mean_ms": 138.19,
+        "p50_ms": 90.67,
+        "p95_ms": 371.0,
+        "max_ms": 383.95
+      },
+      "execution_ms": {
+        "min_ms": 132.99,
+        "mean_ms": 289.64,
+        "p50_ms": 258.36,
+        "p95_ms": 453.64,
+        "max_ms": 537.6
+      },
+      "by_class": {
+        "light": {
+          "count": 25,
+          "queue_wait_ms": {
+            "min_ms": 12.41,
+            "mean_ms": 138.19,
+            "p50_ms": 90.67,
+            "p95_ms": 371.0,
+            "max_ms": 383.95
+          },
+          "execution_ms": {
+            "min_ms": 132.99,
+            "mean_ms": 289.64,
+            "p50_ms": 258.36,
+            "p95_ms": 453.64,
+            "max_ms": 537.6
+          }
+        }
+      },
+      "peak_worker_rss_mb": 90.7,
+      "peak_worker_cpu_percent": 0.0,
+      "peak_active_evaluations": 1,
+      "claims": 25,
+      "resources": {
+        "samples": 146,
+        "max_db_connections": 8,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 293.5,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -7,
+        "max_app_cpu_percent": 140.2,
+        "max_app_rss_mb": 90.71,
+        "max_db_cpu_percent": 99.2,
+        "max_db_rss_mb": 265.7,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 358
+      },
+      "api_during_load": {
+        "challenge_get": {
+          "min_ms": 69.09,
+          "mean_ms": 124.57,
+          "p50_ms": 112.95,
+          "p95_ms": 202.99,
+          "max_ms": 202.99
+        },
+        "submission_list": {
+          "min_ms": 68.0,
+          "mean_ms": 132.78,
+          "p50_ms": 119.05,
+          "p95_ms": 311.47,
+          "max_ms": 311.47
+        },
+        "evaluation_status": {
+          "min_ms": 79.4,
+          "mean_ms": 109.11,
+          "p50_ms": 105.44,
+          "p95_ms": 160.46,
+          "max_ms": 160.46
+        }
+      },
+      "safety_stop": false,
+      "safety_reason": null,
+      "process_rss_note": "process RSS from worker process samples (not summed physical RAM)"
+    },
+    "scale_8_light": {
+      "name": "scale_8_light",
+      "workers": 8,
+      "workload": "light",
+      "produced": 24,
+      "completed": 25,
+      "elapsed_seconds": 16.379,
+      "throughput_per_second": 1.526,
+      "queue_wait_ms": {
+        "min_ms": 12.98,
+        "mean_ms": 97.94,
+        "p50_ms": 100.34,
+        "p95_ms": 202.74,
+        "max_ms": 291.05
+      },
+      "execution_ms": {
+        "min_ms": 170.98,
+        "mean_ms": 314.71,
+        "p50_ms": 320.77,
+        "p95_ms": 431.54,
+        "max_ms": 439.88
+      },
+      "by_class": {
+        "light": {
+          "count": 25,
+          "queue_wait_ms": {
+            "min_ms": 12.98,
+            "mean_ms": 97.94,
+            "p50_ms": 100.34,
+            "p95_ms": 202.74,
+            "max_ms": 291.05
+          },
+          "execution_ms": {
+            "min_ms": 170.98,
+            "mean_ms": 314.71,
+            "p50_ms": 320.77,
+            "p95_ms": 431.54,
+            "max_ms": 439.88
+          }
+        }
+      },
+      "peak_worker_rss_mb": 91.7,
+      "peak_worker_cpu_percent": 0.0,
+      "peak_active_evaluations": 1,
+      "claims": 25,
+      "resources": {
+        "samples": 142,
+        "max_db_connections": 12,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 161.78,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -7,
+        "max_app_cpu_percent": 173.6,
+        "max_app_rss_mb": 91.77,
+        "max_db_cpu_percent": 100.2,
+        "max_db_rss_mb": 321.57,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 473
+      },
+      "api_during_load": {
+        "challenge_get": {
+          "min_ms": 80.54,
+          "mean_ms": 114.95,
+          "p50_ms": 115.12,
+          "p95_ms": 153.67,
+          "max_ms": 153.67
+        },
+        "submission_list": {
+          "min_ms": 89.03,
+          "mean_ms": 126.17,
+          "p50_ms": 126.0,
+          "p95_ms": 150.68,
+          "max_ms": 150.68
+        },
+        "evaluation_status": {
+          "min_ms": 67.24,
+          "mean_ms": 116.59,
+          "p50_ms": 114.46,
+          "p95_ms": 191.47,
+          "max_ms": 191.47
+        }
+      },
+      "safety_stop": false,
+      "safety_reason": null,
+      "process_rss_note": "process RSS from worker process samples (not summed physical RAM)"
+    },
+    "mixed": {
+      "sequence_len": 32,
+      "pattern": [
+        "light",
+        "light",
+        "medium",
+        "light",
+        "heavy",
+        "light",
+        "medium",
+        "heavy"
+      ],
+      "elapsed_seconds": 26.468,
+      "throughput_per_second": 1.209,
+      "queue_wait_ms": {
+        "min_ms": 18.47,
+        "mean_ms": 218.72,
+        "p50_ms": 152.45,
+        "p95_ms": 825.06,
+        "max_ms": 948.24
+      },
+      "execution_ms": {
+        "min_ms": 150.5,
+        "mean_ms": 833.98,
+        "p50_ms": 652.09,
+        "p95_ms": 1980.92,
+        "max_ms": 2030.19
+      },
+      "by_class": {
+        "light": {
+          "count": 16,
+          "queue_wait_ms": {
+            "min_ms": 18.47,
+            "mean_ms": 316.26,
+            "p50_ms": 193.89,
+            "p95_ms": 948.24,
+            "max_ms": 948.24
+          },
+          "execution_ms": {
+            "min_ms": 150.5,
+            "mean_ms": 440.75,
+            "p50_ms": 256.87,
+            "p95_ms": 1036.05,
+            "max_ms": 1036.05
+          }
+        },
+        "medium": {
+          "count": 8,
+          "queue_wait_ms": {
+            "min_ms": 29.66,
+            "mean_ms": 126.8,
+            "p50_ms": 74.88,
+            "p95_ms": 295.65,
+            "max_ms": 295.65
+          },
+          "execution_ms": {
+            "min_ms": 590.49,
+            "mean_ms": 653.16,
+            "p50_ms": 649.75,
+            "p95_ms": 741.33,
+            "max_ms": 741.33
+          }
+        },
+        "heavy": {
+          "count": 8,
+          "queue_wait_ms": {
+            "min_ms": 28.95,
+            "mean_ms": 115.56,
+            "p50_ms": 69.03,
+            "p95_ms": 341.31,
+            "max_ms": 341.31
+          },
+          "execution_ms": {
+            "min_ms": 1559.45,
+            "mean_ms": 1801.25,
+            "p50_ms": 1818.93,
+            "p95_ms": 2030.19,
+            "max_ms": 2030.19
+          }
+        }
+      },
+      "resources": {
+        "samples": 149,
+        "max_db_connections": 11,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 443.39,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -7,
+        "max_app_cpu_percent": 151.2,
+        "max_app_rss_mb": 123.88,
+        "max_db_cpu_percent": 66.5,
+        "max_db_rss_mb": 378.84,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0
+      },
+      "scheduling": "fifo"
+    },
+    "head_of_line": {
+      "workers": 1,
+      "order": [
+        "heavy",
+        "light",
+        "light",
+        "light",
+        "light",
+        "light",
+        "light"
+      ],
+      "elapsed_seconds": 2.284,
+      "heavy_queue_wait_ms": {
+        "min_ms": 896.24,
+        "mean_ms": 896.24,
+        "p50_ms": 896.24,
+        "p95_ms": 896.24,
+        "max_ms": 896.24
+      },
+      "light_queue_wait_ms": {
+        "min_ms": 1980.77,
+        "mean_ms": 2000.84,
+        "p50_ms": 1992.21,
+        "p95_ms": 2022.17,
+        "max_ms": 2022.17
+      },
+      "light_execution_ms": {
+        "min_ms": 95.15,
+        "mean_ms": 110.3,
+        "p50_ms": 99.56,
+        "p95_ms": 144.21,
+        "max_ms": 144.21
+      },
+      "observation": "Under single-worker FIFO, LIGHT jobs waited behind the leading HEAVY job even though each LIGHT execution is short.",
+      "head_of_line_blocking_observed": true,
+      "by_class": {
+        "heavy": {
+          "count": 1,
+          "queue_wait_ms": {
+            "min_ms": 896.24,
+            "mean_ms": 896.24,
+            "p50_ms": 896.24,
+            "p95_ms": 896.24,
+            "max_ms": 896.24
+          },
+          "execution_ms": {
+            "min_ms": 1231.02,
+            "mean_ms": 1231.02,
+            "p50_ms": 1231.02,
+            "p95_ms": 1231.02,
+            "max_ms": 1231.02
+          }
+        },
+        "light": {
+          "count": 6,
+          "queue_wait_ms": {
+            "min_ms": 1980.77,
+            "mean_ms": 2000.84,
+            "p50_ms": 1992.21,
+            "p95_ms": 2022.17,
+            "max_ms": 2022.17
+          },
+          "execution_ms": {
+            "min_ms": 95.15,
+            "mean_ms": 110.3,
+            "p50_ms": 99.56,
+            "p95_ms": 144.21,
+            "max_ms": 144.21
+          }
+        }
+      }
+    },
+    "memory_light": {
+      "name": "memory_light",
+      "workers": 2,
+      "workload": "light",
+      "produced": 12,
+      "completed": 12,
+      "elapsed_seconds": 5.749,
+      "throughput_per_second": 2.087,
+      "queue_wait_ms": {
+        "min_ms": 18.43,
+        "mean_ms": 105.02,
+        "p50_ms": 105.21,
+        "p95_ms": 190.25,
+        "max_ms": 190.25
+      },
+      "execution_ms": {
+        "min_ms": 150.4,
+        "mean_ms": 239.85,
+        "p50_ms": 244.06,
+        "p95_ms": 301.81,
+        "max_ms": 301.81
+      },
+      "by_class": {
+        "light": {
+          "count": 12,
+          "queue_wait_ms": {
+            "min_ms": 18.43,
+            "mean_ms": 105.02,
+            "p50_ms": 105.21,
+            "p95_ms": 190.25,
+            "max_ms": 190.25
+          },
+          "execution_ms": {
+            "min_ms": 150.4,
+            "mean_ms": 239.85,
+            "p50_ms": 244.06,
+            "p95_ms": 301.81,
+            "max_ms": 301.81
+          }
+        }
+      },
+      "peak_worker_rss_mb": 91.89,
+      "peak_worker_cpu_percent": 0.0,
+      "peak_active_evaluations": 1,
+      "claims": 12,
+      "resources": {
+        "samples": 29,
+        "max_db_connections": 11,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 89.72,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -7,
+        "max_app_cpu_percent": 166.2,
+        "max_app_rss_mb": 91.89,
+        "max_db_cpu_percent": 49.6,
+        "max_db_rss_mb": 379.7,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 638
+      },
+      "api_during_load": null,
+      "safety_stop": false,
+      "safety_reason": null,
+      "process_rss_note": "process RSS from worker process samples (not summed physical RAM)"
+    },
+    "memory_medium": {
+      "name": "memory_medium",
+      "workers": 2,
+      "workload": "medium",
+      "produced": 12,
+      "completed": 12,
+      "elapsed_seconds": 10.088,
+      "throughput_per_second": 1.19,
+      "queue_wait_ms": {
+        "min_ms": 19.62,
+        "mean_ms": 99.87,
+        "p50_ms": 86.87,
+        "p95_ms": 202.25,
+        "max_ms": 202.25
+      },
+      "execution_ms": {
+        "min_ms": 527.16,
+        "mean_ms": 655.95,
+        "p50_ms": 617.51,
+        "p95_ms": 921.34,
+        "max_ms": 921.34
+      },
+      "by_class": {
+        "medium": {
+          "count": 12,
+          "queue_wait_ms": {
+            "min_ms": 19.62,
+            "mean_ms": 99.87,
+            "p50_ms": 86.87,
+            "p95_ms": 202.25,
+            "max_ms": 202.25
+          },
+          "execution_ms": {
+            "min_ms": 527.16,
+            "mean_ms": 655.95,
+            "p50_ms": 617.51,
+            "p95_ms": 921.34,
+            "max_ms": 921.34
+          }
+        }
+      },
+      "peak_worker_rss_mb": 91.89,
+      "peak_worker_cpu_percent": 0.0,
+      "peak_active_evaluations": 1,
+      "claims": 12,
+      "resources": {
+        "samples": 57,
+        "max_db_connections": 11,
+        "max_db_active": 2,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 355.48,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -7,
+        "max_app_cpu_percent": 133.0,
+        "max_app_rss_mb": 91.89,
+        "max_db_cpu_percent": 66.5,
+        "max_db_rss_mb": 380.22,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 678
+      },
+      "api_during_load": null,
+      "safety_stop": false,
+      "safety_reason": null,
+      "process_rss_note": "process RSS from worker process samples (not summed physical RAM)"
+    },
+    "memory_heavy": {
+      "name": "memory_heavy",
+      "workers": 2,
+      "workload": "heavy",
+      "produced": 12,
+      "completed": 12,
+      "elapsed_seconds": 19.954,
+      "throughput_per_second": 0.601,
+      "queue_wait_ms": {
+        "min_ms": 115.24,
+        "mean_ms": 521.64,
+        "p50_ms": 503.93,
+        "p95_ms": 1109.84,
+        "max_ms": 1109.84
+      },
+      "execution_ms": {
+        "min_ms": 1322.33,
+        "mean_ms": 1860.08,
+        "p50_ms": 1684.98,
+        "p95_ms": 2891.49,
+        "max_ms": 2891.49
+      },
+      "by_class": {
+        "heavy": {
+          "count": 12,
+          "queue_wait_ms": {
+            "min_ms": 115.24,
+            "mean_ms": 521.64,
+            "p50_ms": 503.93,
+            "p95_ms": 1109.84,
+            "max_ms": 1109.84
+          },
+          "execution_ms": {
+            "min_ms": 1322.33,
+            "mean_ms": 1860.08,
+            "p50_ms": 1684.98,
+            "p95_ms": 2891.49,
+            "max_ms": 2891.49
+          }
+        }
+      },
+      "peak_worker_rss_mb": 91.89,
+      "peak_worker_cpu_percent": 0.0,
+      "peak_active_evaluations": 1,
+      "claims": 12,
+      "resources": {
+        "samples": 101,
+        "max_db_connections": 11,
+        "max_db_active": 3,
+        "max_db_lock_waiters": 0,
+        "max_transaction_ms": 817.89,
+        "max_pool_checked_out": 1,
+        "max_pool_size": 8,
+        "max_pool_overflow": -7,
+        "max_app_cpu_percent": 166.2,
+        "max_app_rss_mb": 91.89,
+        "max_db_cpu_percent": 70.0,
+        "max_db_rss_mb": 381.23,
+        "deadlocks_delta": 0,
+        "conflicts_delta": 0,
+        "exact_peak_pool_checked_out": 1,
+        "pool_checkouts": 718
+      },
+      "api_during_load": null,
+      "safety_stop": false,
+      "safety_reason": null,
+      "process_rss_note": "process RSS from worker process samples (not summed physical RAM)"
+    }
+  }
+}
