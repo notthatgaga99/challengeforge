@@ -135,11 +135,13 @@ Replacing the filesystem with object storage later should not change submission 
 | Expensive plane | Resource-Aware Runtime v1 (budgets, pressure, adaptive concurrency) |
 
 See [`interactive-isolated-load-profile.md`](interactive-isolated-load-profile.md),
-[`resource-aware-runtime.md`](resource-aware-runtime.md), and
+[`resource-aware-runtime.md`](resource-aware-runtime.md),
 [`adaptive-evaluation-v2.md`](adaptive-evaluation-v2.md) /
-[`adaptive-evaluation-v3-audit.md`](adaptive-evaluation-v3-audit.md)
+[`adaptive-evaluation-v3-audit.md`](adaptive-evaluation-v3-audit.md), and
+[`hard-mix-pressure-results.md`](hard-mix-pressure-results.md)
 (progressive synthetic evaluation — opt-in; default `legacy`; safe early-exit
-requires `safe_to_terminate`).
+requires `safe_to_terminate`; HTTP+worker hard mixes preserve decision agreement
+while compute savings collapse on adversarial work).
 
 ## 8. Important failure modes
 
