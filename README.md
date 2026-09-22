@@ -1,5 +1,7 @@
 # ChallengeForge
 
+[![CI](https://github.com/notthatgaga99/challengeforge/actions/workflows/ci.yml/badge.svg)](https://github.com/notthatgaga99/challengeforge/actions/workflows/ci.yml)
+
 ChallengeForge is a competitive challenge/hackathon platform and an evolving
 system-design experiment. It demonstrates engineering judgment through:
 
