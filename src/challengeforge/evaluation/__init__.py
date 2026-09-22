@@ -9,8 +9,10 @@ from challengeforge.evaluation.confidence import StageConfidence
 from challengeforge.evaluation.plan import EvaluationMode, EvaluationPlan, StageSpec
 from challengeforge.evaluation.policy import EscalationDecision, ProgressivePolicy
 from challengeforge.evaluation.progressive import ProgressiveEvaluator, ProgressiveResult
+from challengeforge.evaluation.workload_v3 import Decision, WorkloadKind
 
 __all__ = [
+    "Decision",
     "EscalationDecision",
     "EvaluationMode",
     "EvaluationPlan",
@@ -19,4 +21,5 @@ __all__ = [
     "ProgressiveResult",
     "StageConfidence",
     "StageSpec",
+    "WorkloadKind",
 ]

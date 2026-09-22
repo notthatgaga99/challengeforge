@@ -1,4 +1,4 @@
-"""Deterministic synthetic stage runners."""
+"""Deterministic synthetic stage runners (v2 scenarios + v3 workload kinds)."""
 
 from __future__ import annotations
 
@@ -16,6 +16,11 @@ from challengeforge.application.evaluator import (
 )
 from challengeforge.evaluation.confidence import StageConfidence
 from challengeforge.evaluation.plan import StageSpec
+from challengeforge.evaluation.workload_v3 import (
+    StageEvidence,
+    evidence_for_stage,
+    parse_workload_kind,
+)
 
 
 @dataclass(frozen=True)
@@ -26,9 +31,12 @@ class StageOutcome:
     execution_cpu_ms: float
     peak_alloc_bytes: int
     evidence: dict[str, Any]
+    safe_to_terminate: bool = False
 
 
-def _scenario_confidence(metadata: dict[str, Any], submission_id: UUID) -> StageConfidence:
+def _legacy_scenario_confidence(
+    metadata: dict[str, Any], submission_id: UUID
+) -> StageConfidence:
     raw = metadata.get("adaptive_scenario")
     if isinstance(raw, str):
         key = raw.strip().lower()
@@ -40,13 +48,25 @@ def _scenario_confidence(metadata: dict[str, Any], submission_id: UUID) -> Stage
         }
         if key in mapping:
             return mapping[key]
-    # Deterministic bucket from id — ~50% confident, ~50% uncertain by default.
     bucket = int(hashlib.sha256(str(submission_id).encode()).hexdigest()[:8], 16) % 100
     if bucket < 25:
         return StageConfidence.PASS_CONFIDENT
     if bucket < 50:
         return StageConfidence.FAIL_CONFIDENT
     return StageConfidence.UNCERTAIN
+
+
+def _legacy_safe_to_terminate(
+    confidence: StageConfidence, metadata: dict[str, Any], stage_name: str
+) -> bool:
+    """v2-compatible: confident cheap/medium exit is treated as safe for legacy labels."""
+    raw = str(metadata.get("adaptive_scenario", "")).strip().lower()
+    if raw == "requires_expensive" and stage_name != "heavy":
+        return False
+    return confidence in (
+        StageConfidence.PASS_CONFIDENT,
+        StageConfidence.FAIL_CONFIDENT,
+    )
 
 
 def run_stage(
@@ -64,7 +84,6 @@ def run_stage(
         raise EvaluationFailed(f"Forced stage failure at {stage.name}.")
 
     started = time.perf_counter()
-    # Scale synthetic work from stage estimates (bounded inside helpers).
     peak = _bounded_memory_work(int(stage.estimated_memory_mb * 1024 * 1024))
     iterations = int(25_000 * stage.estimated_cpu_cost)
     token = _bounded_cpu_work(
@@ -77,37 +96,51 @@ def run_stage(
         time.sleep(remaining / 1000.0)
     cpu_ms = (time.perf_counter() - started) * 1000.0
 
-    confidence = _scenario_confidence(metadata, submission_id)
-    # Later stages refine score deterministically; confident fail/pass set extremes.
-    canonical = json.dumps(
-        {
-            "submission_id": str(submission_id),
-            "stage": stage.name,
-            "stage_index": stage_index,
-            "metadata": metadata,
-            "artifact_key": artifact_key,
-        },
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-        allow_nan=False,
-    ).encode("utf-8")
-    digest = hashlib.sha256(canonical + token.encode("ascii")).hexdigest()
-    base_score = int(digest[:8], 16) % 101
-    if confidence == StageConfidence.PASS_CONFIDENT and stage_index == 0:
-        score = 90 + (base_score % 11)
-    elif confidence == StageConfidence.FAIL_CONFIDENT and stage_index == 0:
-        score = base_score % 20
+    kind = parse_workload_kind(metadata)
+    stage_evidence: StageEvidence | None = None
+    if kind is not None:
+        stage_evidence = evidence_for_stage(stage.name, kind, submission_id)
+        confidence = stage_evidence.confidence
+        score = stage_evidence.score
+        safe = stage_evidence.safe_to_terminate
+        notes = stage_evidence.notes
     else:
-        # Uncertain / later stages: mid-band refined by stage name.
-        score = 40 + (base_score % 41)
+        confidence = _legacy_scenario_confidence(metadata, submission_id)
+        if (
+            str(metadata.get("adaptive_scenario", "")).strip().lower()
+            == "requires_expensive"
+            and stage.name != "heavy"
+        ):
+            confidence = StageConfidence.UNCERTAIN
+        canonical = json.dumps(
+            {
+                "submission_id": str(submission_id),
+                "stage": stage.name,
+                "stage_index": stage_index,
+                "metadata": metadata,
+                "artifact_key": artifact_key,
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        ).encode("utf-8")
+        digest = hashlib.sha256(canonical + token.encode("ascii")).hexdigest()
+        base_score = int(digest[:8], 16) % 101
+        if confidence == StageConfidence.PASS_CONFIDENT and stage_index == 0:
+            score = 90 + (base_score % 11)
+        elif confidence == StageConfidence.FAIL_CONFIDENT and stage_index == 0:
+            score = base_score % 20
+        else:
+            score = 40 + (base_score % 41)
+        safe = _legacy_safe_to_terminate(confidence, metadata, stage.name)
+        notes = "legacy_adaptive_scenario"
+        digest_fp = digest[:16]
 
-    # requires_expensive stays uncertain through medium.
-    if (
-        str(metadata.get("adaptive_scenario", "")).strip().lower() == "requires_expensive"
-        and stage.name != "heavy"
-    ):
-        confidence = StageConfidence.UNCERTAIN
+    if kind is not None:
+        digest_fp = hashlib.sha256(
+            f"{submission_id}:{stage.name}:{kind.value}:{score}".encode()
+        ).hexdigest()[:16]
 
     return StageOutcome(
         stage=stage,
@@ -115,12 +148,16 @@ def run_stage(
         score=min(100, max(0, score)),
         execution_cpu_ms=round(cpu_ms, 3),
         peak_alloc_bytes=peak,
+        safe_to_terminate=safe,
         evidence={
             "stage": stage.name,
             "stage_index": stage_index,
             "confidence": confidence.value,
-            "fingerprint": digest[:16],
+            "safe_to_terminate": safe,
+            "fingerprint": digest_fp,
             "cost_units": stage.cost_units,
             "workload_class": stage.workload_class.value,
+            "workload_kind": kind.value if kind else None,
+            "notes": notes,
         },
     )

@@ -1,4 +1,7 @@
-"""Progressive escalation policy (deterministic, inspectable)."""
+"""Progressive escalation policy (deterministic, inspectable).
+
+Early exit requires BOTH confident confidence AND safe_to_terminate=True.
+"""
 
 from __future__ import annotations
 
@@ -14,7 +17,7 @@ from challengeforge.runtime.pressure import PressureState
 class EscalationAction(StrEnum):
     FINISH = "finish"
     CONTINUE = "continue"
-    DEFER = "defer"  # requeue for later expensive stage
+    DEFER = "defer"
 
 
 @dataclass(frozen=True)
@@ -36,19 +39,30 @@ class ProgressivePolicy:
         deadline_at: datetime | None,
         now: datetime | None = None,
         next_stage_cost_units: int = 0,
+        safe_to_terminate: bool = False,
     ) -> EscalationDecision:
         if self.mode == EvaluationMode.ALWAYS_EXPENSIVE:
             if next_stage_exists:
                 return EscalationDecision(EscalationAction.CONTINUE, "always_expensive")
             return EscalationDecision(EscalationAction.FINISH, "plan_exhausted")
 
-        # fixed_progressive and resource_aware_adaptive share confidence early-exit
-        if confidence in (
+        confident = confidence in (
             StageConfidence.PASS_CONFIDENT,
             StageConfidence.FAIL_CONFIDENT,
-        ):
+        )
+        # Safe early-exit contract: confident alone is insufficient.
+        if confident and safe_to_terminate:
             return EscalationDecision(
-                EscalationAction.FINISH, f"early_exit_{confidence.value}"
+                EscalationAction.FINISH, f"safe_early_exit_{confidence.value}"
+            )
+        if confident and not safe_to_terminate:
+            # Adversarial / unsafe confident signal — must escalate if possible.
+            if next_stage_exists:
+                return EscalationDecision(
+                    EscalationAction.CONTINUE, "unsafe_confident_escalate"
+                )
+            return EscalationDecision(
+                EscalationAction.FINISH, "plan_exhausted_unsafe_confident"
             )
 
         if not next_stage_exists:
@@ -57,7 +71,6 @@ class ProgressivePolicy:
         if self.mode == EvaluationMode.FIXED_PROGRESSIVE:
             return EscalationDecision(EscalationAction.CONTINUE, "uncertain_escalate")
 
-        # resource_aware_adaptive
         assert self.mode == EvaluationMode.RESOURCE_AWARE_ADAPTIVE
         now = now or datetime.now(timezone.utc)
         deadline_near = False
@@ -66,13 +79,9 @@ class ProgressivePolicy:
             deadline_near = remaining <= 30.0
 
         if pressure == PressureState.DEGRADED and next_stage_cost_units >= 9 and not deadline_near:
-            return EscalationDecision(
-                EscalationAction.DEFER, "degraded_defer_heavy"
-            )
+            return EscalationDecision(EscalationAction.DEFER, "degraded_defer_heavy")
         if pressure == PressureState.PRESSURED and next_stage_cost_units >= 9 and not deadline_near:
-            return EscalationDecision(
-                EscalationAction.DEFER, "pressured_defer_heavy"
-            )
+            return EscalationDecision(EscalationAction.DEFER, "pressured_defer_heavy")
         if deadline_near:
             return EscalationDecision(EscalationAction.CONTINUE, "deadline_near_escalate")
         return EscalationDecision(EscalationAction.CONTINUE, "uncertain_escalate")

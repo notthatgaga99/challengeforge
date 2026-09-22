@@ -102,6 +102,7 @@ class ProgressiveEvaluator:
                 pressure=pressure,
                 deadline_at=deadline_at,
                 next_stage_cost_units=next_stage.cost_units if next_stage else 0,
+                safe_to_terminate=outcome.safe_to_terminate,
             )
             if decision.action == EscalationAction.FINISH:
                 return ProgressiveResult(

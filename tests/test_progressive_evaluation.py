@@ -29,7 +29,7 @@ def test_fixed_progressive_early_exits_on_confident_pass():
     )
     assert result.finished
     assert result.actual_cost_units == 1
-    assert result.early_exit_reason == "early_exit_pass_confident"
+    assert result.early_exit_reason == "safe_early_exit_pass_confident"
     assert result.compute_savings > 0.8
 
 
@@ -58,13 +58,13 @@ def test_requires_expensive_reaches_heavy():
 def test_adaptive_defers_heavy_when_degraded():
     result = ProgressiveEvaluator(EvaluationMode.RESOURCE_AWARE_ADAPTIVE).run(
         submission_id=uuid4(),
-        metadata={"adaptive_scenario": "requires_expensive"},
+        metadata={"workload_kind": "hard_pass"},
         artifact_key=None,
         pressure=PressureState.DEGRADED,
     )
     assert result.finished is False
     assert result.defer_reason == "degraded_defer_heavy"
-    assert result.next_stage == 2  # after medium, before heavy
+    assert result.next_stage == 2
 
 
 def test_policy_deadline_forces_continue_under_pressure():
@@ -76,6 +76,31 @@ def test_policy_deadline_forces_continue_under_pressure():
         pressure=PressureState.DEGRADED,
         deadline_at=datetime.now(timezone.utc) + timedelta(seconds=5),
         next_stage_cost_units=9,
+        safe_to_terminate=False,
     )
     assert decision.action == EscalationAction.CONTINUE
     assert decision.reason == "deadline_near_escalate"
+
+
+def test_adversarial_confident_but_unsafe_must_escalate():
+    result = ProgressiveEvaluator(EvaluationMode.FIXED_PROGRESSIVE).run(
+        submission_id=uuid4(),
+        metadata={"workload_kind": "adversarial_pass"},
+        artifact_key=None,
+    )
+    assert result.finished
+    assert result.final_tier == "heavy"
+    assert any(s.get("notes", "").startswith("adversarial") for s in result.stages[:1])
+    assert result.actual_cost_units == ALWAYS_EXPENSIVE_COST_UNITS
+
+
+def test_safe_contract_rejects_confident_without_safe_flag():
+    decision = ProgressivePolicy(EvaluationMode.FIXED_PROGRESSIVE).decide(
+        confidence=StageConfidence.PASS_CONFIDENT,
+        next_stage_exists=True,
+        pressure=PressureState.NORMAL,
+        deadline_at=None,
+        safe_to_terminate=False,
+    )
+    assert decision.action == EscalationAction.CONTINUE
+    assert decision.reason == "unsafe_confident_escalate"

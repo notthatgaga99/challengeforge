@@ -136,8 +136,10 @@ Replacing the filesystem with object storage later should not change submission 
 
 See [`interactive-isolated-load-profile.md`](interactive-isolated-load-profile.md),
 [`resource-aware-runtime.md`](resource-aware-runtime.md), and
-[`adaptive-evaluation-v2.md`](adaptive-evaluation-v2.md) (progressive synthetic
-evaluation — opt-in modes; default remains legacy single-shot).
+[`adaptive-evaluation-v2.md`](adaptive-evaluation-v2.md) /
+[`adaptive-evaluation-v3-audit.md`](adaptive-evaluation-v3-audit.md)
+(progressive synthetic evaluation — opt-in; default `legacy`; safe early-exit
+requires `safe_to_terminate`).
 
 ## 8. Important failure modes
 
