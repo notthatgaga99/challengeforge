@@ -46,8 +46,8 @@ from concurrency_experiment import (
 from resource_capacity_experiment import ResourceExperiment, env_snapshot
 
 MAX_DURATION_SECONDS = 15.0
-MAX_REQUESTS = 800
-MAX_CLIENTS = 80
+MAX_REQUESTS = 1_200
+MAX_CLIENTS = 100
 MAX_QUEUED_FOR_POSITION = 1_200
 MAX_DATASET_SUBMISSIONS = 1_200
 
@@ -324,6 +324,9 @@ async def drive(
     rate: float,
     duration: float,
     clients: int,
+    load_generator_note: str | None = None,
+    server_pid: int | None = None,
+    http_timeout_seconds: float = 5.0,
 ) -> dict[str, Any]:
     total = min(MAX_REQUESTS, max(1, round(rate * duration)))
     semaphore = asyncio.Semaphore(min(clients, MAX_CLIENTS))
@@ -334,6 +337,13 @@ async def drive(
     statuses: dict[str, int] = defaultdict(int)
     process = psutil.Process()
     process.cpu_percent(None)
+    server_proc = None
+    if server_pid is not None:
+        try:
+            server_proc = psutil.Process(server_pid)
+            server_proc.cpu_percent(None)
+        except (psutil.Error, ValueError):
+            server_proc = None
     t0 = time.perf_counter()
 
     async def one(index: int, endpoint: str) -> None:
@@ -393,6 +403,16 @@ async def drive(
     elapsed = time.perf_counter() - t0
     cpu = process.cpu_percent(None)
     rss = process.memory_info().rss / (1024 * 1024)
+    server_stats: dict[str, Any] | None = None
+    if server_proc is not None:
+        try:
+            server_stats = {
+                "pid": server_pid,
+                "cpu_percent": server_proc.cpu_percent(None),
+                "rss_mb": round(server_proc.memory_info().rss / (1024 * 1024), 2),
+            }
+        except psutil.Error:
+            server_stats = {"pid": server_pid, "error": "process_stats_unavailable"}
 
     by_endpoint: dict[str, Any] = {}
     for endpoint in endpoints:
@@ -416,6 +436,7 @@ async def drive(
     all_server = [p for values in server_profiles.values() for p in values]
     return {
         "attempted": total,
+        "offered_requests_per_second": rate,
         "elapsed_seconds": round(elapsed, 3),
         "achieved_requests_per_second": round(total / elapsed if elapsed else 0.0, 3),
         "error_count": sum(errors.values()),
@@ -429,9 +450,10 @@ async def drive(
         "query_counts": query_count_summary(all_server),
         "by_endpoint": by_endpoint,
         "client_process": {"cpu_percent": cpu, "rss_mb": round(rss, 2)},
-        "load_generator_note": (
-            "Client and server share one laptop process/host in this harness"
-        ),
+        "server_process": server_stats,
+        "http_timeout_seconds": http_timeout_seconds,
+        "load_generator_note": load_generator_note
+        or "Client and server share one laptop process/host in this harness",
     }
 
 
