@@ -315,6 +315,9 @@ class EvaluationRepository:
         submission_id: UUID,
         *,
         workload_class: str = "light",
+        evaluation_mode: str = "legacy",
+        deadline_at: datetime | None = None,
+        current_stage: int = 0,
     ) -> Evaluation:
         now = utcnow()
         row = EvaluationRow(
@@ -322,6 +325,9 @@ class EvaluationRepository:
             submission_id=submission_id,
             status="queued",
             workload_class=workload_class,
+            current_stage=current_stage,
+            evaluation_mode=evaluation_mode,
+            deadline_at=deadline_at,
             created_at=now,
             started_at=None,
             completed_at=None,
@@ -334,6 +340,38 @@ class EvaluationRepository:
         self.session.add(row)
         await self.session.flush()
         return evaluation_to_domain(row)
+
+    async def defer_escalation(
+        self,
+        evaluation_id: UUID,
+        *,
+        worker_id: str,
+        next_stage: int,
+        workload_class: str,
+        result_metadata: dict,
+    ) -> Evaluation | None:
+        """Release RUNNING → QUEUED after a partial progressive stage."""
+        stmt = (
+            update(EvaluationRow)
+            .where(
+                EvaluationRow.id == evaluation_id,
+                EvaluationRow.status == "running",
+                EvaluationRow.worker_id == worker_id,
+            )
+            .values(
+                status="queued",
+                started_at=None,
+                worker_id=None,
+                current_stage=next_stage,
+                workload_class=workload_class,
+                result_metadata=result_metadata,
+                failure_reason=None,
+            )
+            .returning(EvaluationRow)
+        )
+        result = await self.session.execute(stmt)
+        row = result.scalar_one_or_none()
+        return evaluation_to_domain(row) if row else None
 
     async def claim_next(
         self,

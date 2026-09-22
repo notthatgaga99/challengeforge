@@ -22,11 +22,14 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from challengeforge.application.evaluator import EvaluationFailed, evaluate_submission
 from challengeforge.config import Settings, get_settings
 from challengeforge.domain.enums import WorkloadClass
+from challengeforge.evaluation.plan import DEFAULT_PLAN, EvaluationMode
+from challengeforge.evaluation.progressive import ProgressiveEvaluator
 from challengeforge.observability import configure_logging
 from challengeforge.persistence.mapping import utcnow
 from challengeforge.persistence.repositories import EvaluationRepository, SubmissionRepository
 from challengeforge.persistence.session import dispose_engine, get_session_factory, init_engine
 from challengeforge.runtime import ResourceAwareRuntime, ResourceBudget
+from challengeforge.runtime.pressure import PressureState
 
 logger = structlog.get_logger(__name__)
 
@@ -233,92 +236,232 @@ class EvaluationWorker:
         self._sample_resources()
         eval_started = time.perf_counter()
         try:
+            mode_raw = claimed.evaluation_mode or self.settings.evaluation_progressive_mode
             try:
-                outcome = await asyncio.to_thread(
-                    evaluate_submission,
-                    submission_id=submission.id,
-                    metadata=submission.metadata,
-                    artifact_key=submission.artifact_key,
-                    workload_class=claimed.workload_class,
-                )
-            except EvaluationFailed as exc:
-                async with factory() as fail_session:
-                    result = await EvaluationRepository(fail_session).mark_failed(
-                        claimed.id,
-                        failure_reason=exc.reason,
-                        result_metadata={
-                            "evaluator": "deterministic_placeholder_v2",
-                            "workload_class": claimed.workload_class.value,
-                        },
-                        worker_id=self.worker_id,
-                    )
-                    await fail_session.commit()
-                self.jobs_failed += 1
-                logger.info(
-                    "evaluation_failed",
-                    evaluation_id=str(claimed.id),
-                    submission_id=str(claimed.submission_id),
-                    worker_id=self.worker_id,
-                    attempt=claimed.attempt_count,
-                    status="failed" if result else "abandoned",
-                    workload_class=claimed.workload_class.value,
-                    failure_reason=exc.reason,
-                    completed_at=(
-                        result.completed_at.isoformat()
-                        if result and result.completed_at
-                        else None
-                    ),
-                )
-                return True
+                mode = EvaluationMode(mode_raw)
+            except ValueError:
+                mode = EvaluationMode.LEGACY
 
-            async with factory() as ok_session:
-                result = await EvaluationRepository(ok_session).mark_succeeded(
-                    claimed.id,
-                    score=outcome.score,
-                    result_metadata=outcome.result_metadata,
-                    worker_id=self.worker_id,
+            if mode == EvaluationMode.LEGACY:
+                return await self._run_legacy(
+                    claimed, submission, factory, eval_started
                 )
-                await ok_session.commit()
-            if result is None:
-                logger.warning(
-                    "evaluation_complete_skipped",
-                    evaluation_id=str(claimed.id),
-                    submission_id=str(claimed.submission_id),
-                    worker_id=self.worker_id,
-                    attempt=claimed.attempt_count,
-                    reason="row no longer RUNNING for this worker",
-                )
-                return True
-            self.jobs_completed += 1
-            queue_wait = None
-            execution = None
-            if result.started_at and result.created_at:
-                queue_wait = (result.started_at - result.created_at).total_seconds()
-            if result.completed_at and result.started_at:
-                execution = (result.completed_at - result.started_at).total_seconds()
-            wall_ms = (time.perf_counter() - eval_started) * 1000.0
-            logger.info(
-                "evaluation_succeeded",
-                evaluation_id=str(result.id),
-                submission_id=str(result.submission_id),
-                worker_id=self.worker_id,
-                attempt=result.attempt_count,
-                status="succeeded",
-                score=result.score,
-                workload_class=outcome.workload_class.value,
-                queue_wait_seconds=queue_wait,
-                execution_seconds=execution,
-                execution_cpu_ms=outcome.execution_cpu_ms,
-                peak_alloc_bytes=outcome.peak_alloc_bytes,
-                wall_ms=round(wall_ms, 3),
-                queued_at=result.created_at.isoformat(),
-                started_at=result.started_at.isoformat() if result.started_at else None,
-                completed_at=result.completed_at.isoformat() if result.completed_at else None,
+            return await self._run_progressive(
+                claimed, submission, factory, eval_started, mode, pressure
             )
-            return True
         finally:
             self.active_evaluations = max(0, self.active_evaluations - 1)
             self._sample_resources()
+
+    async def _run_legacy(self, claimed, submission, factory, eval_started: float) -> bool:
+        try:
+            outcome = await asyncio.to_thread(
+                evaluate_submission,
+                submission_id=submission.id,
+                metadata=submission.metadata,
+                artifact_key=submission.artifact_key,
+                workload_class=claimed.workload_class,
+            )
+        except EvaluationFailed as exc:
+            async with factory() as fail_session:
+                result = await EvaluationRepository(fail_session).mark_failed(
+                    claimed.id,
+                    failure_reason=exc.reason,
+                    result_metadata={
+                        "evaluator": "deterministic_placeholder_v2",
+                        "workload_class": claimed.workload_class.value,
+                    },
+                    worker_id=self.worker_id,
+                )
+                await fail_session.commit()
+            self.jobs_failed += 1
+            logger.info(
+                "evaluation_failed",
+                evaluation_id=str(claimed.id),
+                submission_id=str(claimed.submission_id),
+                worker_id=self.worker_id,
+                attempt=claimed.attempt_count,
+                status="failed" if result else "abandoned",
+                workload_class=claimed.workload_class.value,
+                failure_reason=exc.reason,
+            )
+            return True
+
+        async with factory() as ok_session:
+            result = await EvaluationRepository(ok_session).mark_succeeded(
+                claimed.id,
+                score=outcome.score,
+                result_metadata=outcome.result_metadata,
+                worker_id=self.worker_id,
+            )
+            await ok_session.commit()
+        if result is None:
+            logger.warning(
+                "evaluation_complete_skipped",
+                evaluation_id=str(claimed.id),
+                reason="row no longer RUNNING for this worker",
+            )
+            return True
+        self.jobs_completed += 1
+        wall_ms = (time.perf_counter() - eval_started) * 1000.0
+        logger.info(
+            "evaluation_succeeded",
+            evaluation_id=str(result.id),
+            submission_id=str(result.submission_id),
+            worker_id=self.worker_id,
+            status="succeeded",
+            score=result.score,
+            workload_class=outcome.workload_class.value,
+            wall_ms=round(wall_ms, 3),
+            evaluator="legacy",
+        )
+        return True
+
+    async def _run_progressive(
+        self,
+        claimed,
+        submission,
+        factory,
+        eval_started: float,
+        mode: EvaluationMode,
+        pressure_raw: str,
+    ) -> bool:
+        try:
+            pressure = PressureState(pressure_raw)
+        except ValueError:
+            pressure = PressureState.NORMAL
+        evaluator = ProgressiveEvaluator(mode)
+
+        try:
+            progressive = await asyncio.to_thread(
+                evaluator.run,
+                submission_id=submission.id,
+                metadata=submission.metadata,
+                artifact_key=submission.artifact_key,
+                start_stage=claimed.current_stage,
+                pressure=pressure,
+                deadline_at=claimed.deadline_at,
+            )
+        except EvaluationFailed as exc:
+            async with factory() as fail_session:
+                result = await EvaluationRepository(fail_session).mark_failed(
+                    claimed.id,
+                    failure_reason=exc.reason,
+                    result_metadata={
+                        "evaluator": "progressive_synthetic_v1",
+                        "workload_class": claimed.workload_class.value,
+                    },
+                    worker_id=self.worker_id,
+                )
+                await fail_session.commit()
+            self.jobs_failed += 1
+            logger.info(
+                "evaluation_failed",
+                evaluation_id=str(claimed.id),
+                failure_reason=exc.reason,
+                mode=mode.value,
+            )
+            return True
+
+        if not progressive.finished:
+            next_spec = DEFAULT_PLAN.stage_at(progressive.next_stage)
+            next_class = (
+                next_spec.workload_class.value if next_spec else WorkloadClass.HEAVY.value
+            )
+            # Merge prior progressive metadata if re-escalating.
+            meta = dict(claimed.result_metadata or {})
+            prior = meta.get("progressive") if isinstance(meta.get("progressive"), dict) else {}
+            merged_stages = list(prior.get("stages_completed") or []) + list(
+                progressive.stages
+            )
+            progressive.result_metadata["progressive"]["stages_completed"] = merged_stages
+            progressive.result_metadata["progressive"]["actual_cost_units"] = int(
+                prior.get("actual_cost_units") or 0
+            ) + progressive.actual_cost_units
+            async with factory() as defer_session:
+                deferred = await EvaluationRepository(defer_session).defer_escalation(
+                    claimed.id,
+                    worker_id=self.worker_id,
+                    next_stage=progressive.next_stage,
+                    workload_class=next_class,
+                    result_metadata=progressive.result_metadata,
+                )
+                await defer_session.commit()
+            logger.info(
+                "evaluation_escalation_deferred",
+                evaluation_id=str(claimed.id),
+                next_stage=progressive.next_stage,
+                reason=progressive.defer_reason,
+                pressure=pressure.value,
+                deferred=deferred is not None,
+            )
+            return True
+
+        meta = progressive.result_metadata
+        # Accumulate cost if resuming after defer.
+        prior = (claimed.result_metadata or {}).get("progressive")
+        if isinstance(prior, dict) and prior.get("stages_completed"):
+            stages = list(prior.get("stages_completed") or []) + list(progressive.stages)
+            prior_cost = int(prior.get("actual_cost_units") or 0)
+            meta["progressive"]["stages_completed"] = stages
+            meta["progressive"]["actual_cost_units"] = (
+                prior_cost + progressive.actual_cost_units
+            )
+            from challengeforge.evaluation.plan import ALWAYS_EXPENSIVE_COST_UNITS
+
+            meta["progressive"]["compute_savings"] = round(
+                1.0
+                - (
+                    meta["progressive"]["actual_cost_units"]
+                    / ALWAYS_EXPENSIVE_COST_UNITS
+                ),
+                4,
+            )
+
+        async with factory() as ok_session:
+            result = await EvaluationRepository(ok_session).mark_succeeded(
+                claimed.id,
+                score=int(progressive.score or 0),
+                result_metadata=meta,
+                worker_id=self.worker_id,
+            )
+            # Persist final stage index on success via direct update if needed.
+            if result is not None:
+                from sqlalchemy import update
+                from challengeforge.persistence.models import EvaluationRow
+
+                await ok_session.execute(
+                    update(EvaluationRow)
+                    .where(EvaluationRow.id == claimed.id)
+                    .values(current_stage=progressive.next_stage)
+                )
+                await ok_session.commit()
+            else:
+                await ok_session.rollback()
+        if result is None:
+            logger.warning(
+                "evaluation_complete_skipped",
+                evaluation_id=str(claimed.id),
+                reason="row no longer RUNNING for this worker",
+            )
+            return True
+        self.jobs_completed += 1
+        wall_ms = (time.perf_counter() - eval_started) * 1000.0
+        logger.info(
+            "evaluation_succeeded",
+            evaluation_id=str(result.id),
+            submission_id=str(result.submission_id),
+            worker_id=self.worker_id,
+            status="succeeded",
+            score=result.score,
+            mode=mode.value,
+            early_exit_reason=progressive.early_exit_reason,
+            final_tier=progressive.final_tier,
+            actual_cost_units=meta.get("progressive", {}).get("actual_cost_units"),
+            compute_savings=meta.get("progressive", {}).get("compute_savings"),
+            wall_ms=round(wall_ms, 3),
+        )
+        return True
 
     async def run_forever(self) -> None:
         logger.info("worker_started", worker_id=self.worker_id)

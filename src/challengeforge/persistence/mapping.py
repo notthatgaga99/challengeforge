@@ -110,6 +110,9 @@ def evaluation_to_domain(row: EvaluationRow) -> Evaluation:
         result_metadata=dict(row.result_metadata or {}),
         worker_id=row.worker_id,
         workload_class=WorkloadClass(row.workload_class or WorkloadClass.LIGHT.value),
+        current_stage=int(getattr(row, "current_stage", 0) or 0),
+        evaluation_mode=str(getattr(row, "evaluation_mode", None) or "legacy"),
+        deadline_at=getattr(row, "deadline_at", None),
     )
 
 

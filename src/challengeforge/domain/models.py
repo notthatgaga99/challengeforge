@@ -95,3 +95,6 @@ class Evaluation:
     result_metadata: dict[str, Any]
     worker_id: str | None = None
     workload_class: WorkloadClass = WorkloadClass.LIGHT
+    current_stage: int = 0
+    evaluation_mode: str = "legacy"
+    deadline_at: datetime | None = None

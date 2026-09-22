@@ -134,8 +134,10 @@ Replacing the filesystem with object storage later should not change submission 
 | Queue | PostgreSQL evaluations table |
 | Expensive plane | Resource-Aware Runtime v1 (budgets, pressure, adaptive concurrency) |
 
-See [`interactive-isolated-load-profile.md`](interactive-isolated-load-profile.md) and
-[`resource-aware-runtime.md`](resource-aware-runtime.md).
+See [`interactive-isolated-load-profile.md`](interactive-isolated-load-profile.md),
+[`resource-aware-runtime.md`](resource-aware-runtime.md), and
+[`adaptive-evaluation-v2.md`](adaptive-evaluation-v2.md) (progressive synthetic
+evaluation — opt-in modes; default remains legacy single-shot).
 
 ## 8. Important failure modes
 

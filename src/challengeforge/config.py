@@ -33,6 +33,13 @@ class Settings(BaseSettings):
     evaluation_scheduling_policy: Literal[
         "fifo", "bounded_light_bypass", "resource_aware"
     ] = "bounded_light_bypass"
+    # Progressive evaluation (synthetic). Default legacy preserves prior behavior.
+    evaluation_progressive_mode: Literal[
+        "legacy",
+        "always_expensive",
+        "fixed_progressive",
+        "resource_aware_adaptive",
+    ] = "legacy"
     # Backlog health thresholds (observability / messaging — not submission rejection)
     evaluation_busy_queue_depth: int = 20
     evaluation_busy_oldest_age_seconds: float = 5.0

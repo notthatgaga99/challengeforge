@@ -171,6 +171,13 @@ class EvaluationRow(Base):
             "workload_class IN ('light', 'medium', 'heavy')",
             name="ck_evaluations_workload_class",
         ),
+        CheckConstraint("current_stage >= 0", name="ck_evaluations_current_stage"),
+        CheckConstraint(
+            "evaluation_mode IN ("
+            "'legacy', 'always_expensive', 'fixed_progressive', 'resource_aware_adaptive'"
+            ")",
+            name="ck_evaluations_evaluation_mode",
+        ),
         Index("ix_evaluations_status_created", "status", "created_at"),
         Index("ix_evaluations_running_started", "status", "started_at"),
     )
@@ -184,6 +191,15 @@ class EvaluationRow(Base):
     status: Mapped[str] = mapped_column(Text, nullable=False)
     workload_class: Mapped[str] = mapped_column(
         Text, nullable=False, server_default=text("'light'")
+    )
+    current_stage: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default=text("0")
+    )
+    evaluation_mode: Mapped[str] = mapped_column(
+        Text, nullable=False, server_default=text("'legacy'")
+    )
+    deadline_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
     )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     started_at: Mapped[datetime | None] = mapped_column(

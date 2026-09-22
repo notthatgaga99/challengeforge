@@ -216,8 +216,32 @@ class SubmissionService:
         )
         if transitioned is not None:
             workload = parse_workload_class(transitioned.metadata.get("workload_class"))
+            mode = self.uow.settings.evaluation_progressive_mode
+            # Opt-in per-submission override for experiments only.
+            raw_mode = transitioned.metadata.get("evaluation_mode")
+            if isinstance(raw_mode, str) and raw_mode in {
+                "legacy",
+                "always_expensive",
+                "fixed_progressive",
+                "resource_aware_adaptive",
+            }:
+                mode = raw_mode
+            deadline_at = None
+            raw_deadline = transitioned.metadata.get("evaluation_deadline_seconds")
+            if raw_deadline is not None:
+                try:
+                    from datetime import timedelta
+
+                    from challengeforge.persistence.mapping import utcnow as _utcnow
+
+                    deadline_at = _utcnow() + timedelta(seconds=float(raw_deadline))
+                except (TypeError, ValueError):
+                    deadline_at = None
             evaluation = await self.uow.evaluations.create_queued(
-                transitioned.id, workload_class=workload.value
+                transitioned.id,
+                workload_class=workload.value,
+                evaluation_mode=mode,
+                deadline_at=deadline_at,
             )
             await self.uow.session.commit()
             return SubmissionSubmitResult(transitioned, evaluation)

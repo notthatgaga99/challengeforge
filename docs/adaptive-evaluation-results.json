@@ -1,0 +1,346 @@
+{
+  "metadata": {
+    "started_at": "2026-09-22T17:07:45.147116+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 1647.1
+    },
+    "always_expensive_cost_units_per_job": 13,
+    "compute_savings_definition": "1 - sum(actual_cost_units) / (13 * jobs)",
+    "claim": "Resource-aware progressive evaluation architecture with deterministic synthetic stages \u2014 not an intelligent evaluator.",
+    "completed_at": "2026-09-22T17:09:05.086006+00:00"
+  },
+  "scenarios": {
+    "always_expensive__all_confident_pass": {
+      "mode": "always_expensive",
+      "mix": "all_confident_pass",
+      "jobs": 12,
+      "succeeded": 12,
+      "queued_remaining": 0,
+      "elapsed_seconds": 10.941,
+      "evaluation_throughput_per_second": 1.097,
+      "interactive": {
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 47.45,
+          "p95_ms": 53.56,
+          "p99_ms": 55.82
+        }
+      },
+      "early_exit_rate": 0.0,
+      "escalation_rate": 1.0,
+      "actual_cost_units": 156,
+      "always_expensive_cost_units": 156,
+      "compute_savings": 0.0,
+      "process": {
+        "cpu_percent": 93.6,
+        "rss_mb": 89.73
+      },
+      "submissions_durable": 12
+    },
+    "fixed_progressive__all_confident_pass": {
+      "mode": "fixed_progressive",
+      "mix": "all_confident_pass",
+      "jobs": 12,
+      "succeeded": 12,
+      "queued_remaining": 0,
+      "elapsed_seconds": 2.547,
+      "evaluation_throughput_per_second": 4.711,
+      "interactive": {
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 59.52,
+          "p95_ms": 106.88,
+          "p99_ms": 106.96
+        }
+      },
+      "early_exit_rate": 1.0,
+      "escalation_rate": 0.0,
+      "actual_cost_units": 12,
+      "always_expensive_cost_units": 156,
+      "compute_savings": 0.9231,
+      "process": {
+        "cpu_percent": 95.7,
+        "rss_mb": 90.06
+      },
+      "submissions_durable": 12
+    },
+    "resource_aware_adaptive__all_confident_pass": {
+      "mode": "resource_aware_adaptive",
+      "mix": "all_confident_pass",
+      "jobs": 12,
+      "succeeded": 12,
+      "queued_remaining": 0,
+      "elapsed_seconds": 2.972,
+      "evaluation_throughput_per_second": 4.038,
+      "interactive": {
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 52.66,
+          "p95_ms": 102.62,
+          "p99_ms": 103.15
+        }
+      },
+      "early_exit_rate": 1.0,
+      "escalation_rate": 0.0,
+      "actual_cost_units": 12,
+      "always_expensive_cost_units": 156,
+      "compute_savings": 0.9231,
+      "process": {
+        "cpu_percent": 84.3,
+        "rss_mb": 90.21
+      },
+      "submissions_durable": 12
+    },
+    "always_expensive__fifty_fifty": {
+      "mode": "always_expensive",
+      "mix": "fifty_fifty",
+      "jobs": 12,
+      "succeeded": 12,
+      "queued_remaining": 0,
+      "elapsed_seconds": 8.613,
+      "evaluation_throughput_per_second": 1.393,
+      "interactive": {
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 58.33,
+          "p95_ms": 604.16,
+          "p99_ms": 640.28
+        }
+      },
+      "early_exit_rate": 0.0,
+      "escalation_rate": 1.0,
+      "actual_cost_units": 156,
+      "always_expensive_cost_units": 156,
+      "compute_savings": 0.0,
+      "process": {
+        "cpu_percent": 96.6,
+        "rss_mb": 90.29
+      },
+      "submissions_durable": 12
+    },
+    "fixed_progressive__fifty_fifty": {
+      "mode": "fixed_progressive",
+      "mix": "fifty_fifty",
+      "jobs": 12,
+      "succeeded": 12,
+      "queued_remaining": 0,
+      "elapsed_seconds": 5.583,
+      "evaluation_throughput_per_second": 2.149,
+      "interactive": {
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 49.82,
+          "p95_ms": 96.1,
+          "p99_ms": 113.07
+        }
+      },
+      "early_exit_rate": 0.5,
+      "escalation_rate": 0.5,
+      "actual_cost_units": 84,
+      "always_expensive_cost_units": 156,
+      "compute_savings": 0.4615,
+      "process": {
+        "cpu_percent": 95.0,
+        "rss_mb": 90.55
+      },
+      "submissions_durable": 12
+    },
+    "resource_aware_adaptive__fifty_fifty": {
+      "mode": "resource_aware_adaptive",
+      "mix": "fifty_fifty",
+      "jobs": 12,
+      "succeeded": 12,
+      "queued_remaining": 0,
+      "elapsed_seconds": 5.984,
+      "evaluation_throughput_per_second": 2.005,
+      "interactive": {
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 54.91,
+          "p95_ms": 98.31,
+          "p99_ms": 102.46
+        }
+      },
+      "early_exit_rate": 0.5,
+      "escalation_rate": 0.5,
+      "actual_cost_units": 84,
+      "always_expensive_cost_units": 156,
+      "compute_savings": 0.4615,
+      "process": {
+        "cpu_percent": 90.1,
+        "rss_mb": 90.68
+      },
+      "submissions_durable": 12
+    },
+    "always_expensive__eighty_twenty": {
+      "mode": "always_expensive",
+      "mix": "eighty_twenty",
+      "jobs": 12,
+      "succeeded": 12,
+      "queued_remaining": 0,
+      "elapsed_seconds": 8.872,
+      "evaluation_throughput_per_second": 1.353,
+      "interactive": {
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 48.69,
+          "p95_ms": 549.19,
+          "p99_ms": 557.74
+        }
+      },
+      "early_exit_rate": 0.0,
+      "escalation_rate": 1.0,
+      "actual_cost_units": 156,
+      "always_expensive_cost_units": 156,
+      "compute_savings": 0.0,
+      "process": {
+        "cpu_percent": 98.4,
+        "rss_mb": 90.76
+      },
+      "submissions_durable": 12
+    },
+    "fixed_progressive__eighty_twenty": {
+      "mode": "fixed_progressive",
+      "mix": "eighty_twenty",
+      "jobs": 12,
+      "succeeded": 12,
+      "queued_remaining": 0,
+      "elapsed_seconds": 3.402,
+      "evaluation_throughput_per_second": 3.528,
+      "interactive": {
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 49.67,
+          "p95_ms": 98.53,
+          "p99_ms": 102.44
+        }
+      },
+      "early_exit_rate": 0.8333,
+      "escalation_rate": 0.1667,
+      "actual_cost_units": 36,
+      "always_expensive_cost_units": 156,
+      "compute_savings": 0.7692,
+      "process": {
+        "cpu_percent": 94.0,
+        "rss_mb": 90.77
+      },
+      "submissions_durable": 12
+    },
+    "resource_aware_adaptive__eighty_twenty": {
+      "mode": "resource_aware_adaptive",
+      "mix": "eighty_twenty",
+      "jobs": 12,
+      "succeeded": 12,
+      "queued_remaining": 0,
+      "elapsed_seconds": 10.949,
+      "evaluation_throughput_per_second": 1.096,
+      "interactive": {
+        "errors": 0,
+        "latency_ms": {
+          "p50_ms": 113.03,
+          "p95_ms": 218.69,
+          "p99_ms": 222.57
+        }
+      },
+      "early_exit_rate": 0.8333,
+      "escalation_rate": 0.1667,
+      "actual_cost_units": 36,
+      "always_expensive_cost_units": 156,
+      "compute_savings": 0.7692,
+      "process": {
+        "cpu_percent": 63.6,
+        "rss_mb": 90.77
+      },
+      "submissions_durable": 12
+    }
+  },
+  "scorecard": {
+    "always_expensive__all_confident_pass": {
+      "compute_savings": 0.0,
+      "early_exit_rate": 0.0,
+      "escalation_rate": 1.0,
+      "interactive_p95_ms": 53.56,
+      "eval_rps": 1.097,
+      "succeeded": 12,
+      "queued_remaining": 0
+    },
+    "fixed_progressive__all_confident_pass": {
+      "compute_savings": 0.9231,
+      "early_exit_rate": 1.0,
+      "escalation_rate": 0.0,
+      "interactive_p95_ms": 106.88,
+      "eval_rps": 4.711,
+      "succeeded": 12,
+      "queued_remaining": 0
+    },
+    "resource_aware_adaptive__all_confident_pass": {
+      "compute_savings": 0.9231,
+      "early_exit_rate": 1.0,
+      "escalation_rate": 0.0,
+      "interactive_p95_ms": 102.62,
+      "eval_rps": 4.038,
+      "succeeded": 12,
+      "queued_remaining": 0
+    },
+    "always_expensive__fifty_fifty": {
+      "compute_savings": 0.0,
+      "early_exit_rate": 0.0,
+      "escalation_rate": 1.0,
+      "interactive_p95_ms": 604.16,
+      "eval_rps": 1.393,
+      "succeeded": 12,
+      "queued_remaining": 0
+    },
+    "fixed_progressive__fifty_fifty": {
+      "compute_savings": 0.4615,
+      "early_exit_rate": 0.5,
+      "escalation_rate": 0.5,
+      "interactive_p95_ms": 96.1,
+      "eval_rps": 2.149,
+      "succeeded": 12,
+      "queued_remaining": 0
+    },
+    "resource_aware_adaptive__fifty_fifty": {
+      "compute_savings": 0.4615,
+      "early_exit_rate": 0.5,
+      "escalation_rate": 0.5,
+      "interactive_p95_ms": 98.31,
+      "eval_rps": 2.005,
+      "succeeded": 12,
+      "queued_remaining": 0
+    },
+    "always_expensive__eighty_twenty": {
+      "compute_savings": 0.0,
+      "early_exit_rate": 0.0,
+      "escalation_rate": 1.0,
+      "interactive_p95_ms": 549.19,
+      "eval_rps": 1.353,
+      "succeeded": 12,
+      "queued_remaining": 0
+    },
+    "fixed_progressive__eighty_twenty": {
+      "compute_savings": 0.7692,
+      "early_exit_rate": 0.8333,
+      "escalation_rate": 0.1667,
+      "interactive_p95_ms": 98.53,
+      "eval_rps": 3.528,
+      "succeeded": 12,
+      "queued_remaining": 0
+    },
+    "resource_aware_adaptive__eighty_twenty": {
+      "compute_savings": 0.7692,
+      "early_exit_rate": 0.8333,
+      "escalation_rate": 0.1667,
+      "interactive_p95_ms": 218.69,
+      "eval_rps": 1.096,
+      "succeeded": 12,
+      "queued_remaining": 0
+    }
+  }
+}
