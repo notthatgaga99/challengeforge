@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, Integer, Text, text
+from sqlalchemy import CheckConstraint, DateTime, Float, ForeignKey, Index, Integer, Text, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -242,3 +242,7 @@ class EvaluationSchedulerStateRow(Base):
         Text, nullable=False, server_default=text("'normal'")
     )
     adaptive_max_workers: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    interactive_p95_ms: Mapped[float | None] = mapped_column(Float, nullable=True)
+    interactive_sample_count: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default=text("0")
+    )

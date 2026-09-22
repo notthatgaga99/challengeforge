@@ -131,6 +131,7 @@ class EvaluationWorker:
         # Resource-aware gate: may delay evaluation start; never rejects submissions.
         async with factory() as session:
             plane = await EvaluationRepository(session).plane_snapshot()
+            runtime_hint = await EvaluationRepository(session).read_runtime_state()
             await session.rollback()
         peek = None
         if plane.get("oldest_workload_class"):
@@ -138,6 +139,10 @@ class EvaluationWorker:
                 peek = WorkloadClass(str(plane["oldest_workload_class"]))
             except ValueError:
                 peek = WorkloadClass.LIGHT
+        self.runtime.set_interactive_p95_ms(
+            runtime_hint.get("interactive_p95_ms"),
+            sample_count=int(runtime_hint.get("interactive_sample_count") or 0),
+        )
         tick = self.runtime.tick(
             queued_evaluations=int(plane["queued"]),
             running_evaluations=int(plane["running"]),
@@ -160,16 +165,16 @@ class EvaluationWorker:
                 worker_id=self.worker_id,
                 reason=admission.reason,
                 pressure=pressure,
+                interactive_level=tick.get("interactive_level"),
                 effective_max_workers=effective_workers,
                 queued=plane["queued"],
                 running=plane["running"],
+                interactive_p95_ms=tick.get("interactive_p95_ms"),
             )
             return False
 
-        # Under DEGRADED, refuse new HEAVY starts but keep bounded LIGHT bypass.
-        max_heavy = self.settings.evaluation_max_concurrent_heavy
-        if pressure == "degraded":
-            max_heavy = 0
+        # Under DEGRADED / interactive CRITICAL, refuse new HEAVY starts.
+        max_heavy = int(tick.get("effective_max_heavy", self.settings.evaluation_max_concurrent_heavy))
 
         async with factory() as session:
             eval_repo = EvaluationRepository(session)

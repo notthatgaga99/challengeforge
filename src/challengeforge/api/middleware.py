@@ -1,9 +1,11 @@
+from typing import Any
 from uuid import uuid4
 
 import structlog
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from challengeforge.request_profile import clear_profile, current_profile, start_profile
+from challengeforge.runtime.interactive_signal import is_interactive_control_path
 
 log = structlog.get_logger("challengeforge.http")
 
@@ -19,14 +21,14 @@ class RequestContextMiddleware:
             await self.app(scope, receive, send)
             return
 
+        import time
+
         headers = {
             key.decode("latin-1").lower(): value.decode("latin-1")
             for key, value in scope.get("headers", [])
         }
         request_id = headers.get("x-request-id") or str(uuid4())
         scope.setdefault("state", {})
-        # Starlette Request.state is populated from scope["state"] in newer versions;
-        # also stash for our own use.
         scope["state"]["request_id"] = request_id
 
         structlog.contextvars.clear_contextvars()
@@ -41,6 +43,21 @@ class RequestContextMiddleware:
         profiling = bool(
             settings is not None and getattr(settings, "request_profiling_enabled", False)
         )
+        feedback_enabled = bool(
+            settings is not None
+            and float(getattr(settings, "resource_interactive_p95_warn_ms", 0) or 0) > 0
+            and float(getattr(settings, "resource_interactive_p95_critical_ms", 0) or 0)
+            > 0
+        )
+        method = str(scope.get("method") or "GET")
+        path = str(scope.get("path") or "")
+        # Observe interactive wall time when profiling (baseline) or feedback is on.
+        track_interactive = (
+            (feedback_enabled or profiling)
+            and is_interactive_control_path(method, path)
+        )
+        started = time.perf_counter()
+
         if profiling:
             start_profile()
 
@@ -70,5 +87,31 @@ class RequestContextMiddleware:
             log.exception("unhandled_exception")
             raise
         finally:
+            if track_interactive and app is not None and settings is not None:
+                total_ms = (time.perf_counter() - started) * 1000.0
+                await self._record_interactive(app, settings, total_ms)
             if profiling:
                 clear_profile()
+
+    async def _record_interactive(
+        self, app: Any, settings: Any, total_ms: float
+    ) -> None:
+        from challengeforge.api.interactive_metrics import get_or_create_publisher
+        from challengeforge.persistence.repositories import EvaluationRepository
+        from challengeforge.persistence.session import get_session_factory
+
+        publisher = get_or_create_publisher(app, settings)
+        snap = publisher.record(total_ms)
+        if not publisher.should_persist():
+            return
+        try:
+            factory = get_session_factory()
+            async with factory() as session:
+                await EvaluationRepository(session).persist_interactive_hint(
+                    interactive_p95_ms=snap.get("p95_ms"),
+                    sample_count=int(snap.get("sample_count") or 0),
+                )
+                await session.commit()
+            publisher.mark_persisted(snap)
+        except Exception:
+            log.warning("interactive_hint_persist_failed", exc_info=True)

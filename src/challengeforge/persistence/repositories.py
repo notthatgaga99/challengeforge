@@ -515,6 +515,7 @@ class EvaluationRepository:
                 light_bypass_count=0,
                 pressure_state=pressure_state,
                 adaptive_max_workers=adaptive_max_workers,
+                interactive_sample_count=0,
             )
             .on_conflict_do_nothing(index_elements=["id"])
         )
@@ -529,6 +530,34 @@ class EvaluationRepository:
         state.adaptive_max_workers = adaptive_max_workers
         await self.session.flush()
 
+    async def persist_interactive_hint(
+        self, *, interactive_p95_ms: float | None, sample_count: int
+    ) -> None:
+        """API publishes rolling interactive p95 for workers (cross-process)."""
+        await self.session.execute(
+            pg_insert(EvaluationSchedulerStateRow)
+            .values(
+                id=1,
+                blocked_heavy_id=None,
+                light_bypass_count=0,
+                pressure_state="normal",
+                adaptive_max_workers=None,
+                interactive_p95_ms=interactive_p95_ms,
+                interactive_sample_count=max(0, int(sample_count)),
+            )
+            .on_conflict_do_nothing(index_elements=["id"])
+        )
+        state = (
+            await self.session.execute(
+                select(EvaluationSchedulerStateRow)
+                .where(EvaluationSchedulerStateRow.id == 1)
+                .with_for_update()
+            )
+        ).scalar_one()
+        state.interactive_p95_ms = interactive_p95_ms
+        state.interactive_sample_count = max(0, int(sample_count))
+        await self.session.flush()
+
     async def read_runtime_state(self) -> dict:
         row = (
             await self.session.execute(
@@ -538,10 +567,19 @@ class EvaluationRepository:
             )
         ).scalar_one_or_none()
         if row is None:
-            return {"pressure_state": "normal", "adaptive_max_workers": None}
+            return {
+                "pressure_state": "normal",
+                "adaptive_max_workers": None,
+                "interactive_p95_ms": None,
+                "interactive_sample_count": 0,
+            }
         return {
             "pressure_state": row.pressure_state or "normal",
             "adaptive_max_workers": row.adaptive_max_workers,
+            "interactive_p95_ms": row.interactive_p95_ms,
+            "interactive_sample_count": int(
+                getattr(row, "interactive_sample_count", 0) or 0
+            ),
         }
 
     async def queue_position(self, evaluation_id: UUID) -> int | None:

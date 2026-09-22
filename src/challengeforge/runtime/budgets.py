@@ -31,9 +31,13 @@ class ResourceBudget:
     # Controller pacing
     adjust_cooldown_seconds: float
 
-    # Interactive protection (optional measured hint; 0 disables)
+    # Interactive protection (optional measured hint; 0 warn/critical disables)
     interactive_p95_warn_ms: float
     interactive_p95_critical_ms: float
+    interactive_p95_recovery_ms: float
+    interactive_min_samples: int
+    interactive_sustain_seconds: float
+    interactive_critical_hold_all: bool
 
     @classmethod
     def from_settings(cls, settings: Settings) -> ResourceBudget:
@@ -43,7 +47,7 @@ class ResourceBudget:
             min_evaluation_concurrency=min_conc,
             max_evaluation_concurrency=max_conc,
             max_concurrent_heavy=max(
-                1, min(settings.evaluation_max_concurrent_heavy, max_conc)
+                0, min(settings.evaluation_max_concurrent_heavy, max_conc)
             ),
             max_queued_evaluations_soft=settings.evaluation_busy_queue_depth,
             max_queued_evaluations_hard=settings.evaluation_saturated_queue_depth,
@@ -54,6 +58,10 @@ class ResourceBudget:
             adjust_cooldown_seconds=settings.resource_adjust_cooldown_seconds,
             interactive_p95_warn_ms=settings.resource_interactive_p95_warn_ms,
             interactive_p95_critical_ms=settings.resource_interactive_p95_critical_ms,
+            interactive_p95_recovery_ms=settings.resource_interactive_p95_recovery_ms,
+            interactive_min_samples=settings.resource_interactive_min_samples,
+            interactive_sustain_seconds=settings.resource_interactive_sustain_seconds,
+            interactive_critical_hold_all=settings.resource_interactive_critical_hold_all,
         )
 
     def clamp_concurrency(self, value: int) -> int:

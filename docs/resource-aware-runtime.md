@@ -111,7 +111,7 @@ subject to:
   no correctness violations
 ```
 
-See `docs/resource-pressure-experiment.md` for the scorecard and
+See `docs/resource-pressure-experiment.md` for the scorecard,
 `docs/hard-mix-pressure-results.md` for progressive modes under HTTP + hard/adversarial
-evaluation pressure (agreement held; interactive p95 is host-noisy; prefer
-`fixed_progressive` over claiming adaptive superiority).
+evaluation pressure, and `docs/interactive-feedback-control.md` for the experimental
+interactive p95 closed loop (defaults off; EXPERIMENTAL ONLY after A/B/C portfolio).

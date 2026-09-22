@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 from challengeforge.domain.enums import WorkloadClass
 from challengeforge.runtime.budgets import ResourceBudget
+from challengeforge.runtime.interactive_signal import InteractiveLevel
 from challengeforge.runtime.observer import ResourceSnapshot
 from challengeforge.runtime.pressure import PressureState
 
@@ -35,11 +36,18 @@ class ExpensiveAdmission:
         workload_class: WorkloadClass | None = None,
         running_heavy: int = 0,
         effective_max_workers: int = 1,
+        interactive_level: InteractiveLevel = InteractiveLevel.HEALTHY,
+        critical_hold_all: bool = False,
     ) -> AdmissionDecision:
-        _ = workload_class, running_heavy  # reserved for future class-aware gates
+        _ = workload_class, running_heavy  # class-aware gates use claim params
         if snapshot.running_evaluations >= max(1, effective_max_workers):
             return AdmissionDecision(
                 False, "global_concurrency_full", pressure
+            )
+
+        if critical_hold_all and interactive_level == InteractiveLevel.CRITICAL:
+            return AdmissionDecision(
+                False, "interactive_critical_hold_all", pressure
             )
 
         if (
@@ -48,7 +56,6 @@ class ExpensiveAdmission:
             and snapshot.rss_mb >= budget.memory_hard_mb
             and snapshot.running_evaluations > 0
         ):
-            # Memory hard cap with work already in flight: do not start more.
             return AdmissionDecision(False, "degraded_memory_hold", pressure)
 
         return AdmissionDecision(True, "admitted", pressure)

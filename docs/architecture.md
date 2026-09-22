@@ -143,6 +143,11 @@ See [`interactive-isolated-load-profile.md`](interactive-isolated-load-profile.m
 requires `safe_to_terminate`; HTTP+worker hard mixes preserve decision agreement
 while compute savings collapse on adversarial work).
 
+Interactive p95 closed-loop feedback exists as an **experimental** control input
+(`docs/interactive-feedback-control.md`, ADR 0007). Product defaults keep
+`resource_interactive_p95_* = 0` (disabled) after the A/B/C portfolio failed to
+show interactive improvement over baseline on this host.
+
 ## 8. Important failure modes
 
 - Duplicate submit click / lost response → mitigated by `Idempotency-Key` on create; a second *intentional* attempt must use a new key.

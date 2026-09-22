@@ -56,9 +56,19 @@ class Settings(BaseSettings):
     resource_memory_soft_mb: float = 256.0
     resource_memory_hard_mb: float = 400.0
     resource_adjust_cooldown_seconds: float = 2.0
-    # 0 disables interactive-latency pressure inputs (experiments may set hints).
+    # Interactive closed-loop feedback (0 warn/critical disables — product default).
+    # Experiments set warn/critical > 0. Signal is server wall-time p95 for
+    # designated interactive HTTP paths, published via evaluation_scheduler_state.
     resource_interactive_p95_warn_ms: float = 0.0
     resource_interactive_p95_critical_ms: float = 0.0
+    resource_interactive_p95_recovery_ms: float = 0.0  # 0 → 0.8 * warn
+    resource_interactive_window_seconds: float = 5.0
+    resource_interactive_min_samples: int = Field(default=8, ge=1)
+    resource_interactive_sustain_seconds: float = 1.0
+    resource_interactive_persist_every_samples: int = Field(default=5, ge=1)
+    # Mode C: under interactive CRITICAL, hold *all* new evaluation starts
+    # (not only HEAVY). Running work is never cancelled.
+    resource_interactive_critical_hold_all: bool = False
 
 
 @lru_cache

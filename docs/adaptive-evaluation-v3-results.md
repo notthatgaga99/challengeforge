@@ -61,13 +61,9 @@ EvaluationStage
 
 Future: retrieval → rerank → small model → large model → code exec. **Not implemented.**
 
-## Next evidence-driven problem (done → see hard-mix)
+## Next evidence-driven problem
 
-HTTP+worker hard-mix pressure experiment completed:
-[`docs/hard-mix-pressure-experiment.md`](hard-mix-pressure-experiment.md) /
-[`docs/hard-mix-pressure-results.md`](hard-mix-pressure-results.md).
-
-Under real isolation: **100% agreement**, **0** false early-pass, adversarial savings **0%**,
-mean fixed-progressive savings ~**35%** (hard mixes ~**12%**). Interactive p95 under
-concurrent HEAVY eval is **host-noisy** at 20 RPS. Prefer **`fixed_progressive`** when
-opting in; adaptive is not a proven interactive win. LLM/RAG still **not** justified.
+Closed-loop interactive p95 feedback was implemented and measured
+(`docs/interactive-feedback-control.md`). Decision: **EXPERIMENTAL ONLY** —
+correctness held, but mode A (feedback off) beat B/C on mean interactive p95
+in the portfolio run. Prefer fixing signal quality / publish path before LLM/RAG.

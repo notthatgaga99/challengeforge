@@ -25,6 +25,10 @@ def _budget(**overrides) -> ResourceBudget:
         adjust_cooldown_seconds=0.0,
         interactive_p95_warn_ms=0.0,
         interactive_p95_critical_ms=0.0,
+        interactive_p95_recovery_ms=0.0,
+        interactive_min_samples=8,
+        interactive_sustain_seconds=1.0,
+        interactive_critical_hold_all=False,
     )
     base.update(overrides)
     return ResourceBudget(**base)
