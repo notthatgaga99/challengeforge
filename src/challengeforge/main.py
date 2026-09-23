@@ -31,9 +31,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     factory = get_session_factory()
     async with factory() as session:
         await seed_dev_users(session)
-    yield
-    await dispose_engine()
+    from challengeforge.api.interactive_metrics import get_or_create_publisher
 
+    publisher = get_or_create_publisher(app, settings)
+    publisher.start_background()
+    try:
+        yield
+    finally:
+        await publisher.stop_background()
+        await dispose_engine()
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     cfg = settings or get_settings()

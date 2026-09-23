@@ -145,8 +145,9 @@ while compute savings collapse on adversarial work).
 
 Interactive p95 closed-loop feedback exists as an **experimental** control input
 (`docs/interactive-feedback-control.md`, ADR 0007). Product defaults keep
-`resource_interactive_p95_* = 0` (disabled) after the A/B/C portfolio failed to
-show interactive improvement over baseline on this host.
+`resource_interactive_p95_* = 0` (disabled). Hint publication defaults to
+**async** (off the request path). Server wall p95 remains the experimental
+controller signal; pool-wait/in-flight are observed only.
 
 ## 8. Important failure modes
 

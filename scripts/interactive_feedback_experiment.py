@@ -73,6 +73,9 @@ def mode_settings(mode: str) -> dict[str, Any]:
         "resource_interactive_sustain_seconds": 1.0,
         "resource_interactive_persist_every_samples": 3,
         "resource_adjust_cooldown_seconds": 1.0,
+        "resource_interactive_publish_mode": "async",
+        "resource_interactive_publish_interval_ms": 250.0,
+        "resource_interactive_publish_min_delta_ms": 25.0,
     }
     if mode == "A":
         base.update(
@@ -228,7 +231,8 @@ async def read_controller_state(experiment: ResourceExperiment) -> dict[str, Any
                 text(
                     """
                     SELECT pressure_state, adaptive_max_workers,
-                           interactive_p95_ms, interactive_sample_count
+                           interactive_p95_ms, interactive_sample_count,
+                           pool_wait_p95_ms
                     FROM evaluation_scheduler_state WHERE id = 1
                     """
                 )

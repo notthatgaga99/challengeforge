@@ -246,3 +246,4 @@ class EvaluationSchedulerStateRow(Base):
     interactive_sample_count: Mapped[int] = mapped_column(
         Integer, nullable=False, server_default=text("0")
     )
+    pool_wait_p95_ms: Mapped[float | None] = mapped_column(Float, nullable=True)

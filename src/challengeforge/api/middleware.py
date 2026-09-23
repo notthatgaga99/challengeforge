@@ -57,6 +57,12 @@ class RequestContextMiddleware:
             and is_interactive_control_path(method, path)
         )
         started = time.perf_counter()
+        publisher = None
+        if track_interactive and app is not None and settings is not None:
+            from challengeforge.api.interactive_metrics import get_or_create_publisher
+
+            publisher = get_or_create_publisher(app, settings)
+            publisher.begin_request()
 
         if profiling:
             start_profile()
@@ -87,31 +93,23 @@ class RequestContextMiddleware:
             log.exception("unhandled_exception")
             raise
         finally:
-            if track_interactive and app is not None and settings is not None:
+            if track_interactive and publisher is not None:
                 total_ms = (time.perf_counter() - started) * 1000.0
-                await self._record_interactive(app, settings, total_ms)
+                await self._record_interactive(publisher, total_ms)
             if profiling:
                 clear_profile()
 
-    async def _record_interactive(
-        self, app: Any, settings: Any, total_ms: float
-    ) -> None:
-        from challengeforge.api.interactive_metrics import get_or_create_publisher
-        from challengeforge.persistence.repositories import EvaluationRepository
-        from challengeforge.persistence.session import get_session_factory
-
-        publisher = get_or_create_publisher(app, settings)
-        snap = publisher.record(total_ms)
-        if not publisher.should_persist():
-            return
+    async def _record_interactive(self, publisher: Any, total_ms: float) -> None:
+        """Hot path: update in-memory windows. Persist only in sync publish mode."""
+        pool_wait_ms: float | None = None
+        profile = current_profile()
+        if profile is not None:
+            pool_wait_ms = float(profile.pool_wait_ms)
         try:
-            factory = get_session_factory()
-            async with factory() as session:
-                await EvaluationRepository(session).persist_interactive_hint(
-                    interactive_p95_ms=snap.get("p95_ms"),
-                    sample_count=int(snap.get("sample_count") or 0),
-                )
-                await session.commit()
-            publisher.mark_persisted(snap)
+            publisher.record_wall(total_ms, pool_wait_ms=pool_wait_ms)
+            if publisher.publish_mode == "sync" and publisher.should_persist_sync():
+                await publisher.persist_now()
         except Exception:
-            log.warning("interactive_hint_persist_failed", exc_info=True)
+            log.warning("interactive_hint_record_failed", exc_info=True)
+        finally:
+            publisher.end_request()

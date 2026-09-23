@@ -531,9 +531,13 @@ class EvaluationRepository:
         await self.session.flush()
 
     async def persist_interactive_hint(
-        self, *, interactive_p95_ms: float | None, sample_count: int
+        self,
+        *,
+        interactive_p95_ms: float | None,
+        sample_count: int,
+        pool_wait_p95_ms: float | None = None,
     ) -> None:
-        """API publishes rolling interactive p95 for workers (cross-process)."""
+        """API publishes rolling interactive hints for workers (cross-process)."""
         await self.session.execute(
             pg_insert(EvaluationSchedulerStateRow)
             .values(
@@ -544,6 +548,7 @@ class EvaluationRepository:
                 adaptive_max_workers=None,
                 interactive_p95_ms=interactive_p95_ms,
                 interactive_sample_count=max(0, int(sample_count)),
+                pool_wait_p95_ms=pool_wait_p95_ms,
             )
             .on_conflict_do_nothing(index_elements=["id"])
         )
@@ -556,6 +561,8 @@ class EvaluationRepository:
         ).scalar_one()
         state.interactive_p95_ms = interactive_p95_ms
         state.interactive_sample_count = max(0, int(sample_count))
+        if hasattr(state, "pool_wait_p95_ms"):
+            state.pool_wait_p95_ms = pool_wait_p95_ms
         await self.session.flush()
 
     async def read_runtime_state(self) -> dict:
@@ -572,6 +579,7 @@ class EvaluationRepository:
                 "adaptive_max_workers": None,
                 "interactive_p95_ms": None,
                 "interactive_sample_count": 0,
+                "pool_wait_p95_ms": None,
             }
         return {
             "pressure_state": row.pressure_state or "normal",
@@ -580,6 +588,7 @@ class EvaluationRepository:
             "interactive_sample_count": int(
                 getattr(row, "interactive_sample_count", 0) or 0
             ),
+            "pool_wait_p95_ms": getattr(row, "pool_wait_p95_ms", None),
         }
 
     async def queue_position(self, evaluation_id: UUID) -> int | None:

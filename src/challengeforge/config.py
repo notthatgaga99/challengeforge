@@ -66,6 +66,10 @@ class Settings(BaseSettings):
     resource_interactive_min_samples: int = Field(default=8, ge=1)
     resource_interactive_sustain_seconds: float = 1.0
     resource_interactive_persist_every_samples: int = Field(default=5, ge=1)
+    # sync = persist on request path (legacy experiment A); async = background publisher.
+    resource_interactive_publish_mode: Literal["sync", "async"] = "async"
+    resource_interactive_publish_interval_ms: float = 250.0
+    resource_interactive_publish_min_delta_ms: float = 25.0
     # Mode C: under interactive CRITICAL, hold *all* new evaluation starts
     # (not only HEAVY). Running work is never cancelled.
     resource_interactive_critical_hold_all: bool = False
