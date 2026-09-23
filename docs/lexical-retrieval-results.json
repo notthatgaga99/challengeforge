@@ -1,0 +1,1690 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T11:15:16.274937+00:00",
+    "completed_at": "2026-09-23T11:15:48.291232+00:00",
+    "database": "local",
+    "environment": "laptop"
+  },
+  "corpus": {
+    "documents": 8,
+    "queries": 12,
+    "path": "docs/lexical-retrieval-corpus.json"
+  },
+  "evaluation": {
+    "versions": {
+      "cf-lex-fts-1": {
+        "aggregate": {
+          "n_queries": 10,
+          "recall_at": {
+            "1": 0.65,
+            "3": 0.8,
+            "5": 0.8,
+            "10": 0.8
+          },
+          "precision_at": {
+            "1": 0.7,
+            "3": 0.3,
+            "5": 0.18,
+            "10": 0.09
+          },
+          "mrr": 0.75,
+          "zero_hit_rate": 0.2
+        },
+        "failure_counts": {
+          "semantic_gap": 2
+        },
+        "queries": [
+          {
+            "query_id": "q_exact_skip_locked",
+            "type": "exact_phrase",
+            "latency_ms": 5.291,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_identifier_recover",
+            "type": "code_identifier",
+            "latency_ms": 2.418,
+            "n_hits": 2,
+            "recall_at": {
+              "1": 0.5,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.4,
+              "10": 0.2
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 2
+          },
+          {
+            "query_id": "q_rare_idempotency",
+            "type": "rare_term",
+            "latency_ms": 2.477,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_multi_worker_crash",
+            "type": "multi_word_phrase",
+            "latency_ms": 1.594,
+            "n_hits": 2,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_prose_txn",
+            "type": "prose",
+            "latency_ms": 1.26,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_unicode",
+            "type": "unicode",
+            "latency_ms": 1.327,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_noise_locked",
+            "type": "noise_risk",
+            "latency_ms": 1.054,
+            "n_hits": 2,
+            "recall_at": {
+              "1": 0.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 0.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 0.5,
+            "first_relevant_rank": 2,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_no_result",
+            "type": "no_result",
+            "latency_ms": 0.766,
+            "n_hits": 0,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "skipped_metrics": true
+          },
+          {
+            "query_id": "q_paraphrase_crash",
+            "type": "semantic_paraphrase",
+            "latency_ms": 0.764,
+            "n_hits": 0,
+            "recall_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "precision_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "first_relevant_rank": null,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "failure_category": "semantic_gap",
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_paraphrase_claim",
+            "type": "semantic_paraphrase",
+            "latency_ms": 0.728,
+            "n_hits": 0,
+            "recall_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "precision_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "first_relevant_rank": null,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "failure_category": "semantic_gap",
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_stopwordy",
+            "type": "stopword_heavy",
+            "latency_ms": 1.046,
+            "n_hits": 0,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "skipped_metrics": true
+          },
+          {
+            "query_id": "q_upload_finalize",
+            "type": "exact_term",
+            "latency_ms": 0.972,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          }
+        ]
+      },
+      "cf-lex-fts-simple-1": {
+        "aggregate": {
+          "n_queries": 10,
+          "recall_at": {
+            "1": 0.65,
+            "3": 0.8,
+            "5": 0.8,
+            "10": 0.8
+          },
+          "precision_at": {
+            "1": 0.7,
+            "3": 0.3,
+            "5": 0.18,
+            "10": 0.09
+          },
+          "mrr": 0.75,
+          "zero_hit_rate": 0.2
+        },
+        "failure_counts": {
+          "semantic_gap": 2
+        },
+        "queries": [
+          {
+            "query_id": "q_exact_skip_locked",
+            "type": "exact_phrase",
+            "latency_ms": 4.409,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_identifier_recover",
+            "type": "code_identifier",
+            "latency_ms": 2.06,
+            "n_hits": 2,
+            "recall_at": {
+              "1": 0.5,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.4,
+              "10": 0.2
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 2
+          },
+          {
+            "query_id": "q_rare_idempotency",
+            "type": "rare_term",
+            "latency_ms": 1.539,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_multi_worker_crash",
+            "type": "multi_word_phrase",
+            "latency_ms": 1.496,
+            "n_hits": 2,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_prose_txn",
+            "type": "prose",
+            "latency_ms": 1.584,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_unicode",
+            "type": "unicode",
+            "latency_ms": 1.434,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_noise_locked",
+            "type": "noise_risk",
+            "latency_ms": 1.037,
+            "n_hits": 2,
+            "recall_at": {
+              "1": 0.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 0.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 0.5,
+            "first_relevant_rank": 2,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_no_result",
+            "type": "no_result",
+            "latency_ms": 0.866,
+            "n_hits": 0,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "skipped_metrics": true
+          },
+          {
+            "query_id": "q_paraphrase_crash",
+            "type": "semantic_paraphrase",
+            "latency_ms": 0.801,
+            "n_hits": 0,
+            "recall_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "precision_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "first_relevant_rank": null,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "failure_category": "semantic_gap",
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_paraphrase_claim",
+            "type": "semantic_paraphrase",
+            "latency_ms": 0.767,
+            "n_hits": 0,
+            "recall_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "precision_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "first_relevant_rank": null,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "failure_category": "semantic_gap",
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_stopwordy",
+            "type": "stopword_heavy",
+            "latency_ms": 0.765,
+            "n_hits": 0,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "skipped_metrics": true
+          },
+          {
+            "query_id": "q_upload_finalize",
+            "type": "exact_term",
+            "latency_ms": 0.763,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          }
+        ]
+      },
+      "cf-lex-fts-struct-1": {
+        "aggregate": {
+          "n_queries": 10,
+          "recall_at": {
+            "1": 0.65,
+            "3": 0.8,
+            "5": 0.8,
+            "10": 0.8
+          },
+          "precision_at": {
+            "1": 0.7,
+            "3": 0.3,
+            "5": 0.18,
+            "10": 0.09
+          },
+          "mrr": 0.75,
+          "zero_hit_rate": 0.2
+        },
+        "failure_counts": {
+          "semantic_gap": 2
+        },
+        "queries": [
+          {
+            "query_id": "q_exact_skip_locked",
+            "type": "exact_phrase",
+            "latency_ms": 5.024,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_identifier_recover",
+            "type": "code_identifier",
+            "latency_ms": 1.571,
+            "n_hits": 2,
+            "recall_at": {
+              "1": 0.5,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.6666666666666666,
+              "5": 0.4,
+              "10": 0.2
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 2
+          },
+          {
+            "query_id": "q_rare_idempotency",
+            "type": "rare_term",
+            "latency_ms": 1.377,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_multi_worker_crash",
+            "type": "multi_word_phrase",
+            "latency_ms": 1.571,
+            "n_hits": 2,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_prose_txn",
+            "type": "prose",
+            "latency_ms": 1.566,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_unicode",
+            "type": "unicode",
+            "latency_ms": 1.75,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_noise_locked",
+            "type": "noise_risk",
+            "latency_ms": 1.196,
+            "n_hits": 2,
+            "recall_at": {
+              "1": 0.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 0.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 0.5,
+            "first_relevant_rank": 2,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_no_result",
+            "type": "no_result",
+            "latency_ms": 0.954,
+            "n_hits": 0,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "skipped_metrics": true
+          },
+          {
+            "query_id": "q_paraphrase_crash",
+            "type": "semantic_paraphrase",
+            "latency_ms": 2.768,
+            "n_hits": 0,
+            "recall_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "precision_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "first_relevant_rank": null,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "failure_category": "semantic_gap",
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_paraphrase_claim",
+            "type": "semantic_paraphrase",
+            "latency_ms": 1.661,
+            "n_hits": 0,
+            "recall_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "precision_at": {
+              "1": 0.0,
+              "3": 0.0,
+              "5": 0.0,
+              "10": 0.0
+            },
+            "mrr": 0.0,
+            "first_relevant_rank": null,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "failure_category": "semantic_gap",
+            "relevant_count": 1
+          },
+          {
+            "query_id": "q_stopwordy",
+            "type": "stopword_heavy",
+            "latency_ms": 1.558,
+            "n_hits": 0,
+            "zero_hit": true,
+            "expect_lexical_fail": true,
+            "skipped_metrics": true
+          },
+          {
+            "query_id": "q_upload_finalize",
+            "type": "exact_term",
+            "latency_ms": 1.481,
+            "n_hits": 1,
+            "recall_at": {
+              "1": 1.0,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3333333333333333,
+              "5": 0.2,
+              "10": 0.1
+            },
+            "mrr": 1.0,
+            "first_relevant_rank": 1,
+            "zero_hit": false,
+            "expect_lexical_fail": false,
+            "failure_category": null,
+            "relevant_count": 1
+          }
+        ]
+      }
+    },
+    "per_query": {
+      "cf-lex-fts-1": [
+        {
+          "query_id": "q_exact_skip_locked",
+          "type": "exact_phrase",
+          "latency_ms": 5.291,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_identifier_recover",
+          "type": "code_identifier",
+          "latency_ms": 2.418,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 0.5,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.6666666666666666,
+            "5": 0.4,
+            "10": 0.2
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 2
+        },
+        {
+          "query_id": "q_rare_idempotency",
+          "type": "rare_term",
+          "latency_ms": 2.477,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_multi_worker_crash",
+          "type": "multi_word_phrase",
+          "latency_ms": 1.594,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_prose_txn",
+          "type": "prose",
+          "latency_ms": 1.26,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_unicode",
+          "type": "unicode",
+          "latency_ms": 1.327,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_noise_locked",
+          "type": "noise_risk",
+          "latency_ms": 1.054,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 0.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 0.5,
+          "first_relevant_rank": 2,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_no_result",
+          "type": "no_result",
+          "latency_ms": 0.766,
+          "n_hits": 0,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "skipped_metrics": true
+        },
+        {
+          "query_id": "q_paraphrase_crash",
+          "type": "semantic_paraphrase",
+          "latency_ms": 0.764,
+          "n_hits": 0,
+          "recall_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "mrr": 0.0,
+          "first_relevant_rank": null,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "failure_category": "semantic_gap",
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_paraphrase_claim",
+          "type": "semantic_paraphrase",
+          "latency_ms": 0.728,
+          "n_hits": 0,
+          "recall_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "mrr": 0.0,
+          "first_relevant_rank": null,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "failure_category": "semantic_gap",
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_stopwordy",
+          "type": "stopword_heavy",
+          "latency_ms": 1.046,
+          "n_hits": 0,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "skipped_metrics": true
+        },
+        {
+          "query_id": "q_upload_finalize",
+          "type": "exact_term",
+          "latency_ms": 0.972,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        }
+      ],
+      "cf-lex-fts-simple-1": [
+        {
+          "query_id": "q_exact_skip_locked",
+          "type": "exact_phrase",
+          "latency_ms": 4.409,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_identifier_recover",
+          "type": "code_identifier",
+          "latency_ms": 2.06,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 0.5,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.6666666666666666,
+            "5": 0.4,
+            "10": 0.2
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 2
+        },
+        {
+          "query_id": "q_rare_idempotency",
+          "type": "rare_term",
+          "latency_ms": 1.539,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_multi_worker_crash",
+          "type": "multi_word_phrase",
+          "latency_ms": 1.496,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_prose_txn",
+          "type": "prose",
+          "latency_ms": 1.584,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_unicode",
+          "type": "unicode",
+          "latency_ms": 1.434,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_noise_locked",
+          "type": "noise_risk",
+          "latency_ms": 1.037,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 0.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 0.5,
+          "first_relevant_rank": 2,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_no_result",
+          "type": "no_result",
+          "latency_ms": 0.866,
+          "n_hits": 0,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "skipped_metrics": true
+        },
+        {
+          "query_id": "q_paraphrase_crash",
+          "type": "semantic_paraphrase",
+          "latency_ms": 0.801,
+          "n_hits": 0,
+          "recall_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "mrr": 0.0,
+          "first_relevant_rank": null,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "failure_category": "semantic_gap",
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_paraphrase_claim",
+          "type": "semantic_paraphrase",
+          "latency_ms": 0.767,
+          "n_hits": 0,
+          "recall_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "mrr": 0.0,
+          "first_relevant_rank": null,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "failure_category": "semantic_gap",
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_stopwordy",
+          "type": "stopword_heavy",
+          "latency_ms": 0.765,
+          "n_hits": 0,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "skipped_metrics": true
+        },
+        {
+          "query_id": "q_upload_finalize",
+          "type": "exact_term",
+          "latency_ms": 0.763,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        }
+      ],
+      "cf-lex-fts-struct-1": [
+        {
+          "query_id": "q_exact_skip_locked",
+          "type": "exact_phrase",
+          "latency_ms": 5.024,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_identifier_recover",
+          "type": "code_identifier",
+          "latency_ms": 1.571,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 0.5,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.6666666666666666,
+            "5": 0.4,
+            "10": 0.2
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 2
+        },
+        {
+          "query_id": "q_rare_idempotency",
+          "type": "rare_term",
+          "latency_ms": 1.377,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_multi_worker_crash",
+          "type": "multi_word_phrase",
+          "latency_ms": 1.571,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_prose_txn",
+          "type": "prose",
+          "latency_ms": 1.566,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_unicode",
+          "type": "unicode",
+          "latency_ms": 1.75,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_noise_locked",
+          "type": "noise_risk",
+          "latency_ms": 1.196,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 0.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 0.5,
+          "first_relevant_rank": 2,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_no_result",
+          "type": "no_result",
+          "latency_ms": 0.954,
+          "n_hits": 0,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "skipped_metrics": true
+        },
+        {
+          "query_id": "q_paraphrase_crash",
+          "type": "semantic_paraphrase",
+          "latency_ms": 2.768,
+          "n_hits": 0,
+          "recall_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "mrr": 0.0,
+          "first_relevant_rank": null,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "failure_category": "semantic_gap",
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_paraphrase_claim",
+          "type": "semantic_paraphrase",
+          "latency_ms": 1.661,
+          "n_hits": 0,
+          "recall_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "mrr": 0.0,
+          "first_relevant_rank": null,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "failure_category": "semantic_gap",
+          "relevant_count": 1
+        },
+        {
+          "query_id": "q_stopwordy",
+          "type": "stopword_heavy",
+          "latency_ms": 1.558,
+          "n_hits": 0,
+          "zero_hit": true,
+          "expect_lexical_fail": true,
+          "skipped_metrics": true
+        },
+        {
+          "query_id": "q_upload_finalize",
+          "type": "exact_term",
+          "latency_ms": 1.481,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "expect_lexical_fail": false,
+          "failure_category": null,
+          "relevant_count": 1
+        }
+      ]
+    }
+  },
+  "performance": [
+    {
+      "n_chunks_target": 100,
+      "samples": 30,
+      "p50_ms": 3.46,
+      "p95_ms": 5.234,
+      "p99_ms": 5.36,
+      "mean_ms": 3.795
+    },
+    {
+      "n_chunks_target": 1000,
+      "samples": 30,
+      "p50_ms": 27.291,
+      "p95_ms": 31.111,
+      "p99_ms": 31.36,
+      "mean_ms": 24.092
+    },
+    {
+      "n_chunks_target": 10000,
+      "samples": 30,
+      "p50_ms": 201.509,
+      "p95_ms": 335.903,
+      "p99_ms": 346.335,
+      "mean_ms": 217.58
+    },
+    {
+      "n_chunks_target": 100000,
+      "samples": 30,
+      "p50_ms": 8161.977,
+      "p95_ms": 10426.832,
+      "p99_ms": 12154.141,
+      "mean_ms": 8063.896,
+      "note": "from full harness run; skipped on refresh for speed"
+    }
+  ],
+  "decision": {
+    "gate": "KEEP PostgreSQL lexical FTS baseline (ts_rank_cd, not BM25)",
+    "default_version": "cf-lex-fts-1",
+    "structural_variant": "cf-lex-fts-struct-1",
+    "simple_variant": "cf-lex-fts-simple-1",
+    "rationale": "Measured Recall/MRR on a checked-in corpus; paraphrase queries expose semantic gaps that motivate embeddings next \u2014 without claiming vectors are proven better yet.",
+    "fts_recall_at_5": 0.8,
+    "fts_mrr": 0.75,
+    "paraphrase_zero_hits": 2
+  }
+}

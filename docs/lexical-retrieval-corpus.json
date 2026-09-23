@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "description": "Deterministic lexical retrieval evaluation corpus for ChallengeForge.",
+  "documents": [
+    {
+      "id": "doc_worker_recovery",
+      "title": "Worker crash recovery",
+      "text": "# Worker crash recovery\n\nWhen a worker disappears, stale RUNNING evaluations are requeued after worker failure.\nThe recover_stale_running procedure checks started_at against a stale threshold.\n\n## Details\n\nJobs that still have attempts remaining return to QUEUED.\nExhausted attempts become FAILED with stale_exhausted.\n"
+    },
+    {
+      "id": "doc_skip_locked",
+      "title": "Claiming with SKIP LOCKED",
+      "text": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\nThis is the durable Postgres queue claim pattern.\n"
+    },
+    {
+      "id": "doc_idempotency",
+      "title": "Idempotent effects",
+      "text": "# Idempotency\n\nAt-least-once execution is acceptable when effects are idempotent.\nOverwrite the same result_key and use conditional completion on worker_id.\n"
+    },
+    {
+      "id": "doc_transactions",
+      "title": "Database transaction retries",
+      "text": "# Database transaction retries\n\nTransient serialization failures may retry the transaction.\nDo not confuse this with ingestion job retries after worker crash recovery.\n"
+    },
+    {
+      "id": "doc_code_symbols",
+      "title": "Code symbols",
+      "text": "# Code\n\n```python\ndef recover_stale_running(stale_before, max_attempts):\n    \"\"\"Requeue or fail stale RUNNING rows.\"\"\"\n    return contain_and_requeue()\n```\n\nCallers must not invoke recover_stale_running while a prior root_pid is alive.\n"
+    },
+    {
+      "id": "doc_noise_locked",
+      "title": "File locking noise",
+      "text": "# File locking\n\nApplication-level file locks are unrelated to SQL row locks.\nA locked file does not imply SKIP LOCKED semantics.\n"
+    },
+    {
+      "id": "doc_unicode",
+      "title": "Unicode notes",
+      "text": "# Unicode\n\nCanonical text preserves 你好 and Café and emoji 🚀 for provenance.\nChunk budgets count Unicode code points, not UTF-8 bytes.\n"
+    },
+    {
+      "id": "doc_upload_stream",
+      "title": "Upload streaming",
+      "text": "# Large uploads\n\nStream multipart bodies to .incoming then atomic finalize to the final artifact key.\nStreaming is not resumability.\n"
+    }
+  ],
+  "queries": [
+    {
+      "id": "q_exact_skip_locked",
+      "query": "FOR UPDATE SKIP LOCKED",
+      "type": "exact_phrase",
+      "relevant_selectors": [
+        {"doc_id": "doc_skip_locked", "contains": "FOR UPDATE SKIP LOCKED"}
+      ],
+      "expect_lexical_fail": false
+    },
+    {
+      "id": "q_identifier_recover",
+      "query": "recover_stale_running",
+      "type": "code_identifier",
+      "relevant_selectors": [
+        {"doc_id": "doc_code_symbols", "contains": "recover_stale_running"},
+        {"doc_id": "doc_worker_recovery", "contains": "recover_stale_running"}
+      ],
+      "expect_lexical_fail": false
+    },
+    {
+      "id": "q_rare_idempotency",
+      "query": "idempotency",
+      "type": "rare_term",
+      "relevant_selectors": [
+        {"doc_id": "doc_idempotency", "contains": "Idempotency"}
+      ],
+      "expect_lexical_fail": false
+    },
+    {
+      "id": "q_multi_worker_crash",
+      "query": "worker crash recovery",
+      "type": "multi_word_phrase",
+      "relevant_selectors": [
+        {"doc_id": "doc_worker_recovery", "contains": "Worker crash recovery"}
+      ],
+      "expect_lexical_fail": false
+    },
+    {
+      "id": "q_prose_txn",
+      "query": "database transaction retries",
+      "type": "prose",
+      "relevant_selectors": [
+        {"doc_id": "doc_transactions", "contains": "Database transaction retries"}
+      ],
+      "expect_lexical_fail": false
+    },
+    {
+      "id": "q_unicode",
+      "query": "你好",
+      "type": "unicode",
+      "relevant_selectors": [
+        {"doc_id": "doc_unicode", "contains": "你好"}
+      ],
+      "expect_lexical_fail": false
+    },
+    {
+      "id": "q_noise_locked",
+      "query": "SKIP LOCKED",
+      "type": "noise_risk",
+      "relevant_selectors": [
+        {"doc_id": "doc_skip_locked", "contains": "SKIP LOCKED"}
+      ],
+      "expect_lexical_fail": false,
+      "notes": "doc_noise_locked mentions SKIP LOCKED but is not relevant"
+    },
+    {
+      "id": "q_no_result",
+      "query": "quantum entanglement scheduling",
+      "type": "no_result",
+      "relevant_selectors": [],
+      "expect_lexical_fail": true,
+      "allow_empty_relevant": true
+    },
+    {
+      "id": "q_paraphrase_crash",
+      "query": "how does the system recover work after a worker crashes?",
+      "type": "semantic_paraphrase",
+      "relevant_selectors": [
+        {
+          "doc_id": "doc_worker_recovery",
+          "contains": "stale RUNNING evaluations are requeued after worker failure"
+        }
+      ],
+      "expect_lexical_fail": true,
+      "notes": "Lexical baseline should struggle: paraphrase without shared rare terms"
+    },
+    {
+      "id": "q_paraphrase_claim",
+      "query": "how do workers grab the next job without blocking each other?",
+      "type": "semantic_paraphrase",
+      "relevant_selectors": [
+        {"doc_id": "doc_skip_locked", "contains": "FOR UPDATE SKIP LOCKED"}
+      ],
+      "expect_lexical_fail": true
+    },
+    {
+      "id": "q_stopwordy",
+      "query": "the a of and to",
+      "type": "stopword_heavy",
+      "relevant_selectors": [],
+      "expect_lexical_fail": true,
+      "allow_empty_relevant": true
+    },
+    {
+      "id": "q_upload_finalize",
+      "query": "atomic finalize",
+      "type": "exact_term",
+      "relevant_selectors": [
+        {"doc_id": "doc_upload_stream", "contains": "atomic finalize"}
+      ],
+      "expect_lexical_fail": false
+    }
+  ]
+}
