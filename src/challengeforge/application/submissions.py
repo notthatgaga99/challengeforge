@@ -148,6 +148,14 @@ class SubmissionService:
             await self.uow.session.rollback()
             compensate_delete(self.uow.storage, artifact_key)
             raise
+        if artifact_key is not None and getattr(
+            self.uow.settings, "ingestion_enabled", True
+        ):
+            await self.uow.ingestion_jobs.enqueue(
+                submission_id=submission.id,
+                artifact_key=artifact_key,
+            )
+            await self.uow.session.commit()
         return SubmissionCreateResult(submission, replayed=False)
 
     async def get(self, actor: CurrentUser, submission_id: UUID) -> Submission:
@@ -223,6 +231,14 @@ class SubmissionService:
             and previous_artifact_key != new_artifact_key
         ):
             compensate_delete(self.uow.storage, previous_artifact_key)
+        if new_artifact_key is not None and getattr(
+            self.uow.settings, "ingestion_enabled", True
+        ):
+            await self.uow.ingestion_jobs.enqueue(
+                submission_id=submission_id,
+                artifact_key=new_artifact_key,
+            )
+            await self.uow.session.commit()
         updated = await self.uow.submissions.get(submission_id)
         assert updated is not None
         return updated
@@ -275,6 +291,12 @@ class SubmissionService:
             raise
         if previous_artifact_key and previous_artifact_key != new_artifact_key:
             compensate_delete(self.uow.storage, previous_artifact_key)
+        if getattr(self.uow.settings, "ingestion_enabled", True):
+            await self.uow.ingestion_jobs.enqueue(
+                submission_id=submission_id,
+                artifact_key=new_artifact_key,
+            )
+            await self.uow.session.commit()
         updated = await self.uow.submissions.get(submission_id)
         assert updated is not None
         return updated

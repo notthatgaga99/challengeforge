@@ -23,6 +23,12 @@ class Settings(BaseSettings):
     evaluation_max_attempts: int = 3
     evaluation_poll_interval_seconds: float = 0.25
     evaluation_fake_work_ms: int = 50
+    # Ingestion worker (artifact PARSE→NORMALIZE→READY)
+    ingestion_enabled: bool = True
+    ingestion_stale_after_seconds: int = 30
+    ingestion_max_attempts: int = 3
+    ingestion_poll_interval_seconds: float = 0.25
+    ingestion_retry_delay_seconds: float = 0.0
     # Environment-specific operating envelope from the laptop experiment.
     # These are explicit limits, not an auto-scaling or resource prediction model.
     evaluation_max_workers: int = Field(default=1, ge=1)

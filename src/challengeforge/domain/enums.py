@@ -32,6 +32,13 @@ class EvaluationStatus(StrEnum):
     FAILED = "failed"
 
 
+class IngestionStatus(StrEnum):
+    QUEUED = "queued"
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    FAILED = "failed"
+
+
 class WorkloadClass(StrEnum):
     """Experimental evaluator profiles — not production workload claims."""
 

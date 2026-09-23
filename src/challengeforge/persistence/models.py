@@ -248,3 +248,41 @@ class EvaluationSchedulerStateRow(Base):
         Integer, nullable=False, server_default=text("0")
     )
     pool_wait_p95_ms: Mapped[float | None] = mapped_column(Float, nullable=True)
+
+
+class IngestionJobRow(Base):
+    """Durable PARSE→NORMALIZE→READY job for a committed artifact."""
+
+    __tablename__ = "ingestion_jobs"
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('queued', 'running', 'succeeded', 'failed')",
+            name="ck_ingestion_jobs_status",
+        ),
+        CheckConstraint("attempt_count >= 0", name="ck_ingestion_jobs_attempts"),
+        Index("ix_ingestion_jobs_claim", "status", "available_at", "created_at"),
+        Index("ix_ingestion_jobs_submission_id", "submission_id"),
+    )
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    submission_id: Mapped[UUID] = mapped_column(
+        ForeignKey("submissions.id", ondelete="CASCADE"), nullable=False
+    )
+    artifact_key: Mapped[str] = mapped_column(Text, nullable=False)
+    status: Mapped[str] = mapped_column(Text, nullable=False)
+    attempt_count: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default=text("0")
+    )
+    worker_id: Mapped[str | None] = mapped_column(Text, nullable=True)
+    available_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    started_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    completed_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    error_code: Mapped[str | None] = mapped_column(Text, nullable=True)
+    error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
+    result_key: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

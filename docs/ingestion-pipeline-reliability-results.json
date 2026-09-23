@@ -1,0 +1,122 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T10:03:52.475104+00:00",
+    "database": "local",
+    "completed_at": "2026-09-23T10:04:54.192702+00:00"
+  },
+  "capacity": [
+    {
+      "workers": 1,
+      "jobs": 20,
+      "wall_s": 2.8374,
+      "succeeded": 20,
+      "failed": 0,
+      "retried": 0,
+      "claims": 20,
+      "counts": {
+        "succeeded": 20
+      },
+      "jobs_per_s": 7.05,
+      "ok": true
+    },
+    {
+      "workers": 2,
+      "jobs": 50,
+      "wall_s": 8.7251,
+      "succeeded": 50,
+      "failed": 0,
+      "retried": 0,
+      "claims": 50,
+      "counts": {
+        "succeeded": 50
+      },
+      "jobs_per_s": 5.73,
+      "ok": true
+    },
+    {
+      "workers": 4,
+      "jobs": 100,
+      "wall_s": 15.2985,
+      "succeeded": 100,
+      "failed": 0,
+      "retried": 0,
+      "claims": 100,
+      "counts": {
+        "succeeded": 100
+      },
+      "jobs_per_s": 6.54,
+      "ok": true
+    }
+  ],
+  "failure_injection": {
+    "job_never_started": {
+      "counts": {
+        "queued": 1
+      },
+      "ok": true
+    },
+    "claim_then_die": {
+      "raised": true,
+      "after_crash": {
+        "running": 1
+      },
+      "after_recover": {
+        "succeeded": 1
+      },
+      "ok": true
+    },
+    "die_after_process_before_ack": {
+      "raised": true,
+      "blob_after_crash": true,
+      "after_crash_counts": {
+        "running": 1
+      },
+      "final_status": "succeeded",
+      "final_result_exists": true,
+      "ok": true
+    },
+    "poison_isolation": {
+      "wall_s": 2.2995,
+      "succeeded": 10,
+      "failed": 1,
+      "retried": 0,
+      "claims": 11,
+      "counts": {
+        "failed": 1,
+        "succeeded": 10
+      },
+      "ok": true
+    },
+    "transient_then_success": {
+      "after_first": {
+        "queued": 1
+      },
+      "after_second": {
+        "succeeded": 1
+      },
+      "retried": 1,
+      "succeeded": 1,
+      "ok": true
+    }
+  },
+  "poison_isolation": {
+    "wall_s": 2.2995,
+    "succeeded": 10,
+    "failed": 1,
+    "retried": 0,
+    "claims": 11,
+    "counts": {
+      "failed": 1,
+      "succeeded": 10
+    },
+    "ok": true
+  },
+  "decision": {
+    "gate": "KEEP PostgreSQL-backed durable ingestion jobs",
+    "rationale": "At-least-once claim with SKIP LOCKED, idempotent result_key overwrite, deterministic poison terminal, stale RUNNING recovery, and measured laptop throughput do not justify Redis/Kafka/Celery yet.",
+    "exactly_once_execution": false,
+    "exactly_once_effects": "approximated via idempotent result overwrite + conditional complete",
+    "external_queue": false,
+    "failure_cells_ok": true
+  }
+}

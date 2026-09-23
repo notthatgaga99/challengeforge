@@ -9,6 +9,7 @@ from challengeforge.persistence.repositories import (
     ChallengeRepository,
     EvaluationRepository,
     HackathonRepository,
+    IngestionJobRepository,
     SubmissionRepository,
     UserRepository,
 )
@@ -40,6 +41,10 @@ class UnitOfWork:
     @property
     def evaluations(self) -> EvaluationRepository:
         return EvaluationRepository(self.session)
+
+    @property
+    def ingestion_jobs(self) -> IngestionJobRepository:
+        return IngestionJobRepository(self.session)
 
 
 def require_organizer(user: CurrentUser) -> None:

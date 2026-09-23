@@ -5,6 +5,7 @@ from challengeforge.domain.enums import (
     ChallengeStatus,
     EvaluationStatus,
     HackathonStatus,
+    IngestionStatus,
     SubmissionStatus,
     UserRole,
     WorkloadClass,
@@ -15,6 +16,7 @@ from challengeforge.domain.models import (
     Evaluation,
     EvaluationCriterion,
     Hackathon,
+    IngestionJob,
     Submission,
     User,
 )
@@ -22,6 +24,7 @@ from challengeforge.persistence.models import (
     ChallengeRow,
     EvaluationRow,
     HackathonRow,
+    IngestionJobRow,
     SubmissionRow,
     UserRow,
 )
@@ -113,6 +116,25 @@ def evaluation_to_domain(row: EvaluationRow) -> Evaluation:
         current_stage=int(getattr(row, "current_stage", 0) or 0),
         evaluation_mode=str(getattr(row, "evaluation_mode", None) or "legacy"),
         deadline_at=getattr(row, "deadline_at", None),
+    )
+
+
+def ingestion_to_domain(row: IngestionJobRow) -> IngestionJob:
+    return IngestionJob(
+        id=row.id,
+        submission_id=row.submission_id,
+        artifact_key=row.artifact_key,
+        status=IngestionStatus(row.status),
+        attempt_count=row.attempt_count,
+        available_at=row.available_at,
+        created_at=row.created_at,
+        updated_at=row.updated_at,
+        worker_id=row.worker_id,
+        started_at=row.started_at,
+        completed_at=row.completed_at,
+        error_code=row.error_code,
+        error_message=row.error_message,
+        result_key=row.result_key,
     )
 
 

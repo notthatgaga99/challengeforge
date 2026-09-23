@@ -7,11 +7,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from challengeforge.domain.enums import ChallengeStatus, HackathonStatus
-from challengeforge.domain.models import Challenge, Evaluation, Hackathon, Submission, User
+from challengeforge.domain.models import (
+    Challenge,
+    Evaluation,
+    Hackathon,
+    IngestionJob,
+    Submission,
+    User,
+)
 from challengeforge.persistence.mapping import (
     challenge_to_domain,
     evaluation_to_domain,
     hackathon_to_domain,
+    ingestion_to_domain,
     submission_to_domain,
     user_to_domain,
 )
@@ -22,6 +30,7 @@ from challengeforge.persistence.models import (
     EvaluationRow,
     EvaluationSchedulerStateRow,
     HackathonRow,
+    IngestionJobRow,
     SubmissionRow,
     UserRow,
 )
@@ -944,3 +953,208 @@ class EvaluationRepository:
         stmt = select(EvaluationRow).order_by(EvaluationRow.created_at.asc())
         result = await self.session.execute(stmt)
         return [evaluation_to_domain(row) for row in result.scalars().all()]
+
+
+class IngestionJobRepository:
+    """PostgreSQL-backed ingestion queue (FOR UPDATE SKIP LOCKED claims)."""
+
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def enqueue(
+        self, *, submission_id: UUID, artifact_key: str
+    ) -> IngestionJob:
+        now = utcnow()
+        row = IngestionJobRow(
+            id=uuid4(),
+            submission_id=submission_id,
+            artifact_key=artifact_key,
+            status="queued",
+            attempt_count=0,
+            worker_id=None,
+            available_at=now,
+            started_at=None,
+            completed_at=None,
+            error_code=None,
+            error_message=None,
+            result_key=None,
+            created_at=now,
+            updated_at=now,
+        )
+        self.session.add(row)
+        await self.session.flush()
+        return ingestion_to_domain(row)
+
+    async def get(self, job_id: UUID) -> IngestionJob | None:
+        row = await self.session.get(IngestionJobRow, job_id)
+        return ingestion_to_domain(row) if row else None
+
+    async def claim_next(self, *, worker_id: str) -> IngestionJob | None:
+        now = utcnow()
+        stmt = (
+            select(IngestionJobRow)
+            .where(
+                IngestionJobRow.status == "queued",
+                IngestionJobRow.available_at <= now,
+            )
+            .order_by(IngestionJobRow.created_at.asc(), IngestionJobRow.id.asc())
+            .limit(1)
+            .with_for_update(skip_locked=True)
+        )
+        result = await self.session.execute(stmt)
+        row = result.scalar_one_or_none()
+        if row is None:
+            return None
+        row.status = "running"
+        row.attempt_count = int(row.attempt_count) + 1
+        row.worker_id = worker_id
+        row.started_at = now
+        row.updated_at = now
+        row.error_code = None
+        row.error_message = None
+        await self.session.flush()
+        return ingestion_to_domain(row)
+
+    async def mark_succeeded(
+        self, *, job_id: UUID, worker_id: str, result_key: str
+    ) -> IngestionJob | None:
+        now = utcnow()
+        stmt = (
+            update(IngestionJobRow)
+            .where(
+                IngestionJobRow.id == job_id,
+                IngestionJobRow.status == "running",
+                IngestionJobRow.worker_id == worker_id,
+            )
+            .values(
+                status="succeeded",
+                result_key=result_key,
+                completed_at=now,
+                updated_at=now,
+                error_code=None,
+                error_message=None,
+            )
+            .returning(IngestionJobRow.id)
+        )
+        result = await self.session.execute(stmt)
+        if result.scalar_one_or_none() is None:
+            return None
+        row = await self.session.get(IngestionJobRow, job_id)
+        assert row is not None
+        return ingestion_to_domain(row)
+
+    async def mark_failed(
+        self,
+        *,
+        job_id: UUID,
+        worker_id: str,
+        error_code: str,
+        error_message: str,
+    ) -> IngestionJob | None:
+        now = utcnow()
+        stmt = (
+            update(IngestionJobRow)
+            .where(
+                IngestionJobRow.id == job_id,
+                IngestionJobRow.status == "running",
+                IngestionJobRow.worker_id == worker_id,
+            )
+            .values(
+                status="failed",
+                completed_at=now,
+                updated_at=now,
+                error_code=error_code,
+                error_message=error_message[:2000],
+            )
+            .returning(IngestionJobRow.id)
+        )
+        result = await self.session.execute(stmt)
+        if result.scalar_one_or_none() is None:
+            return None
+        row = await self.session.get(IngestionJobRow, job_id)
+        assert row is not None
+        return ingestion_to_domain(row)
+
+    async def release_for_retry(
+        self,
+        *,
+        job_id: UUID,
+        worker_id: str,
+        error_code: str,
+        error_message: str,
+        delay_seconds: float = 0.0,
+    ) -> IngestionJob | None:
+        """RUNNING → QUEUED for transient failures (attempts already counted)."""
+        now = utcnow()
+        available = now + timedelta(seconds=max(0.0, delay_seconds))
+        stmt = (
+            update(IngestionJobRow)
+            .where(
+                IngestionJobRow.id == job_id,
+                IngestionJobRow.status == "running",
+                IngestionJobRow.worker_id == worker_id,
+            )
+            .values(
+                status="queued",
+                worker_id=None,
+                started_at=None,
+                available_at=available,
+                updated_at=now,
+                error_code=error_code,
+                error_message=error_message[:2000],
+            )
+            .returning(IngestionJobRow.id)
+        )
+        result = await self.session.execute(stmt)
+        if result.scalar_one_or_none() is None:
+            return None
+        row = await self.session.get(IngestionJobRow, job_id)
+        assert row is not None
+        return ingestion_to_domain(row)
+
+    async def recover_stale_running(
+        self, *, stale_before: datetime, max_attempts: int
+    ) -> list[IngestionJob]:
+        now = utcnow()
+        rows = (
+            await self.session.execute(
+                select(IngestionJobRow)
+                .where(
+                    IngestionJobRow.status == "running",
+                    IngestionJobRow.started_at.is_not(None),
+                    IngestionJobRow.started_at < stale_before,
+                )
+                .order_by(IngestionJobRow.started_at.asc())
+                .with_for_update()
+            )
+        ).scalars().all()
+        recovered: list[IngestionJob] = []
+        for row in rows:
+            if row.attempt_count >= max_attempts:
+                row.status = "failed"
+                row.completed_at = now
+                row.updated_at = now
+                row.error_code = "stale_exhausted"
+                row.error_message = (
+                    "Stale RUNNING ingestion job exhausted attempts "
+                    "(worker crash recovery)."
+                )
+                row.worker_id = None
+            else:
+                row.status = "queued"
+                row.worker_id = None
+                row.started_at = None
+                row.available_at = now
+                row.updated_at = now
+                row.error_code = "stale_requeued"
+                row.error_message = "Requeued after stale RUNNING (worker crash)."
+            recovered.append(ingestion_to_domain(row))
+        await self.session.flush()
+        return recovered
+
+    async def count_by_status(self) -> dict[str, int]:
+        stmt = select(IngestionJobRow.status, func.count()).group_by(
+            IngestionJobRow.status
+        )
+        result = await self.session.execute(stmt)
+        return {status: int(count) for status, count in result.all()}

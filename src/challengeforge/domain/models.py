@@ -9,6 +9,7 @@ from challengeforge.domain.enums import (
     ChallengeStatus,
     EvaluationStatus,
     HackathonStatus,
+    IngestionStatus,
     SubmissionStatus,
     UserRole,
     WorkloadClass,
@@ -98,3 +99,21 @@ class Evaluation:
     current_stage: int = 0
     evaluation_mode: str = "legacy"
     deadline_at: datetime | None = None
+
+
+@dataclass(frozen=True)
+class IngestionJob:
+    id: UUID
+    submission_id: UUID
+    artifact_key: str
+    status: IngestionStatus
+    attempt_count: int
+    available_at: datetime
+    created_at: datetime
+    updated_at: datetime
+    worker_id: str | None = None
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
+    error_code: str | None = None
+    error_message: str | None = None
+    result_key: str | None = None
