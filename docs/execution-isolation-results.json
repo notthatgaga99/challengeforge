@@ -1,0 +1,312 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T05:36:17.589113+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 319.8
+    },
+    "profile": "full",
+    "claim": "Synthetic execution isolation prototype \u2014 not participant code",
+    "limits": {
+      "wall_timeout_seconds": 5.0,
+      "max_stdout_bytes": 32768
+    }
+  },
+  "suite": {
+    "LIGHT": {
+      "workload": "LIGHT",
+      "status": "succeeded",
+      "exit_code": 0,
+      "wall_ms": 828.225,
+      "startup_ms": 95.969,
+      "cleanup_ms": 244.279,
+      "stdout_bytes": 30,
+      "stderr_bytes": 254,
+      "stdout_truncated": false,
+      "stderr_truncated": false,
+      "peak_rss_mb": null,
+      "process_count_peak": 2,
+      "leaked_pids_after_cleanup": [],
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-light-3692oix6",
+      "workspace_cleaned": true,
+      "evidence": {
+        "stdout_preview": "light_ok checksum=4107543296\r\n",
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n"
+      }
+    },
+    "CPU_HEAVY": {
+      "workload": "CPU_HEAVY",
+      "status": "succeeded",
+      "exit_code": 0,
+      "wall_ms": 1588.375,
+      "startup_ms": 93.464,
+      "cleanup_ms": 269.763,
+      "stdout_bytes": 33,
+      "stderr_bytes": 254,
+      "stdout_truncated": false,
+      "stderr_truncated": false,
+      "peak_rss_mb": null,
+      "process_count_peak": 2,
+      "leaked_pids_after_cleanup": [],
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-cpu_heavy-xr885l2v",
+      "workspace_cleaned": true,
+      "evidence": {
+        "stdout_preview": "cpu_heavy_ok checksum=631560480\r\n",
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n"
+      }
+    },
+    "MEMORY_HEAVY": {
+      "workload": "MEMORY_HEAVY",
+      "status": "succeeded",
+      "exit_code": 0,
+      "wall_ms": 1084.945,
+      "startup_ms": 108.124,
+      "cleanup_ms": 246.321,
+      "stdout_bytes": 32,
+      "stderr_bytes": 254,
+      "stdout_truncated": false,
+      "stderr_truncated": false,
+      "peak_rss_mb": null,
+      "process_count_peak": 2,
+      "leaked_pids_after_cleanup": [],
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-memory_heavy-sp6m0r7h",
+      "workspace_cleaned": true,
+      "evidence": {
+        "stdout_preview": "memory_heavy_ok bytes=33554432\r\n",
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n"
+      }
+    },
+    "SLEEP": {
+      "workload": "SLEEP",
+      "status": "succeeded",
+      "exit_code": 0,
+      "wall_ms": 2117.757,
+      "startup_ms": 210.893,
+      "cleanup_ms": 307.06,
+      "stdout_bytes": 10,
+      "stderr_bytes": 254,
+      "stdout_truncated": false,
+      "stderr_truncated": false,
+      "peak_rss_mb": null,
+      "process_count_peak": 2,
+      "leaked_pids_after_cleanup": [],
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-sleep-7bxwn_8m",
+      "workspace_cleaned": true,
+      "evidence": {
+        "stdout_preview": "sleep_ok\r\n",
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n"
+      }
+    },
+    "LARGE_OUTPUT": {
+      "workload": "LARGE_OUTPUT",
+      "status": "output_limit",
+      "exit_code": 15,
+      "wall_ms": 874.038,
+      "startup_ms": 209.645,
+      "cleanup_ms": 384.581,
+      "stdout_bytes": 32768,
+      "stderr_bytes": 254,
+      "stdout_truncated": true,
+      "stderr_truncated": false,
+      "peak_rss_mb": null,
+      "process_count_peak": 2,
+      "leaked_pids_after_cleanup": [],
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-large_output-c6us_uzg",
+      "workspace_cleaned": true,
+      "evidence": {
+        "stdout_preview": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n"
+      }
+    },
+    "CHILD_PROCESS": {
+      "workload": "CHILD_PROCESS",
+      "status": "succeeded",
+      "exit_code": 0,
+      "wall_ms": 3187.161,
+      "startup_ms": 98.049,
+      "cleanup_ms": 28215.507,
+      "stdout_bytes": 28,
+      "stderr_bytes": 254,
+      "stdout_truncated": false,
+      "stderr_truncated": false,
+      "peak_rss_mb": null,
+      "process_count_peak": 4,
+      "leaked_pids_after_cleanup": [],
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-child_process-afdoylu3",
+      "workspace_cleaned": true,
+      "evidence": {
+        "stdout_preview": "child_spawned parent=43348\r\n",
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n"
+      }
+    },
+    "TIMEOUT": {
+      "workload": "TIMEOUT",
+      "status": "timeout",
+      "exit_code": 15,
+      "wall_ms": 5198.557,
+      "startup_ms": 145.557,
+      "cleanup_ms": 254.832,
+      "stdout_bytes": 0,
+      "stderr_bytes": 254,
+      "stdout_truncated": false,
+      "stderr_truncated": false,
+      "peak_rss_mb": null,
+      "process_count_peak": 2,
+      "leaked_pids_after_cleanup": [],
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-timeout-bcjdgo_y",
+      "workspace_cleaned": true,
+      "evidence": {
+        "stdout_preview": "",
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n"
+      }
+    },
+    "MANY_FILES": {
+      "workload": "MANY_FILES",
+      "status": "succeeded",
+      "exit_code": 0,
+      "wall_ms": 1295.668,
+      "startup_ms": 118.833,
+      "cleanup_ms": 438.596,
+      "stdout_bytes": 114,
+      "stderr_bytes": 254,
+      "stdout_truncated": false,
+      "stderr_truncated": false,
+      "peak_rss_mb": null,
+      "process_count_peak": 2,
+      "leaked_pids_after_cleanup": [],
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-many_files-sdt9c1f2",
+      "workspace_cleaned": true,
+      "evidence": {
+        "stdout_preview": "many_files_ok n=50 dir=C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-many_files-sdt9c1f2\\many\r\n",
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n"
+      }
+    },
+    "FAILURE": {
+      "workload": "FAILURE",
+      "status": "failed",
+      "exit_code": 7,
+      "wall_ms": 939.97,
+      "startup_ms": 93.821,
+      "cleanup_ms": 239.567,
+      "stdout_bytes": 0,
+      "stderr_bytes": 272,
+      "stdout_truncated": false,
+      "stderr_truncated": false,
+      "peak_rss_mb": null,
+      "process_count_peak": 2,
+      "leaked_pids_after_cleanup": [],
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-iso-ix_l604b\\cf-exec-failure-rjc673lh",
+      "workspace_cleaned": true,
+      "evidence": {
+        "stdout_preview": "",
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\nfailure_expected\r\n"
+      }
+    }
+  },
+  "invariants": {
+    "timeout_containment": true,
+    "process_tree_containment": true,
+    "output_containment": true,
+    "filesystem_cleanup": true,
+    "nonzero_exit_observed": true,
+    "light_ok": true
+  },
+  "capacity": [
+    {
+      "concurrency": 1,
+      "workload": "CPU_HEAVY",
+      "repeats": 4,
+      "batch_wall_s": 6.638,
+      "throughput_per_s": 0.603,
+      "mean_wall_ms": 1360.26,
+      "mean_cleanup_ms": 245.99,
+      "completed": 4,
+      "total_leaked_pids": 0,
+      "statuses": {
+        "succeeded": 4
+      }
+    },
+    {
+      "concurrency": 1,
+      "workload": "SLEEP",
+      "repeats": 4,
+      "batch_wall_s": 9.975,
+      "throughput_per_s": 0.401,
+      "mean_wall_ms": 2168.14,
+      "mean_cleanup_ms": 270.35,
+      "completed": 4,
+      "total_leaked_pids": 0,
+      "statuses": {
+        "succeeded": 4
+      }
+    },
+    {
+      "concurrency": 2,
+      "workload": "CPU_HEAVY",
+      "repeats": 4,
+      "batch_wall_s": 4.374,
+      "throughput_per_s": 0.914,
+      "mean_wall_ms": 1869.68,
+      "mean_cleanup_ms": 251.91,
+      "completed": 4,
+      "total_leaked_pids": 0,
+      "statuses": {
+        "succeeded": 4
+      }
+    },
+    {
+      "concurrency": 2,
+      "workload": "SLEEP",
+      "repeats": 4,
+      "batch_wall_s": 4.275,
+      "throughput_per_s": 0.936,
+      "mean_wall_ms": 1839.13,
+      "mean_cleanup_ms": 237.14,
+      "completed": 4,
+      "total_leaked_pids": 0,
+      "statuses": {
+        "succeeded": 4
+      }
+    },
+    {
+      "concurrency": 4,
+      "workload": "CPU_HEAVY",
+      "repeats": 8,
+      "batch_wall_s": 4.697,
+      "throughput_per_s": 1.703,
+      "mean_wall_ms": 2017.36,
+      "mean_cleanup_ms": 259.52,
+      "completed": 8,
+      "total_leaked_pids": 0,
+      "statuses": {
+        "succeeded": 8
+      }
+    },
+    {
+      "concurrency": 4,
+      "workload": "SLEEP",
+      "repeats": 8,
+      "batch_wall_s": 5.304,
+      "throughput_per_s": 1.508,
+      "mean_wall_ms": 2333.56,
+      "mean_cleanup_ms": 256.98,
+      "completed": 8,
+      "total_leaked_pids": 0,
+      "statuses": {
+        "succeeded": 8
+      }
+    }
+  ],
+  "decision": {
+    "gate": "KEEP SUBPROCESS",
+    "rationale": "Synthetic process executor met timeout/tree/output/cleanup invariants on this host. Soft FS containment and scrubbed env are present; hard net/cgroup isolation is NOT claimed. Participant code remains forbidden.",
+    "participant_code_allowed": false,
+    "network_isolation_claimed": false,
+    "hard_cgroup_claimed": false
+  }
+}

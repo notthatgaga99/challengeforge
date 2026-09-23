@@ -149,6 +149,10 @@ Interactive p95 closed-loop feedback exists as an **experimental** control input
 **async** (off the request path). Server wall p95 remains the experimental
 controller signal; pool-wait/in-flight are observed only.
 
+Untrusted **execution isolation** is the next control-plane boundary
+(`docs/execution-isolation.md`, ADR 0008): synthetic process executor only;
+participant code is not executed.
+
 ## 8. Important failure modes
 
 - Duplicate submit click / lost response → mitigated by `Idempotency-Key` on create; a second *intentional* attempt must use a new key.

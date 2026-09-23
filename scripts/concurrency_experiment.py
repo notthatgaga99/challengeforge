@@ -6,6 +6,9 @@ the current FastAPI application with its configured 5+5 SQLAlchemy pool against
 an isolated embedded PostgreSQL instance by default, drives concurrent HTTP
 requests, samples PostgreSQL/pool/process state, and writes machine-readable
 results.
+
+Import note: other scripts should call ``cf_experiment_paths.ensure_experiment_paths()``
+before importing this module so ``scripts/`` is on ``sys.path`` from any cwd.
 """
 
 from __future__ import annotations

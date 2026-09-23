@@ -23,6 +23,11 @@ from sqlalchemy import event, text
 from challengeforge.config import Settings
 from challengeforge.main import create_app
 from challengeforge.persistence import session as session_module
+
+from cf_experiment_paths import ensure_experiment_paths
+
+ensure_experiment_paths()
+
 from concurrency_experiment import (
     PARTICIPANT_ID,
     ROOT,

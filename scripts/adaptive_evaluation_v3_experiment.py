@@ -18,7 +18,11 @@ from typing import Any
 from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "src"))
+from cf_experiment_paths import ensure_experiment_paths
+
+ensure_experiment_paths()
 
 from challengeforge.evaluation.plan import ALWAYS_EXPENSIVE_COST_UNITS, EvaluationMode
 from challengeforge.evaluation.quality import compare_to_ground_truth
@@ -27,8 +31,6 @@ from challengeforge.runtime.coalescing import InProcessCoalescer
 from challengeforge.runtime.pressure import PressureState
 from concurrency_experiment import percentile, utc_iso
 from resource_capacity_experiment import env_snapshot
-
-sys.path.insert(0, str(ROOT / "scripts"))
 
 MIXES: dict[str, list[tuple[str, int]]] = {
     "easy": [("easy_pass", 8), ("easy_fail", 8), ("ambiguous_pass", 2), ("ambiguous_fail", 2)],
