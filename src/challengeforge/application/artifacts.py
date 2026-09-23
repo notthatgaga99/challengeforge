@@ -116,6 +116,19 @@ def reconcile_orphans(
                 report.deleted.append(key)
         except Exception as exc:
             report.errors.append(f"delete({key}): {exc}")
+
+    # Also reclaim abandoned staging uploads when storage exposes incoming_root.
+    incoming_fn = getattr(storage, "incoming_root", None)
+    if incoming_fn is not None and delete:
+        try:
+            from challengeforge.application.uploads import cleanup_incoming
+
+            for name in cleanup_incoming(
+                incoming_fn(), grace_seconds=grace_seconds, now=clock
+            ):
+                report.deleted.append(f".incoming/{name}")
+        except Exception as exc:
+            report.errors.append(f"incoming_cleanup: {exc}")
     return report
 
 

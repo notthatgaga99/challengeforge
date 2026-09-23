@@ -1,52 +1,54 @@
-# ADR 0009: Artifact storage consistency
+# ADR 0009: Artifact storage consistency and upload boundary
 
 ## Status
 
-Accepted: **BLOB-FIRST + COMPENSATING DELETE + RECONCILIATION**
+Accepted:
+
+1. **BLOB-FIRST + COMPENSATING DELETE + RECONCILIATION**  
+2. **KEEP + temporary/finalize streaming upload** (not resumable, not S3)
 
 ## Context
 
-Submission artifacts are stored outside PostgreSQL via `ArtifactStorage`.
-Historically the application wrote the blob, then committed `artifact_key`.
-If the commit failed, an orphaned blob remained. Architecture accepted orphans
-and forbade dangling DB references. There is no async ingestion pipeline yet.
+Artifact bytes live outside PostgreSQL. Dual-write orphans were closed with
+compensating delete and grace-aware reconciliation. Separately, the HTTP attach
+path buffered the entire multipart body in memory (`await file.read()`), so peak
+RSS tracked artifact size.
 
 ## Decision
 
-1. Keep **blob-then-metadata** write order (never publish a key without bytes).  
-2. On metadata transaction failure, **compensating `delete`** of the new key.  
-3. On successful replace, best-effort delete of the previous key.  
-4. Provide **`reconcile_orphans`** with a grace window for in-flight uploads.  
-5. Add `delete` / `iter_keys` / `mtime` to the storage protocol.  
-6. Do **not** introduce object storage, DB BYTEA, CAS, or a durable artifact
-   status enum until ingestion or scale evidence requires them.
+1. Keep blob-then-metadata; compensate on commit failure; reconcile orphans.  
+2. Stream request bodies to `.incoming/{uuid}`, hash optionally (`X-Content-SHA256`),
+   then atomically `put_from_path` to the final key before committing metadata.  
+3. Reclaim abandoned incoming files via cleanup (opportunistic + reconcile).  
+4. Do **not** add chunked/resumable protocols or object storage yet.  
+5. Do **not** treat checksum as content-addressed deduplication.
 
 ## Alternatives
 
 | Option | Why not now |
 |---|---|
-| Metadata-first + UPLOADING | Extra states; dangling-key risk |
-| Outbox / rich state machine | No ingestion consumer yet |
-| Content-addressed store | Dedup nice-to-have |
-| PostgreSQL BYTEA | Wrong size/scale trade-off |
-| External object storage | Same dual-write problem; ops cost |
+| Keep full-body buffer | RSS scales with size; unnecessary |
+| Resumable / chunked uploads | No evidence at ≤5 MiB default |
+| Direct object-storage upload | Same consistency problem; ops cost |
+| CAS keys | Dedup not required yet |
 
 ## Evidence
 
 - `docs/artifact-storage-consistency.md`  
-- `scripts/artifact_storage_consistency_experiment.py`  
-- `tests/test_artifact_consistency.py`
+- `docs/large-upload-architecture.md`  
+- `scripts/large_upload_architecture_experiment.py`  
+- `tests/test_large_upload.py` / `tests/test_artifact_consistency.py`
 
 ## Trade-offs
 
-**+** Closes measured orphan gap; preserves no-dangling-key invariant; small diff  
-**−** Compensate is best-effort; grace window must be tuned; no content dedupe
+**+** Bounded memory; complete-only finals; small API change  
+**−** Extra disk staging; whole-upload retry only; best-effort incoming GC
 
 ## Reconsideration
 
-Persistent orphan growth · need virus-scan/unpack pipeline · multi-node blob
-backend · storage cost dominated by duplicates.
+Larger max size · unreliable networks · interactive degradation under upload
+pressure · shared multi-node storage · dedupe / ingestion pipeline needs.
 
 ## Related
 
-ADR 0001 (modular monolith / storage boundary), architecture § Artifact-storage.
+ADR 0001; architecture § Artifact-storage.

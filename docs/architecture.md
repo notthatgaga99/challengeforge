@@ -124,6 +124,10 @@ compensating delete when metadata commit fails, previous-key GC on replace, and
 grace-aware orphan reconciliation (`docs/artifact-storage-consistency.md`,
 ADR 0009).
 
+**Upload:** stream multipart bodies to `.incoming/` then atomic finalize to the
+final key (`docs/large-upload-architecture.md`). Streaming ≠ resumability;
+optional `X-Content-SHA256` ≠ deduplication. Default size cap remains 5 MiB.
+
 Replacing the filesystem with object storage later should not change submission
 use cases — the dual-write problem remains behind the same protocol.
 

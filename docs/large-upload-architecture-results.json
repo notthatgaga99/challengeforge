@@ -1,0 +1,185 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T09:26:28.115534+00:00",
+    "claim": "Large upload architecture \u2014 not S3/resumable by default",
+    "default_artifact_max_bytes": 5242880,
+    "completed_at": "2026-09-23T09:26:28.115534+00:00"
+  },
+  "size_sweep": [
+    {
+      "mode": "buffered",
+      "size_mb": 1.0,
+      "wall_s": 0.0398,
+      "rss_before_mb": 56.04,
+      "rss_while_holding_mb": 58.12,
+      "rss_after_put_mb": 58.12,
+      "rss_delta_hold_mb": 2.08,
+      "throughput_mibs": 25.12,
+      "final_exists": true
+    },
+    {
+      "mode": "stream_finalize",
+      "size_mb": 1.0,
+      "wall_s": 0.8237,
+      "rss_before_mb": 57.13,
+      "rss_after_source_mb": 58.14,
+      "rss_after_put_mb": 58.16,
+      "rss_delta_mb": 1.03,
+      "throughput_mibs": 1.21,
+      "sha256_len": 64,
+      "final_exists": true,
+      "staging_gone": true
+    },
+    {
+      "mode": "buffered",
+      "size_mb": 10.0,
+      "wall_s": 0.1475,
+      "rss_before_mb": 57.16,
+      "rss_while_holding_mb": 67.16,
+      "rss_after_put_mb": 67.16,
+      "rss_delta_hold_mb": 10.0,
+      "throughput_mibs": 67.82,
+      "final_exists": true
+    },
+    {
+      "mode": "stream_finalize",
+      "size_mb": 10.0,
+      "wall_s": 0.1315,
+      "rss_before_mb": 57.16,
+      "rss_after_source_mb": 58.16,
+      "rss_after_put_mb": 58.16,
+      "rss_delta_mb": 1.0,
+      "throughput_mibs": 76.05,
+      "sha256_len": 64,
+      "final_exists": true,
+      "staging_gone": true
+    },
+    {
+      "mode": "buffered",
+      "size_mb": 25.0,
+      "wall_s": 0.3768,
+      "rss_before_mb": 57.16,
+      "rss_while_holding_mb": 82.16,
+      "rss_after_put_mb": 82.16,
+      "rss_delta_hold_mb": 25.0,
+      "throughput_mibs": 66.35,
+      "final_exists": true
+    },
+    {
+      "mode": "stream_finalize",
+      "size_mb": 25.0,
+      "wall_s": 0.3199,
+      "rss_before_mb": 57.16,
+      "rss_after_source_mb": 58.16,
+      "rss_after_put_mb": 58.16,
+      "rss_delta_mb": 1.0,
+      "throughput_mibs": 78.15,
+      "sha256_len": 64,
+      "final_exists": true,
+      "staging_gone": true
+    },
+    {
+      "mode": "buffered",
+      "size_mb": 50.0,
+      "wall_s": 0.7959,
+      "rss_before_mb": 57.16,
+      "rss_while_holding_mb": 107.17,
+      "rss_after_put_mb": 107.17,
+      "rss_delta_hold_mb": 50.0,
+      "throughput_mibs": 62.82,
+      "final_exists": true
+    },
+    {
+      "mode": "stream_finalize",
+      "size_mb": 50.0,
+      "wall_s": 0.6915,
+      "rss_before_mb": 57.16,
+      "rss_after_source_mb": 58.17,
+      "rss_after_put_mb": 58.17,
+      "rss_delta_mb": 1.0,
+      "throughput_mibs": 72.31,
+      "sha256_len": 64,
+      "final_exists": true,
+      "staging_gone": true
+    }
+  ],
+  "failure_matrix": [
+    {
+      "case": "client_disconnect_abort",
+      "staging_exists": false,
+      "db_ref": false,
+      "invariant_ok": true
+    },
+    {
+      "case": "fail_after_finalize_before_commit",
+      "blob_exists": false,
+      "staging_exists": false,
+      "invariant_ok": true
+    },
+    {
+      "case": "success_finalize",
+      "blob_exists": true,
+      "size": 8,
+      "staging_gone": true,
+      "invariant_ok": true
+    },
+    {
+      "case": "checksum_mismatch",
+      "rejected": true
+    },
+    {
+      "case": "abandoned_incoming_cleanup",
+      "deleted": true,
+      "exists": false,
+      "invariant_ok": true
+    },
+    {
+      "case": "oversize_abort",
+      "left_staging": false,
+      "invariant_ok": true
+    }
+  ],
+  "concurrency": [
+    {
+      "concurrency": 1,
+      "size_bytes": 262144,
+      "batch_s": 0.0733,
+      "p50_s": 0.0547,
+      "p95_s": 0.0547,
+      "rss_delta_mb": 0.14,
+      "final_keys": 1,
+      "ok": true
+    },
+    {
+      "concurrency": 5,
+      "size_bytes": 262144,
+      "batch_s": 0.2357,
+      "p50_s": 0.1024,
+      "p95_s": 0.1097,
+      "rss_delta_mb": 0.15,
+      "final_keys": 5,
+      "ok": true
+    },
+    {
+      "concurrency": 10,
+      "size_bytes": 262144,
+      "batch_s": 0.2542,
+      "p50_s": 0.0772,
+      "p95_s": 0.082,
+      "rss_delta_mb": -1.29,
+      "final_keys": 10,
+      "ok": true
+    }
+  ],
+  "decision": {
+    "gate": "KEEP + temporary/finalize boundary",
+    "portfolio": "B",
+    "resumability": "not_required_yet",
+    "checksum": "optional_whole_upload_sha256",
+    "rationale": "API previously buffered entire bodies in RAM. Streaming to staging then atomic finalize keeps final keys complete-only, bounds RSS growth vs size, and preserves blob-first + compensate. Resumability/chunking/S3 not justified for current \u22645MiB default and typical hackathon zip sizes; whole-upload retry remains sufficient.",
+    "buffered_samples": 4,
+    "streaming_samples": 4,
+    "object_storage": false,
+    "default_max_bytes_unchanged": true
+  }
+}

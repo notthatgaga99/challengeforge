@@ -5,7 +5,9 @@ from fastapi import APIRouter, Depends, File, Header, Response, UploadFile, stat
 from challengeforge.api.deps import (
     challenge_service,
     evaluation_service,
+    get_app_settings,
     get_current_user,
+    get_storage,
     submission_service,
 )
 from challengeforge.api.routes.hackathons import serialize_challenge
@@ -25,8 +27,10 @@ from challengeforge.application.evaluations import (
     ParticipantEvaluationView,
 )
 from challengeforge.application.submissions import SubmissionService
+from challengeforge.config import Settings
 from challengeforge.domain.models import Evaluation, Submission
 from challengeforge.identity import CurrentUser
+from challengeforge.storage.base import ArtifactStorage
 
 router = APIRouter()
 
@@ -210,17 +214,47 @@ async def attach_artifact(
     submission_id: UUID,
     actor: CurrentUser = Depends(get_current_user),
     service: SubmissionService = Depends(submission_service),
+    storage: ArtifactStorage = Depends(get_storage),
+    settings: Settings = Depends(get_app_settings),
     file: UploadFile = File(...),
+    content_sha256: str | None = Header(default=None, alias="X-Content-SHA256"),
 ) -> SubmissionResponse:
-    data = await file.read()
-    item = await service.update_created(
-        actor,
-        submission_id,
-        artifact=data,
-        artifact_content_type=file.content_type,
-        artifact_filename=file.filename,
+    """Stream upload to staging, finalize to final key, then commit metadata.
+
+    Does not buffer the entire body in memory. Streaming ≠ resumability.
+    """
+    from challengeforge.application.uploads import (
+        cleanup_incoming,
+        iter_upload_file,
+        stream_to_incoming,
     )
-    return serialize_submission(item)
+
+    incoming = None
+    try:
+        incoming = await stream_to_incoming(
+            storage.incoming_root(),
+            iter_upload_file(file),
+            max_bytes=settings.artifact_max_bytes,
+            content_type=file.content_type or "application/octet-stream",
+            expected_sha256=content_sha256,
+        )
+        item = await service.attach_incoming(
+            actor,
+            submission_id,
+            incoming,
+            artifact_filename=file.filename,
+        )
+        return serialize_submission(item)
+    except Exception:
+        if incoming is not None:
+            incoming.abort()
+        raise
+    finally:
+        # Opportunistic: reclaim very old abandoned staging (best-effort).
+        try:
+            cleanup_incoming(storage.incoming_root(), grace_seconds=3600.0)
+        except Exception:
+            pass
 
 
 @router.post("/submissions/{submission_id}/submit", response_model=SubmissionResponse)

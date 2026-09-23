@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Iterable
+import os
+import shutil
 
 
 class LocalFilesystemStorage:
@@ -12,9 +14,12 @@ class LocalFilesystemStorage:
     def _resolve(self, key: str) -> Path:
         if not key or key.startswith("/") or ".." in Path(key).parts:
             raise ValueError("Invalid artifact key.")
-        path = (self.root / key).resolve()
-        if not str(path).startswith(str(self.root.resolve())):
-            raise ValueError("Artifact key escapes storage root.")
+        root = self.root.resolve()
+        path = (root / key).resolve()
+        try:
+            path.relative_to(root)
+        except ValueError as exc:
+            raise ValueError("Artifact key escapes storage root.") from exc
         return path
 
     def _sidecar(self, path: Path) -> Path:
@@ -30,6 +35,35 @@ class LocalFilesystemStorage:
         meta = self._sidecar(path)
         meta.write_text(content_type or "application/octet-stream", encoding="utf-8")
         return key
+
+    def put_from_path(self, key: str, source: Path, content_type: str) -> str:
+        """Atomically publish a complete local file as ``key`` (no partial final)."""
+        path = self._resolve(key)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        src = Path(source)
+        if not src.is_file():
+            raise FileNotFoundError(str(source))
+        tmp = path.with_suffix(path.suffix + ".tmp")
+        if tmp.exists():
+            tmp.unlink()
+        try:
+            os.replace(src, tmp)
+        except OSError:
+            shutil.copyfile(src, tmp)
+            try:
+                src.unlink()
+            except OSError:
+                pass
+        os.replace(tmp, path)
+        meta = self._sidecar(path)
+        meta.write_text(content_type or "application/octet-stream", encoding="utf-8")
+        return key
+
+    def incoming_root(self) -> Path:
+        root = self.root / ".incoming"
+        root.mkdir(parents=True, exist_ok=True)
+        return root
+
 
     def get(self, key: str) -> bytes:
         path = self._resolve(key)
@@ -68,8 +102,10 @@ class LocalFilesystemStorage:
             if prefix.startswith("/") or ".." in Path(prefix).parts:
                 raise ValueError("Invalid prefix.")
             base = (root / prefix).resolve()
-            if not str(base).startswith(str(root)):
-                raise ValueError("Prefix escapes storage root.")
+            try:
+                base.relative_to(root)
+            except ValueError as exc:
+                raise ValueError("Prefix escapes storage root.") from exc
         if not base.exists():
             return
         try:
