@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from challengeforge.application.evaluator import parse_workload_class
 from challengeforge.application import UnitOfWork, require_participant
+from challengeforge.application.artifacts import compensate_delete
 from challengeforge.application.idempotency import submission_request_fingerprint
 from challengeforge.domain.enums import ChallengeStatus, HackathonStatus, SubmissionStatus
 from challengeforge.domain.exceptions import (
@@ -134,11 +135,16 @@ class SubmissionService:
             await self.uow.session.commit()
         except IntegrityError:
             await self.uow.session.rollback()
+            compensate_delete(self.uow.storage, artifact_key)
             if key:
                 existing = await self.uow.submissions.find_by_idempotency(actor.id, key)
                 if existing is not None:
                     assert request_fingerprint is not None
                     return self._replay_or_conflict(existing, request_fingerprint)
+            raise
+        except Exception:
+            await self.uow.session.rollback()
+            compensate_delete(self.uow.storage, artifact_key)
             raise
         return SubmissionCreateResult(submission, replayed=False)
 
@@ -182,6 +188,8 @@ class SubmissionService:
             raise PermissionDenied("You cannot modify this submission.")
         if row.status != SubmissionStatus.CREATED.value:
             raise ValidationFailed("Only submissions in CREATED can be updated.")
+        previous_artifact_key = row.artifact_key
+        new_artifact_key: str | None = None
         if metadata is not None:
             row.metadata_json = self._validate_metadata(metadata)
         if artifact is not None:
@@ -190,13 +198,29 @@ class SubmissionService:
             suffix = ""
             if artifact_filename and "." in artifact_filename:
                 suffix = "." + artifact_filename.rsplit(".", 1)[-1].lower()
-            artifact_key = f"submissions/{row.challenge_id}/{actor.id}/{uuid4()}{suffix}"
-            self.uow.storage.put(
-                artifact_key, artifact, artifact_content_type or "application/octet-stream"
+            new_artifact_key = (
+                f"submissions/{row.challenge_id}/{actor.id}/{uuid4()}{suffix}"
             )
-            row.artifact_key = artifact_key
+            self.uow.storage.put(
+                new_artifact_key,
+                artifact,
+                artifact_content_type or "application/octet-stream",
+            )
+            row.artifact_key = new_artifact_key
         row.updated_at = utcnow()
-        await self.uow.session.commit()
+        try:
+            await self.uow.session.commit()
+        except Exception:
+            await self.uow.session.rollback()
+            compensate_delete(self.uow.storage, new_artifact_key)
+            raise
+        # Successful replace: drop the previous blob (best-effort).
+        if (
+            new_artifact_key is not None
+            and previous_artifact_key
+            and previous_artifact_key != new_artifact_key
+        ):
+            compensate_delete(self.uow.storage, previous_artifact_key)
         updated = await self.uow.submissions.get(submission_id)
         assert updated is not None
         return updated

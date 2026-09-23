@@ -1,4 +1,4 @@
-from typing import Protocol
+from typing import Iterable, Protocol
 
 
 class ArtifactStorage(Protocol):
@@ -11,3 +11,12 @@ class ArtifactStorage(Protocol):
         """Return stored bytes or raise FileNotFoundError."""
 
     def exists(self, key: str) -> bool: ...
+
+    def delete(self, key: str) -> bool:
+        """Remove blob (+ sidecar if any). True if something was removed."""
+
+    def iter_keys(self, prefix: str = "") -> Iterable[str]:
+        """Yield blob keys under prefix (excludes content-type sidecars)."""
+
+    def mtime(self, key: str) -> float | None:
+        """Modification time of the blob, or None if missing."""

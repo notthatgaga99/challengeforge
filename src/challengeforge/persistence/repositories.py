@@ -245,6 +245,14 @@ class SubmissionRepository:
         result = await self.session.execute(stmt)
         return [submission_to_domain(row) for row in result.scalars().all()]
 
+    async def list_artifact_keys(self) -> list[str]:
+        """All durable artifact keys (for orphan reconciliation)."""
+        stmt = select(SubmissionRow.artifact_key).where(
+            SubmissionRow.artifact_key.is_not(None)
+        )
+        result = await self.session.execute(stmt)
+        return [key for key in result.scalars().all() if key]
+
     async def add(
         self,
         *,

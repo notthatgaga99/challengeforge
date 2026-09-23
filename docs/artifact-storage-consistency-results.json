@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T07:37:01.712862+00:00",
+    "storage_root": "C:\\Users\\emxxgag\\OneDrive - Ericsson\\Documents\\CodeBase\\challengeforge\\.cf_gov_ws\\artifacts_exp\\78647baf-a47b-487c-aa1d-bfad1a2e0df5",
+    "claim": "Artifact consistency \u2014 not object-storage migration",
+    "completed_at": "2026-09-23T07:37:01.712862+00:00"
+  },
+  "scenarios": [
+    {
+      "name": "blob_ok_db_fail_no_compensate",
+      "key": "submissions/exp/f71e4347-bc47-4436-b3b9-97123697efd9.bin",
+      "blob_exists": true,
+      "orphan": true
+    },
+    {
+      "name": "blob_ok_db_fail_compensate",
+      "key": "submissions/exp/78a9f9a6-0325-40f2-83bd-d41b8a1f0ba6.bin",
+      "blob_exists": false,
+      "orphan": false
+    },
+    {
+      "name": "db_ok_blob_fail_prevented_by_blob_first",
+      "key": "submissions/exp/28f828d6-51ec-4887-aaeb-b8633ae60955.bin",
+      "blob_exists": false,
+      "referenced": [],
+      "dangling_reference": false,
+      "put_error": "simulated put failure"
+    },
+    {
+      "name": "duplicate_upload_replace",
+      "old_exists": false,
+      "new_exists": true,
+      "referenced": [
+        "submissions/exp/06ef4a27-eb9a-4d32-ba0c-1311f229d84c.bin"
+      ]
+    },
+    {
+      "name": "same_content_two_keys_no_cas",
+      "keys": [
+        "submissions/exp/1ce6fa0f-dd86-4770-b988-2437dfb1d52a.bin",
+        "submissions/exp/eaf754ed-52b4-4104-9352-4383b93627e5.bin"
+      ],
+      "deduped": false,
+      "both_exist": true,
+      "note": "Content-addressed dedupe deferred; GC only unreferenced keys"
+    },
+    {
+      "name": "reconcile_deletes_orphan_keeps_live",
+      "live_exists": true,
+      "orphan_exists": false,
+      "report": {
+        "scanned": 6,
+        "referenced": 1,
+        "orphan_candidates": 5,
+        "deleted": [
+          "submissions/exp/06ef4a27-eb9a-4d32-ba0c-1311f229d84c.bin",
+          "submissions/exp/1ce6fa0f-dd86-4770-b988-2437dfb1d52a.bin",
+          "submissions/exp/3054f138-5100-4992-971a-90848971fa17.bin",
+          "submissions/exp/eaf754ed-52b4-4104-9352-4383b93627e5.bin",
+          "submissions/exp/f71e4347-bc47-4436-b3b9-97123697efd9.bin"
+        ],
+        "missing_referenced": [],
+        "skipped_young": [],
+        "errors": []
+      },
+      "ok": true
+    },
+    {
+      "name": "reconcile_skips_young_orphan",
+      "young_exists": true,
+      "skipped": true,
+      "deleted": false,
+      "ok": true
+    },
+    {
+      "name": "reconcile_idempotent",
+      "first_deleted": true,
+      "second_deleted": false,
+      "still_gone": true,
+      "ok": true
+    },
+    {
+      "name": "detect_missing_referenced",
+      "missing_referenced": [
+        "submissions/exp/e39ea269-17b5-4a7e-9556-3b2c24c374a2.bin"
+      ],
+      "ok": true,
+      "note": "Integrity failure \u2014 blob-first write order prevents introducing these"
+    }
+  ],
+  "decision": {
+    "gate": "BLOB-FIRST + COMPENSATING DELETE + RECONCILIATION",
+    "rationale": "Keep blob-before-metadata so committed keys never dangle. Compensating delete closes the common orphan path immediately; reconciliation with grace sweeps leftovers idempotently. No object store, no DB BYTEA, no full artifact state machine \u2014 ingestion is not yet a separate plane.",
+    "compensate_closes_orphan": true,
+    "uncompensated_still_orphans": true,
+    "reconcile_ok": true,
+    "grace_ok": true,
+    "reconcile_idempotent": true,
+    "object_storage_required": false,
+    "new_durable_states_required": false
+  }
+}

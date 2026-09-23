@@ -116,11 +116,16 @@ See [`concurrency-design.md`](concurrency-design.md) and
 
 ## 6. Artifact-storage boundary
 
-Submission bytes are not stored in PostgreSQL. `ArtifactStorage.put/get/exists` is the only storage API the application uses. Slice 1 writes under `./data/artifacts`.
+Submission bytes are not stored in PostgreSQL. `ArtifactStorage.put/get/exists/delete`
+is the storage API the application uses. Slice 1 writes under `./data/artifacts`.
 
-Write order: persist the file, then the row. Orphan files are acceptable; a row pointing at a missing object is not. Reconsider if orphan volume becomes measurable.
+**Consistency:** blob-first write order (never a committed key without bytes),
+compensating delete when metadata commit fails, previous-key GC on replace, and
+grace-aware orphan reconciliation (`docs/artifact-storage-consistency.md`,
+ADR 0009).
 
-Replacing the filesystem with object storage later should not change submission use cases.
+Replacing the filesystem with object storage later should not change submission
+use cases — the dual-write problem remains behind the same protocol.
 
 ## 7. Current capacity assumptions
 
