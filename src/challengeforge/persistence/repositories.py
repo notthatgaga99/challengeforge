@@ -722,58 +722,115 @@ class EvaluationRepository:
         row = result.scalar_one_or_none()
         return evaluation_to_domain(row) if row else None
 
+    async def begin_execution_attempt(
+        self,
+        evaluation_id: UUID,
+        *,
+        worker_id: str,
+        execution_attempt: dict,
+    ) -> Evaluation | None:
+        """Persist OS ownership metadata while RUNNING (duplicate-prevention)."""
+        row = (
+            await self.session.execute(
+                select(EvaluationRow)
+                .where(
+                    EvaluationRow.id == evaluation_id,
+                    EvaluationRow.status == "running",
+                    EvaluationRow.worker_id == worker_id,
+                )
+                .with_for_update()
+            )
+        ).scalar_one_or_none()
+        if row is None:
+            return None
+        meta = dict(row.result_metadata or {})
+        meta["execution_attempt"] = execution_attempt
+        meta["evaluator"] = meta.get("evaluator") or "synthetic_execution_v1"
+        row.result_metadata = meta
+        await self.session.flush()
+        return evaluation_to_domain(row)
+
     async def recover_stale_running(
         self,
         *,
         stale_before: datetime,
         max_attempts: int,
     ) -> list[Evaluation]:
-        """Requeue or permanently fail RUNNING rows whose started_at is stale."""
+        """Contain orphaned executions, then requeue or fail stale RUNNING rows.
+
+        Never requeues while a prior execution_attempt root_pid is still alive
+        without first attempting containment.
+        """
+        from challengeforge.execution.ownership import (
+            ExecutionAttempt,
+            contain_attempt,
+            orphan_suspected,
+        )
+
         recovered: list[Evaluation] = []
 
-        fail_stmt = (
-            update(EvaluationRow)
-            .where(
-                EvaluationRow.status == "running",
-                EvaluationRow.started_at.is_not(None),
-                EvaluationRow.started_at < stale_before,
-                EvaluationRow.attempt_count >= max_attempts,
+        stale_rows = (
+            await self.session.execute(
+                select(EvaluationRow)
+                .where(
+                    EvaluationRow.status == "running",
+                    EvaluationRow.started_at.is_not(None),
+                    EvaluationRow.started_at < stale_before,
+                )
+                .with_for_update()
             )
-            .values(
-                status="failed",
-                completed_at=utcnow(),
-                failure_reason=(
+        ).scalars().all()
+
+        for row in stale_rows:
+            meta = dict(row.result_metadata or {})
+            attempt = ExecutionAttempt.from_metadata(meta)
+            containment = None
+            if attempt is not None and orphan_suspected(attempt):
+                containment = contain_attempt(attempt)
+                meta["ownership_recovery"] = containment
+                # If still alive after containment, quarantine — do not requeue.
+                if containment.get("still_alive"):
+                    meta["orphan_suspected"] = True
+                    row.result_metadata = meta
+                    row.status = "failed"
+                    row.completed_at = utcnow()
+                    row.failure_reason = (
+                        "orphan_suspected: prior execution still alive after "
+                        "containment; refused duplicate requeue"
+                    )
+                    row.worker_id = None
+                    recovered.append(evaluation_to_domain(row))
+                    continue
+                meta["orphan_suspected"] = False
+            elif attempt is not None:
+                # Record that we checked and found no live process.
+                meta["ownership_recovery"] = {
+                    "execution_attempt_id": attempt.execution_attempt_id,
+                    "root_pid": attempt.root_pid,
+                    "was_alive": False,
+                    "contained": True,
+                }
+
+            row.result_metadata = meta
+            if row.attempt_count >= max_attempts:
+                row.status = "failed"
+                row.completed_at = utcnow()
+                row.failure_reason = (
                     f"Abandoned after {max_attempts} attempt(s) without completion "
                     "(worker crash / stale RUNNING)."
-                ),
-                worker_id=None,
-            )
-            .returning(EvaluationRow)
-        )
-        fail_result = await self.session.execute(fail_stmt)
-        for row in fail_result.scalars().all():
+                )
+                row.worker_id = None
+            else:
+                row.status = "queued"
+                row.started_at = None
+                row.worker_id = None
+                row.failure_reason = (
+                    "Requeued after stale RUNNING (worker crash recovery; "
+                    "prior execution contained)."
+                )
             recovered.append(evaluation_to_domain(row))
 
-        requeue_stmt = (
-            update(EvaluationRow)
-            .where(
-                EvaluationRow.status == "running",
-                EvaluationRow.started_at.is_not(None),
-                EvaluationRow.started_at < stale_before,
-                EvaluationRow.attempt_count < max_attempts,
-            )
-            .values(
-                status="queued",
-                started_at=None,
-                worker_id=None,
-                failure_reason="Requeued after stale RUNNING (worker crash recovery).",
-            )
-            .returning(EvaluationRow)
-        )
-        requeue_result = await self.session.execute(requeue_stmt)
-        for row in requeue_result.scalars().all():
-            recovered.append(evaluation_to_domain(row))
-
+        await self.session.flush()
         return recovered
 
     async def plane_snapshot(self) -> dict:

@@ -344,6 +344,26 @@ class EvaluationWorker:
                 getattr(self.settings, "execution_max_stderr_bytes", 256 * 1024)
             ),
         )
+        loop = asyncio.get_running_loop()
+        started_q: asyncio.Queue[dict] = asyncio.Queue()
+
+        def on_started(info: dict) -> None:
+            loop.call_soon_threadsafe(started_q.put_nowait, info)
+
+        async def persist_started() -> None:
+            try:
+                info = await asyncio.wait_for(started_q.get(), timeout=30.0)
+            except asyncio.TimeoutError:
+                return
+            async with factory() as session:
+                await EvaluationRepository(session).begin_execution_attempt(
+                    claimed.id,
+                    worker_id=self.worker_id,
+                    execution_attempt=info,
+                )
+                await session.commit()
+
+        persist_task = asyncio.create_task(persist_started())
         try:
             record = await asyncio.to_thread(
                 run_synthetic_execution,
@@ -353,9 +373,13 @@ class EvaluationWorker:
                 workload_class=claimed.workload_class.value,
                 attempt_count=int(claimed.attempt_count),
                 max_attempts=int(self.settings.evaluation_max_attempts),
+                worker_id=self.worker_id,
                 limits=limits,
+                use_os_ownership=True,
+                on_started=on_started,
             )
         except ValueError as exc:
+            persist_task.cancel()
             async with factory() as fail_session:
                 await EvaluationRepository(fail_session).mark_failed(
                     claimed.id,
@@ -369,6 +393,11 @@ class EvaluationWorker:
                 await fail_session.commit()
             self.jobs_failed += 1
             return True
+        finally:
+            try:
+                await asyncio.wait_for(persist_task, timeout=2.0)
+            except (asyncio.TimeoutError, asyncio.CancelledError):
+                persist_task.cancel()
 
         wall_ms = (time.perf_counter() - eval_started) * 1000.0
         if record.evaluation_terminal == "requeue":

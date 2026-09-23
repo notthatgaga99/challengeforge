@@ -1,0 +1,1393 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T06:31:12.575029+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 671.1
+    },
+    "profile": "interactive",
+    "claim": "Synthetic execution evaluation integration \u2014 not public code",
+    "trusted_corpus": [
+      "LIGHT",
+      "CPU_HEAVY",
+      "MEMORY_HEAVY",
+      "SLEEP",
+      "LARGE_OUTPUT",
+      "CHILD_PROCESS",
+      "TIMEOUT",
+      "MANY_FILES",
+      "FAILURE"
+    ],
+    "budget_labels": {
+      "wall_timeout": "ENFORCED",
+      "stdout_cap": "ENFORCED",
+      "stderr_cap": "ENFORCED",
+      "process_tree_cleanup": "ENFORCED",
+      "workspace_cleanup": "ENFORCED",
+      "scrubbed_env": "ENFORCED",
+      "peak_rss": "OBSERVED",
+      "process_count": "OBSERVED",
+      "cpu_accounting": "OBSERVED",
+      "network_deny": "NOT ENFORCED",
+      "cgroup_cpu_quota": "NOT ENFORCED",
+      "cgroup_memory": "NOT ENFORCED",
+      "filesystem_jail": "NOT ENFORCED"
+    },
+    "completed_at": "2026-09-23T06:33:04.464954+00:00"
+  },
+  "corpus": {
+    "cases": [
+      {
+        "workload": "LIGHT",
+        "expected_status": "succeeded",
+        "status": "succeeded",
+        "score": 100,
+        "failure_reason": null,
+        "execution_outcome": "SUCCESS",
+        "execution": {
+          "status": "succeeded",
+          "wall_ms": 1463.164,
+          "evidence": {
+            "pgid": null,
+            "stderr_preview": "",
+            "stdout_preview": "light_ok checksum=4107543296\r\n"
+          },
+          "root_pid": 41708,
+          "workload": "LIGHT",
+          "exit_code": 0,
+          "ownership": "windows_job_object_kill_on_close",
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-light-3ek4g30w",
+          "cleanup_ms": 1941.374,
+          "startup_ms": 275.345,
+          "peak_rss_mb": null,
+          "stderr_bytes": 0,
+          "stdout_bytes": 30,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "CPU_HEAVY",
+        "expected_status": "succeeded",
+        "status": "succeeded",
+        "score": 100,
+        "failure_reason": null,
+        "execution_outcome": "SUCCESS",
+        "execution": {
+          "status": "succeeded",
+          "wall_ms": 1981.713,
+          "evidence": {
+            "pgid": null,
+            "stderr_preview": "",
+            "stdout_preview": "cpu_heavy_ok checksum=631560480\r\n"
+          },
+          "root_pid": 6756,
+          "workload": "CPU_HEAVY",
+          "exit_code": 0,
+          "ownership": "windows_job_object_kill_on_close",
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-cpu_heavy-w11jfel9",
+          "cleanup_ms": 2087.548,
+          "startup_ms": 144.71,
+          "peak_rss_mb": null,
+          "stderr_bytes": 0,
+          "stdout_bytes": 33,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "TIMEOUT",
+        "expected_status": "failed",
+        "status": "failed",
+        "score": null,
+        "failure_reason": "execution_timeout",
+        "execution_outcome": "TIMEOUT",
+        "execution": {
+          "status": "timeout",
+          "wall_ms": 5267.17,
+          "evidence": {
+            "pgid": null,
+            "stderr_preview": "",
+            "stdout_preview": ""
+          },
+          "root_pid": 22464,
+          "workload": "TIMEOUT",
+          "exit_code": 15,
+          "ownership": "windows_job_object_kill_on_close",
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-timeout-v3hpsazo",
+          "cleanup_ms": 1918.042,
+          "startup_ms": 221.47,
+          "peak_rss_mb": null,
+          "stderr_bytes": 0,
+          "stdout_bytes": 0,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "LARGE_OUTPUT",
+        "expected_status": "failed",
+        "status": "failed",
+        "score": null,
+        "failure_reason": "execution_output_limit",
+        "execution_outcome": "OUTPUT_LIMIT",
+        "execution": {
+          "status": "output_limit",
+          "wall_ms": 968.307,
+          "evidence": {
+            "pgid": null,
+            "stderr_preview": "",
+            "stdout_preview": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          },
+          "root_pid": 20460,
+          "workload": "LARGE_OUTPUT",
+          "exit_code": 15,
+          "ownership": "windows_job_object_kill_on_close",
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-large_output-e9h0q3th",
+          "cleanup_ms": 1950.396,
+          "startup_ms": 203.442,
+          "peak_rss_mb": null,
+          "stderr_bytes": 0,
+          "stdout_bytes": 32768,
+          "stderr_truncated": false,
+          "stdout_truncated": true,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "CHILD_PROCESS",
+        "expected_status": "succeeded",
+        "status": "succeeded",
+        "score": 100,
+        "failure_reason": null,
+        "execution_outcome": "SUCCESS",
+        "execution": {
+          "status": "succeeded",
+          "wall_ms": 1695.235,
+          "evidence": {
+            "pgid": null,
+            "stderr_preview": "",
+            "stdout_preview": "child_spawned parent=41036\r\n"
+          },
+          "root_pid": 4776,
+          "workload": "CHILD_PROCESS",
+          "exit_code": 0,
+          "ownership": "windows_job_object_kill_on_close",
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-child_process-j2cb9wbe",
+          "cleanup_ms": 1976.676,
+          "startup_ms": 243.473,
+          "peak_rss_mb": null,
+          "stderr_bytes": 0,
+          "stdout_bytes": 28,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 4,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "FAILURE",
+        "expected_status": "failed",
+        "status": "failed",
+        "score": null,
+        "failure_reason": "execution_nonzero_exit",
+        "execution_outcome": "NONZERO_EXIT",
+        "execution": {
+          "status": "failed",
+          "wall_ms": 1526.05,
+          "evidence": {
+            "pgid": null,
+            "stderr_preview": "failure_expected\r\n",
+            "stdout_preview": ""
+          },
+          "root_pid": 6864,
+          "workload": "FAILURE",
+          "exit_code": 7,
+          "ownership": "windows_job_object_kill_on_close",
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-failure-iizk30jb",
+          "cleanup_ms": 2032.434,
+          "startup_ms": 281.017,
+          "peak_rss_mb": null,
+          "stderr_bytes": 18,
+          "stdout_bytes": 0,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "MANY_FILES",
+        "expected_status": "succeeded",
+        "status": "succeeded",
+        "score": 100,
+        "failure_reason": null,
+        "execution_outcome": "SUCCESS",
+        "execution": {
+          "status": "succeeded",
+          "wall_ms": 1621.325,
+          "evidence": {
+            "pgid": null,
+            "stderr_preview": "",
+            "stdout_preview": "many_files_ok n=50 dir=C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-many_files-a9vziiba\\many\r\n"
+          },
+          "root_pid": 27592,
+          "workload": "MANY_FILES",
+          "exit_code": 0,
+          "ownership": "windows_job_object_kill_on_close",
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-many_files-a9vziiba",
+          "cleanup_ms": 2440.85,
+          "startup_ms": 292.324,
+          "peak_rss_mb": null,
+          "stderr_bytes": 0,
+          "stdout_bytes": 93,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      }
+    ],
+    "all_ok": true,
+    "leaked_pids_total": 0
+  },
+  "interactive": [
+    {
+      "label": "A_none",
+      "exec_concurrency": 0,
+      "interactive": {
+        "attempted": 60,
+        "offered_requests_per_second": 15.0,
+        "elapsed_seconds": 9.677,
+        "achieved_requests_per_second": 6.2,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 45,
+          "201": 15
+        },
+        "client_latency_ms": {
+          "mean_ms": 1934.09,
+          "p50_ms": 1612.16,
+          "p95_ms": 3892.0,
+          "p99_ms": 5082.21,
+          "max_ms": 5082.21
+        },
+        "server_total_ms": {
+          "mean_ms": 78.13,
+          "p50_ms": 41.62,
+          "p95_ms": 188.92,
+          "p99_ms": 413.69,
+          "max_ms": 413.69
+        },
+        "pool_wait_ms": {
+          "mean_ms": 6.15,
+          "p50_ms": 4.37,
+          "p95_ms": 16.04,
+          "p99_ms": 30.97,
+          "max_ms": 30.97
+        },
+        "sql_ms": {
+          "mean_ms": 16.28,
+          "p50_ms": 10.58,
+          "p95_ms": 47.44,
+          "p99_ms": 76.58,
+          "max_ms": 76.58
+        },
+        "non_db_ms": {
+          "mean_ms": 55.71,
+          "p50_ms": 25.89,
+          "p95_ms": 171.23,
+          "p99_ms": 306.15,
+          "max_ms": 306.15
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 1427.94,
+              "p50_ms": 1548.56,
+              "p95_ms": 2675.82,
+              "p99_ms": 2675.82,
+              "max_ms": 2675.82
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 54.73,
+              "p50_ms": 42.4,
+              "p95_ms": 123.47,
+              "p99_ms": 123.47,
+              "max_ms": 123.47
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.25,
+              "p50_ms": 5.4,
+              "p95_ms": 14.62,
+              "p99_ms": 14.62,
+              "max_ms": 14.62
+            },
+            "sql_ms": {
+              "mean_ms": 17.43,
+              "p50_ms": 10.58,
+              "p95_ms": 50.45,
+              "p99_ms": 50.45,
+              "max_ms": 50.45
+            },
+            "non_db_ms": {
+              "mean_ms": 31.05,
+              "p50_ms": 25.32,
+              "p95_ms": 67.59,
+              "p99_ms": 67.59,
+              "max_ms": 67.59
+            },
+            "identity_ms": {
+              "mean_ms": 6.41,
+              "p50_ms": 5.62,
+              "p95_ms": 17.2,
+              "p99_ms": 17.2,
+              "max_ms": 17.2
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 2241.77,
+              "p50_ms": 2292.09,
+              "p95_ms": 5082.21,
+              "p99_ms": 5082.21,
+              "max_ms": 5082.21
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 49.39,
+              "p50_ms": 30.04,
+              "p95_ms": 156.1,
+              "p99_ms": 156.1,
+              "max_ms": 156.1
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.27,
+              "p50_ms": 4.74,
+              "p95_ms": 18.46,
+              "p99_ms": 18.46,
+              "max_ms": 18.46
+            },
+            "sql_ms": {
+              "mean_ms": 11.57,
+              "p50_ms": 6.91,
+              "p95_ms": 40.34,
+              "p99_ms": 40.34,
+              "max_ms": 40.34
+            },
+            "non_db_ms": {
+              "mean_ms": 31.55,
+              "p50_ms": 19.35,
+              "p95_ms": 97.63,
+              "p99_ms": 97.63,
+              "max_ms": 97.63
+            },
+            "identity_ms": {
+              "mean_ms": 8.89,
+              "p50_ms": 5.0,
+              "p95_ms": 51.09,
+              "p99_ms": 51.09,
+              "max_ms": 51.09
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 1995.68,
+              "p50_ms": 1617.29,
+              "p95_ms": 3901.01,
+              "p99_ms": 3901.01,
+              "max_ms": 3901.01
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 38.37,
+              "p50_ms": 32.4,
+              "p95_ms": 99.71,
+              "p99_ms": 99.71,
+              "max_ms": 99.71
+            },
+            "pool_wait_ms": {
+              "mean_ms": 5.46,
+              "p50_ms": 3.93,
+              "p95_ms": 16.04,
+              "p99_ms": 16.04,
+              "max_ms": 16.04
+            },
+            "sql_ms": {
+              "mean_ms": 9.78,
+              "p50_ms": 7.14,
+              "p95_ms": 31.79,
+              "p99_ms": 31.79,
+              "max_ms": 31.79
+            },
+            "non_db_ms": {
+              "mean_ms": 23.13,
+              "p50_ms": 19.42,
+              "p95_ms": 51.88,
+              "p99_ms": 51.88,
+              "max_ms": 51.88
+            },
+            "identity_ms": {
+              "mean_ms": 7.06,
+              "p50_ms": 4.95,
+              "p95_ms": 20.2,
+              "p99_ms": 20.2,
+              "max_ms": 20.2
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 2070.98,
+              "p50_ms": 1630.67,
+              "p95_ms": 3948.05,
+              "p99_ms": 3948.05,
+              "max_ms": 3948.05
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 170.05,
+              "p50_ms": 156.98,
+              "p95_ms": 413.69,
+              "p99_ms": 413.69,
+              "max_ms": 413.69
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.64,
+              "p50_ms": 4.88,
+              "p95_ms": 30.97,
+              "p99_ms": 30.97,
+              "max_ms": 30.97
+            },
+            "sql_ms": {
+              "mean_ms": 26.32,
+              "p50_ms": 14.64,
+              "p95_ms": 76.58,
+              "p99_ms": 76.58,
+              "max_ms": 76.58
+            },
+            "non_db_ms": {
+              "mean_ms": 137.09,
+              "p50_ms": 133.85,
+              "p95_ms": 306.15,
+              "p99_ms": 306.15,
+              "max_ms": 306.15
+            },
+            "identity_ms": {
+              "mean_ms": 9.2,
+              "p50_ms": 5.34,
+              "p95_ms": 52.64,
+              "p99_ms": 52.64,
+              "max_ms": 52.64
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 63.7,
+          "rss_mb": 87.62
+        },
+        "server_process": {
+          "pid": 20888,
+          "cpu_percent": 22.9,
+          "rss_mb": 84.71
+        },
+        "http_timeout_seconds": 5.0,
+        "load_generator_note": "sei interactive vs execution"
+      },
+      "client_p95_ms": 3892.0,
+      "achieved_rps": 6.2,
+      "evaluations": []
+    },
+    {
+      "label": "B_one",
+      "exec_concurrency": 1,
+      "interactive": {
+        "attempted": 60,
+        "offered_requests_per_second": 15.0,
+        "elapsed_seconds": 10.493,
+        "achieved_requests_per_second": 5.718,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 45,
+          "201": 15
+        },
+        "client_latency_ms": {
+          "mean_ms": 2036.65,
+          "p50_ms": 1884.72,
+          "p95_ms": 4589.22,
+          "p99_ms": 6908.36,
+          "max_ms": 6908.36
+        },
+        "server_total_ms": {
+          "mean_ms": 72.8,
+          "p50_ms": 49.55,
+          "p95_ms": 193.79,
+          "p99_ms": 238.32,
+          "max_ms": 238.32
+        },
+        "pool_wait_ms": {
+          "mean_ms": 6.04,
+          "p50_ms": 4.51,
+          "p95_ms": 13.69,
+          "p99_ms": 20.77,
+          "max_ms": 20.77
+        },
+        "sql_ms": {
+          "mean_ms": 15.18,
+          "p50_ms": 11.49,
+          "p95_ms": 29.21,
+          "p99_ms": 50.27,
+          "max_ms": 50.27
+        },
+        "non_db_ms": {
+          "mean_ms": 51.59,
+          "p50_ms": 28.72,
+          "p95_ms": 165.88,
+          "p99_ms": 198.93,
+          "max_ms": 198.93
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 1185.1,
+              "p50_ms": 970.26,
+              "p95_ms": 2776.08,
+              "p99_ms": 2776.08,
+              "max_ms": 2776.08
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 53.14,
+              "p50_ms": 49.55,
+              "p95_ms": 100.77,
+              "p99_ms": 100.77,
+              "max_ms": 100.77
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.59,
+              "p50_ms": 5.72,
+              "p95_ms": 13.69,
+              "p99_ms": 13.69,
+              "max_ms": 13.69
+            },
+            "sql_ms": {
+              "mean_ms": 13.63,
+              "p50_ms": 10.96,
+              "p95_ms": 28.3,
+              "p99_ms": 28.3,
+              "max_ms": 28.3
+            },
+            "non_db_ms": {
+              "mean_ms": 32.92,
+              "p50_ms": 29.13,
+              "p95_ms": 70.1,
+              "p99_ms": 70.1,
+              "max_ms": 70.1
+            },
+            "identity_ms": {
+              "mean_ms": 6.67,
+              "p50_ms": 5.79,
+              "p95_ms": 11.03,
+              "p99_ms": 11.03,
+              "max_ms": 11.03
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 2215.54,
+              "p50_ms": 2203.74,
+              "p95_ms": 5079.12,
+              "p99_ms": 5079.12,
+              "max_ms": 5079.12
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 41.56,
+              "p50_ms": 30.11,
+              "p95_ms": 111.21,
+              "p99_ms": 111.21,
+              "max_ms": 111.21
+            },
+            "pool_wait_ms": {
+              "mean_ms": 5.31,
+              "p50_ms": 4.18,
+              "p95_ms": 13.69,
+              "p99_ms": 13.69,
+              "max_ms": 13.69
+            },
+            "sql_ms": {
+              "mean_ms": 12.08,
+              "p50_ms": 6.51,
+              "p95_ms": 50.27,
+              "p99_ms": 50.27,
+              "max_ms": 50.27
+            },
+            "non_db_ms": {
+              "mean_ms": 24.17,
+              "p50_ms": 19.63,
+              "p95_ms": 53.58,
+              "p99_ms": 53.58,
+              "max_ms": 53.58
+            },
+            "identity_ms": {
+              "mean_ms": 7.82,
+              "p50_ms": 5.1,
+              "p95_ms": 19.14,
+              "p99_ms": 19.14,
+              "max_ms": 19.14
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 2400.97,
+              "p50_ms": 2245.52,
+              "p95_ms": 6908.36,
+              "p99_ms": 6908.36,
+              "max_ms": 6908.36
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 43.52,
+              "p50_ms": 36.81,
+              "p95_ms": 82.78,
+              "p99_ms": 82.78,
+              "max_ms": 82.78
+            },
+            "pool_wait_ms": {
+              "mean_ms": 5.77,
+              "p50_ms": 4.47,
+              "p95_ms": 15.45,
+              "p99_ms": 15.45,
+              "max_ms": 15.45
+            },
+            "sql_ms": {
+              "mean_ms": 11.7,
+              "p50_ms": 8.68,
+              "p95_ms": 37.23,
+              "p99_ms": 37.23,
+              "max_ms": 37.23
+            },
+            "non_db_ms": {
+              "mean_ms": 26.05,
+              "p50_ms": 23.67,
+              "p95_ms": 44.49,
+              "p99_ms": 44.49,
+              "max_ms": 44.49
+            },
+            "identity_ms": {
+              "mean_ms": 7.93,
+              "p50_ms": 4.65,
+              "p95_ms": 19.98,
+              "p99_ms": 19.98,
+              "max_ms": 19.98
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 2344.98,
+              "p50_ms": 2331.91,
+              "p95_ms": 5204.23,
+              "p99_ms": 5204.23,
+              "max_ms": 5204.23
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 152.98,
+              "p50_ms": 160.82,
+              "p95_ms": 238.32,
+              "p99_ms": 238.32,
+              "max_ms": 238.32
+            },
+            "pool_wait_ms": {
+              "mean_ms": 6.47,
+              "p50_ms": 4.51,
+              "p95_ms": 20.77,
+              "p99_ms": 20.77,
+              "max_ms": 20.77
+            },
+            "sql_ms": {
+              "mean_ms": 23.31,
+              "p50_ms": 20.37,
+              "p95_ms": 45.33,
+              "p99_ms": 45.33,
+              "max_ms": 45.33
+            },
+            "non_db_ms": {
+              "mean_ms": 123.19,
+              "p50_ms": 125.55,
+              "p95_ms": 198.93,
+              "p99_ms": 198.93,
+              "max_ms": 198.93
+            },
+            "identity_ms": {
+              "mean_ms": 7.07,
+              "p50_ms": 7.14,
+              "p95_ms": 14.06,
+              "p99_ms": 14.06,
+              "max_ms": 14.06
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 62.1,
+          "rss_mb": 87.68
+        },
+        "server_process": {
+          "pid": 20888,
+          "cpu_percent": 19.4,
+          "rss_mb": 84.91
+        },
+        "http_timeout_seconds": 5.0,
+        "load_generator_note": "sei interactive vs execution"
+      },
+      "client_p95_ms": 4589.22,
+      "achieved_rps": 5.718,
+      "evaluations": [
+        {
+          "status": "succeeded",
+          "outcome": "SUCCESS"
+        }
+      ]
+    },
+    {
+      "label": "C_two",
+      "exec_concurrency": 2,
+      "interactive": {
+        "attempted": 60,
+        "offered_requests_per_second": 15.0,
+        "elapsed_seconds": 12.15,
+        "achieved_requests_per_second": 4.938,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 45,
+          "201": 15
+        },
+        "client_latency_ms": {
+          "mean_ms": 909.68,
+          "p50_ms": 72.51,
+          "p95_ms": 4666.61,
+          "p99_ms": 7010.49,
+          "max_ms": 7010.49
+        },
+        "server_total_ms": {
+          "mean_ms": 441.31,
+          "p50_ms": 28.95,
+          "p95_ms": 3127.71,
+          "p99_ms": 5974.87,
+          "max_ms": 5974.87
+        },
+        "pool_wait_ms": {
+          "mean_ms": 374.67,
+          "p50_ms": 2.94,
+          "p95_ms": 3023.33,
+          "p99_ms": 5867.07,
+          "max_ms": 5867.07
+        },
+        "sql_ms": {
+          "mean_ms": 20.22,
+          "p50_ms": 6.65,
+          "p95_ms": 74.38,
+          "p99_ms": 190.58,
+          "max_ms": 190.58
+        },
+        "non_db_ms": {
+          "mean_ms": 46.42,
+          "p50_ms": 19.39,
+          "p95_ms": 173.82,
+          "p99_ms": 391.99,
+          "max_ms": 391.99
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 984.78,
+              "p50_ms": 74.94,
+              "p95_ms": 6356.57,
+              "p99_ms": 6356.57,
+              "max_ms": 6356.57
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 502.21,
+              "p50_ms": 27.74,
+              "p95_ms": 5174.02,
+              "p99_ms": 5174.02,
+              "max_ms": 5174.02
+            },
+            "pool_wait_ms": {
+              "mean_ms": 447.59,
+              "p50_ms": 3.0,
+              "p95_ms": 5027.11,
+              "p99_ms": 5027.11,
+              "max_ms": 5027.11
+            },
+            "sql_ms": {
+              "mean_ms": 17.94,
+              "p50_ms": 6.78,
+              "p95_ms": 74.38,
+              "p99_ms": 74.38,
+              "max_ms": 74.38
+            },
+            "non_db_ms": {
+              "mean_ms": 36.68,
+              "p50_ms": 18.43,
+              "p95_ms": 173.82,
+              "p99_ms": 173.82,
+              "max_ms": 173.82
+            },
+            "identity_ms": {
+              "mean_ms": 5.99,
+              "p50_ms": 3.63,
+              "p95_ms": 21.2,
+              "p99_ms": 21.2,
+              "max_ms": 21.2
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 1167.66,
+              "p50_ms": 65.36,
+              "p95_ms": 7010.49,
+              "p99_ms": 7010.49,
+              "max_ms": 7010.49
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 668.57,
+              "p50_ms": 20.42,
+              "p95_ms": 5974.87,
+              "p99_ms": 5974.87,
+              "max_ms": 5974.87
+            },
+            "pool_wait_ms": {
+              "mean_ms": 610.06,
+              "p50_ms": 3.27,
+              "p95_ms": 5867.07,
+              "p99_ms": 5867.07,
+              "max_ms": 5867.07
+            },
+            "sql_ms": {
+              "mean_ms": 21.95,
+              "p50_ms": 4.13,
+              "p95_ms": 159.75,
+              "p99_ms": 159.75,
+              "max_ms": 159.75
+            },
+            "non_db_ms": {
+              "mean_ms": 36.57,
+              "p50_ms": 14.41,
+              "p95_ms": 154.51,
+              "p99_ms": 154.51,
+              "max_ms": 154.51
+            },
+            "identity_ms": {
+              "mean_ms": 10.46,
+              "p50_ms": 3.48,
+              "p95_ms": 67.21,
+              "p99_ms": 67.21,
+              "max_ms": 67.21
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 584.52,
+              "p50_ms": 60.8,
+              "p95_ms": 4253.89,
+              "p99_ms": 4253.89,
+              "max_ms": 4253.89
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 176.31,
+              "p50_ms": 20.62,
+              "p95_ms": 2276.79,
+              "p99_ms": 2276.79,
+              "max_ms": 2276.79
+            },
+            "pool_wait_ms": {
+              "mean_ms": 149.73,
+              "p50_ms": 2.94,
+              "p95_ms": 2197.49,
+              "p99_ms": 2197.49,
+              "max_ms": 2197.49
+            },
+            "sql_ms": {
+              "mean_ms": 7.2,
+              "p50_ms": 4.09,
+              "p95_ms": 28.58,
+              "p99_ms": 28.58,
+              "max_ms": 28.58
+            },
+            "non_db_ms": {
+              "mean_ms": 19.38,
+              "p50_ms": 13.64,
+              "p95_ms": 50.72,
+              "p99_ms": 50.72,
+              "max_ms": 50.72
+            },
+            "identity_ms": {
+              "mean_ms": 4.89,
+              "p50_ms": 3.3,
+              "p95_ms": 16.09,
+              "p99_ms": 16.09,
+              "max_ms": 16.09
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 901.77,
+              "p50_ms": 81.99,
+              "p95_ms": 4968.25,
+              "p99_ms": 4968.25,
+              "max_ms": 4968.25
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 418.16,
+              "p50_ms": 39.44,
+              "p95_ms": 4285.2,
+              "p99_ms": 4285.2,
+              "max_ms": 4285.2
+            },
+            "pool_wait_ms": {
+              "mean_ms": 291.3,
+              "p50_ms": 2.44,
+              "p95_ms": 4073.24,
+              "p99_ms": 4073.24,
+              "max_ms": 4073.24
+            },
+            "sql_ms": {
+              "mean_ms": 33.79,
+              "p50_ms": 10.29,
+              "p95_ms": 190.58,
+              "p99_ms": 190.58,
+              "max_ms": 190.58
+            },
+            "non_db_ms": {
+              "mean_ms": 93.07,
+              "p50_ms": 24.95,
+              "p95_ms": 391.99,
+              "p99_ms": 391.99,
+              "max_ms": 391.99
+            },
+            "identity_ms": {
+              "mean_ms": 10.41,
+              "p50_ms": 3.48,
+              "p95_ms": 66.25,
+              "p99_ms": 66.25,
+              "max_ms": 66.25
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 20.9,
+          "rss_mb": 88.14
+        },
+        "server_process": {
+          "pid": 20888,
+          "cpu_percent": 17.7,
+          "rss_mb": 86.62
+        },
+        "http_timeout_seconds": 5.0,
+        "load_generator_note": "sei interactive vs execution"
+      },
+      "client_p95_ms": 4666.61,
+      "achieved_rps": 4.938,
+      "evaluations": [
+        {
+          "status": "succeeded",
+          "outcome": "SUCCESS"
+        },
+        {
+          "status": "succeeded",
+          "outcome": "SUCCESS"
+        },
+        {
+          "status": "failed",
+          "outcome": "TIMEOUT"
+        }
+      ]
+    }
+  ],
+  "decision": {
+    "gate": "KEEP EXECUTION INTEGRATION",
+    "rationale": "Trusted synthetic_execution composes with durable QUEUED/RUNNING/SUCCEEDED|FAILED, process-tree cleanup held under orchestration, and participant code remains forbidden. Network/cgroup still NOT ENFORCED.",
+    "participant_code_allowed": false,
+    "public_sandbox_ready": false,
+    "budget_labels": {
+      "wall_timeout": "ENFORCED",
+      "stdout_cap": "ENFORCED",
+      "stderr_cap": "ENFORCED",
+      "process_tree_cleanup": "ENFORCED",
+      "workspace_cleanup": "ENFORCED",
+      "scrubbed_env": "ENFORCED",
+      "peak_rss": "OBSERVED",
+      "process_count": "OBSERVED",
+      "cpu_accounting": "OBSERVED",
+      "network_deny": "NOT ENFORCED",
+      "cgroup_cpu_quota": "NOT ENFORCED",
+      "cgroup_memory": "NOT ENFORCED",
+      "filesystem_jail": "NOT ENFORCED"
+    },
+    "interactive_cells": 3
+  }
+}

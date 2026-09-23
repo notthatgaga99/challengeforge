@@ -206,13 +206,12 @@ on this host. Participant uploads remain forbidden. Network/cgroup still
 
 ---
 
-## 17. Limitations
+## Limitations
 
 - Windows host; no cgroup/netns claims  
-- Orphan children after hard worker kill not fully supervisor-owned  
 - Interactive coupling measured only under laptop noise  
 - No participant uploads  
-
+- Worker-death ownership addressed separately (`docs/execution-ownership-recovery.md`)
 ## 18. Reconsideration
 
 - Process leaks under orchestration → STOP / isolate further  

@@ -1,67 +1,62 @@
-# ADR 0008: Execution isolation + evaluation integration (synthetic)
+# ADR 0008: Execution isolation, integration, and ownership
 
 ## Status
 
 Accepted:
 
-1. **KEEP SUBPROCESS** for the synthetic executor prototype  
-   (`docs/execution-isolation-results.json`)
-2. **KEEP EXECUTION INTEGRATION** for opt-in durable orchestration  
-   (`docs/execution-evaluation-integration-results.json`)
+1. **KEEP SUBPROCESS** — synthetic executor prototype  
+2. **KEEP EXECUTION INTEGRATION** — opt-in durable `synthetic_execution`  
+3. **KEEP + OS OWNERSHIP** — Windows Job Object `KILL_ON_JOB_CLOSE` + recovery
+   containment before requeue  
 
-Participant code execution remains **forbidden**. Hard network/cgroup isolation
-is **not** claimed. Product default evaluation mode remains `legacy`.
+Participant code remains **forbidden**. Network/cgroup/FS jail **not** claimed.
+Default mode remains `legacy`.
 
 ## Context
 
-ChallengeForge can admit and bound expensive synthetic evaluation work. The
-process executor proved timeout/tree/output/workspace containment in isolation.
-The next question was whether the durable evaluation pipeline can orchestrate
-that executor without crossing the trust boundary.
+After integrating ProcessExecutor with the evaluation queue, worker death could
+leave Postgres `RUNNING` while an OS execution survived — enabling duplicate
+execution on stale requeue.
 
 ## Decision
 
-1. Keep subprocess + tree cleanup as the execution plane for trusted workloads.
-2. Add opt-in `evaluation_mode=synthetic_execution` (migration `0010`).
-3. Separate **execution evidence** (`ProcessExecutor`) from **evaluation
-   disposition** (worker → SUCCEEDED/FAILED/requeue).
-4. Allowlist workloads via `metadata.execution_workload` only — never arbitrary
-   source.
-5. Label budgets ENFORCED / OBSERVED / NOT ENFORCED explicitly.
-6. Do **not** wire participant uploads; do **not** add Docker/K8s/Redis/LLM.
+1. Assign each synthetic execution to a Windows Job Object with
+   `JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE` when available.
+2. Persist `execution_attempt` metadata (id, root_pid, workspace, ownership)
+   at process start (`begin_execution_attempt`).
+3. Change `recover_stale_running` to **contain** live attempts before requeue;
+   if containment fails → fail with `orphan_suspected` (no second start).
+4. Do not add a supervisor process or external executor service yet.
+5. Do not add a new durable status enum; use metadata + FAILED reason.
 
 ## Alternatives
 
-| Option | Why deferred / rejected for now |
+| Option | Why deferred |
 |---|---|
-| In-process | No isolation for hostile code |
-| Containers first | Ops/startup cost before proving subprocess orchestration |
-| MicroVM / remote executor | Unjustified without multi-tenant hostile corpus |
-| New durable execution statuses | Unnecessary — RUNNING covers execute |
-| Redis/K8s/LLM | Explicit non-goals |
+| Worker-only ownership | Orphans on hard kill (measured) |
+| Local supervisor | Extra failure domain without evidence yet |
+| Containers / remote service | Ownership ≠ sandbox; unjustified for this gap |
+| Blind requeue | Creates duplicate execution risk |
 
 ## Evidence
 
-- Design: `docs/execution-isolation.md`, `docs/execution-evaluation-integration.md`
-- Tests: `tests/test_execution_isolation.py`, `tests/test_synthetic_execution.py`
-- Harnesses: `scripts/execution_isolation_experiment.py`,
-  `scripts/execution_evaluation_integration_experiment.py`
+- `docs/execution-isolation.md`  
+- `docs/execution-evaluation-integration.md`  
+- `docs/execution-ownership-recovery.md`  
+- `tests/test_execution_ownership.py`  
+- `scripts/execution_ownership_experiment.py`
 
 ## Trade-offs
 
-**+** Durable orchestration; clear outcome taxonomy; opt-in; no fashion infra  
-**−** Soft FS containment; host network not denied; worker-death orphan reaping
-is OS-dependent; interactive coupling still laptop-noisy
+**+** Native OS lifecycle coupling; duplicate prevention; no new infra  
+**−** Windows-centric hard guarantee; POSIX relies more on recovery kill;
+quarantine may fail evaluations that could have been retried
 
 ## Reconsideration
 
-Move to containers / stronger isolation if:
-
-- process leaks under orchestration, or
-- mount/network deny is required, or
-- public multi-tenant hostile code is in scope.
+Supervisor or remote executor if Job Objects unavailable / ineffective in the
+deployment target, or if orphan_suspected becomes common.
 
 ## Related
 
-ADR 0003 (async evaluation boundary), ADR 0005 (resource-aware runtime),
-evaluation pipeline docs.
+ADR 0003, ADR 0005, evaluation pipeline docs.

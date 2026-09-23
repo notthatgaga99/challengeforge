@@ -11,10 +11,15 @@ import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, IO
+from typing import Any, Callable, IO
 
 import psutil
 
+from challengeforge.execution.job_object import (
+    create_kill_on_close_job,
+    job_objects_available,
+    ownership_mechanism,
+)
 from challengeforge.execution.limits import ExecutionLimits
 
 
@@ -35,6 +40,8 @@ class ExecutionResult:
     leaked_pids_after_cleanup: list[int] = field(default_factory=list)
     workspace: str | None = None
     workspace_cleaned: bool = False
+    root_pid: int | None = None
+    ownership: str = "pid_tracking_only"
     evidence: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -56,6 +63,8 @@ class ExecutionResult:
             "leaked_pids_after_cleanup": self.leaked_pids_after_cleanup,
             "workspace": self.workspace,
             "workspace_cleaned": self.workspace_cleaned,
+            "root_pid": self.root_pid,
+            "ownership": self.ownership,
             "evidence": self.evidence,
         }
 
@@ -115,7 +124,13 @@ class ProcessExecutor:
         self.limits = limits or ExecutionLimits()
         self.workspace_root = workspace_root
 
-    def run(self, workload: str) -> ExecutionResult:
+    def run(
+        self,
+        workload: str,
+        *,
+        use_os_ownership: bool = True,
+        on_started: Callable[[dict[str, Any]], None] | None = None,
+    ) -> ExecutionResult:
         limits = self.limits
         t_start = time.perf_counter()
         work_dir = Path(
@@ -139,10 +154,24 @@ class ProcessExecutor:
         else:
             kwargs["start_new_session"] = True
 
+        job = None
+        ownership = "pid_tracking_only"
+        if use_os_ownership and job_objects_available():
+            try:
+                job = create_kill_on_close_job(name=None)
+                ownership = ownership_mechanism()
+            except OSError:
+                job = None
+                ownership = "pid_tracking_only"
+        elif use_os_ownership:
+            ownership = ownership_mechanism()
+
         startup_begin = time.perf_counter()
         try:
             proc = subprocess.Popen(cmd, **kwargs)
         except Exception as exc:
+            if job is not None:
+                job.close()
             self._cleanup_workspace(work_dir, keep=False)
             return ExecutionResult(
                 workload=workload,
@@ -159,9 +188,45 @@ class ProcessExecutor:
                 process_count_peak=0,
                 workspace=str(work_dir),
                 workspace_cleaned=True,
+                ownership=ownership,
                 evidence={"error": str(exc)},
             )
         startup_ms = (time.perf_counter() - startup_begin) * 1000.0
+
+        if job is not None:
+            try:
+                job.assign(proc.pid)
+            except OSError as exc:
+                # Fall back to pid tracking; continue the run.
+                ownership = "pid_tracking_only"
+                job.close()
+                job = None
+                # stash assign error in evidence later
+                assign_error = str(exc)
+            else:
+                assign_error = None
+        else:
+            assign_error = None
+
+        pgid = None
+        if os.name != "nt":
+            try:
+                pgid = os.getpgid(proc.pid)
+            except OSError:
+                pgid = None
+
+        if on_started is not None:
+            try:
+                on_started(
+                    {
+                        "root_pid": proc.pid,
+                        "pgid": pgid,
+                        "workspace": str(work_dir),
+                        "ownership": ownership,
+                    }
+                )
+            except Exception:
+                pass
 
         assert proc.stdout is not None and proc.stderr is not None
         out_cap = _StreamCap(proc.stdout, limits.max_stdout_bytes)
@@ -175,6 +240,7 @@ class ProcessExecutor:
         status = "succeeded"
         deadline = time.perf_counter() + max(0.05, limits.wall_timeout_seconds)
         last_rss_poll = 0.0
+        root_pid = proc.pid
 
         try:
             while True:
@@ -217,6 +283,12 @@ class ProcessExecutor:
             wall_ms = (time.perf_counter() - t_start) * 1000.0
             c0 = time.perf_counter()
             leaked = self._terminate_tree(proc, parent, limits.grace_terminate_seconds)
+            # Closing the job handle also kills remaining members (KillOnJobClose).
+            if job is not None:
+                try:
+                    job.close()
+                except Exception:
+                    pass
             out_cap.join(timeout=1.0)
             err_cap.join(timeout=1.0)
             for stream in (proc.stdout, proc.stderr):
@@ -225,7 +297,6 @@ class ProcessExecutor:
                         stream.close()
                     except Exception:
                         pass
-            # Give the OS a beat to release cwd handles before rmtree (esp. Windows).
             time.sleep(0.15)
             if peak_rss is None:
                 peak_rss = self._tree_rss_mb(parent)
@@ -238,6 +309,13 @@ class ProcessExecutor:
 
         out = bytes(out_cap.buf)
         err = bytes(err_cap.buf)
+        evidence = {
+            "stdout_preview": out[:512].decode("utf-8", errors="replace"),
+            "stderr_preview": err[:512].decode("utf-8", errors="replace"),
+            "pgid": pgid,
+        }
+        if assign_error:
+            evidence["job_assign_error"] = assign_error
         return ExecutionResult(
             workload=workload,
             status=status,
@@ -254,10 +332,9 @@ class ProcessExecutor:
             leaked_pids_after_cleanup=leaked,
             workspace=str(work_dir),
             workspace_cleaned=cleaned,
-            evidence={
-                "stdout_preview": out[:512].decode("utf-8", errors="replace"),
-                "stderr_preview": err[:512].decode("utf-8", errors="replace"),
-            },
+            root_pid=root_pid,
+            ownership=ownership,
+            evidence=evidence,
         )
 
     def cleanup_only(self, workspace: Path) -> bool:

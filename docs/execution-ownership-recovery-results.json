@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T06:20:59.280230+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 747.8
+    },
+    "claim": "Execution ownership across worker death \u2014 not public sandbox"
+  },
+  "matrix": {
+    "mechanism": "windows_job_object_kill_on_close",
+    "job_objects_available": true,
+    "scenarios": {
+      "with_job": {
+        "root_pid": 37088,
+        "orphaned_after_worker_kill": false,
+        "detection_or_death_s": 9.406,
+        "orphan_observed_s": 9.356,
+        "alive_after_wait": false,
+        "containment": null,
+        "use_job": true
+      },
+      "without_job": {
+        "root_pid": 26236,
+        "orphaned_after_worker_kill": true,
+        "detection_or_death_s": null,
+        "orphan_observed_s": 9.263,
+        "alive_after_wait": true,
+        "containment": {
+          "execution_attempt_id": "7d9d20fc-a7dd-4910-a539-6a1ace73c02e",
+          "root_pid": 26236,
+          "was_alive": true,
+          "killed_pids": [
+            26236,
+            38668
+          ],
+          "still_alive": [],
+          "workspace_exists": false,
+          "contained": true,
+          "taskkill_error": "Command '['taskkill', '/F', '/T', '/PID', '26236']' timed out after 1.5 seconds"
+        },
+        "use_job": false
+      }
+    }
+  },
+  "capacity_microbench": [
+    {
+      "use_os_ownership": false,
+      "n": 3,
+      "mean_wall_ms": 980.73,
+      "batch_s": 8.558
+    },
+    {
+      "use_os_ownership": true,
+      "n": 3,
+      "mean_wall_ms": 860.19,
+      "batch_s": 8.252
+    }
+  ],
+  "decision": {
+    "gate": "KEEP + OS OWNERSHIP",
+    "rationale": "Without Job Object, worker death can orphan an execution; with KILL_ON_JOB_CLOSE the execution dies with the worker. Recovery also contains by stored PID before requeue.",
+    "participant_code_allowed": false,
+    "public_sandbox_ready": false,
+    "mechanism": "windows_job_object_kill_on_close"
+  },
+  "interactive_regression": {
+    "source": "docs/execution-ownership-interactive-regression.json",
+    "cells": [
+      {
+        "label": "A_none",
+        "client_p95_ms": 3892.0,
+        "achieved_rps": 6.2
+      },
+      {
+        "label": "B_one",
+        "client_p95_ms": 4589.22,
+        "achieved_rps": 5.718
+      },
+      {
+        "label": "C_two",
+        "client_p95_ms": 4666.61,
+        "achieved_rps": 4.938
+      }
+    ],
+    "note": "A_none already degraded; host-saturated run; ownership not implicated as new API bottleneck"
+  }
+}
