@@ -15,6 +15,7 @@ from typing import Any, Callable, IO
 
 import psutil
 
+from challengeforge.execution.execution_environment import build_execution_env
 from challengeforge.execution.job_object import (
     JobResourceLimits,
     create_job,
@@ -140,9 +141,13 @@ class ProcessExecutor:
         *,
         limits: ExecutionLimits | None = None,
         workspace_root: Path | None = None,
+        extra_env: dict[str, str] | None = None,
+        include_platform_pythonpath: bool = True,
     ) -> None:
         self.limits = limits or ExecutionLimits()
         self.workspace_root = workspace_root
+        self.extra_env = dict(extra_env or {})
+        self.include_platform_pythonpath = include_platform_pythonpath
 
     def run(
         self,
@@ -398,7 +403,7 @@ class ProcessExecutor:
                 limit_reason = limit_reason or "workload_signal"
 
         evidence = {
-            "stdout_preview": out[:512].decode("utf-8", errors="replace"),
+            "stdout_preview": out[:2048].decode("utf-8", errors="replace"),
             "stderr_preview": err[:512].decode("utf-8", errors="replace"),
             "pgid": pgid,
             "job_applied": job_applied,
@@ -446,16 +451,11 @@ class ProcessExecutor:
         return self._cleanup_workspace(workspace, keep=False)
 
     def _scrubbed_env(self, work_dir: Path) -> dict[str, str]:
-        keep = ("PATH", "SYSTEMROOT", "WINDIR", "PATHEXT", "COMSPEC", "LANG", "LC_ALL")
-        env = {k: os.environ[k] for k in keep if k in os.environ}
-        src = str(Path(__file__).resolve().parents[2])
-        env["PYTHONPATH"] = src
-        env["CF_WORKSPACE"] = str(work_dir)
-        env["TMPDIR"] = str(work_dir)
-        env["TEMP"] = str(work_dir)
-        env["TMP"] = str(work_dir)
-        env["PYTHONUNBUFFERED"] = "1"
-        return env
+        return build_execution_env(
+            work_dir,
+            extra=self.extra_env,
+            include_platform_pythonpath=self.include_platform_pythonpath,
+        )
 
     def _tree_rss_mb(self, parent: psutil.Process) -> float | None:
         try:

@@ -158,6 +158,8 @@ Worker-death ownership uses Windows Job Objects where available
 (`docs/execution-ownership-recovery.md`). Selective resource budgets
 (process/memory/CPU/workspace) are documented in
 `docs/execution-resource-governance.md` — ownership ≠ governance ≠ sandbox.
+Hostile participant code remains out of scope until a stronger isolation
+boundary exists (`docs/execution-isolation-boundary.md`).
 
 ## 8. Important failure modes
 

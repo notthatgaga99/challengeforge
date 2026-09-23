@@ -1,0 +1,104 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T07:19:09.283115+00:00",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.11.0",
+    "claim": "Boundary probes \u2014 not a sandbox proof",
+    "completed_at": "2026-09-23T07:19:14.402294+00:00"
+  },
+  "probe": {
+    "executor_status": "succeeded",
+    "leaked_pids": [],
+    "workspace_cleaned": true,
+    "child_env_contract": {
+      "key_count": 12,
+      "keys": [
+        "CF_FORBIDDEN_PROBE",
+        "CF_WORKSPACE",
+        "COMSPEC",
+        "PATH",
+        "PATHEXT",
+        "PYTHONPATH",
+        "PYTHONUNBUFFERED",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "TMPDIR",
+        "WINDIR"
+      ],
+      "has_pythonpath": true,
+      "forbidden_present": [],
+      "workspace": "C:\\Users\\emxxgag\\OneDrive - Ericsson\\Documents\\CodeBase\\challengeforge\\.cf_gov_ws\\boundary\\dummy"
+    },
+    "child_env_forbidden": [],
+    "probe": {
+      "cwd": "C:\\Users\\emxxgag\\OneDrive - Ericsson\\Documents\\CodeBase\\challengeforge\\.cf_gov_ws\\boundary\\cf-exec-boundary_probe-95u0jfki",
+      "pid": 40264,
+      "env_key_count": 12,
+      "has_database_url": false,
+      "has_aws_secret": false,
+      "has_pythonpath": true,
+      "pythonpath_set": true,
+      "workspace": "C:\\Users\\emxxgag\\OneDrive - Ericsson\\Documents\\CodeBase\\challengeforge\\.cf_gov_ws\\boundary\\cf-exec-boundary_probe-95u0jfki",
+      "attempt_id_set": false,
+      "forbidden_probe_configured": true,
+      "forbidden_readable": true,
+      "forbidden_error": null,
+      "forbidden_len": 24,
+      "parent_listable": true,
+      "parent_entry_count": 1,
+      "loopback_socket_attempted": true,
+      "loopback_reachable_stack": false,
+      "loopback_error": "TimeoutError",
+      "dns_resolve_attempted": true,
+      "dns_resolved": true,
+      "network_stack_usable": true,
+      "can_import_challengeforge": true
+    },
+    "gaps_observed": {
+      "secrets_not_in_child_env": true,
+      "forbidden_file_readable": true,
+      "parent_dir_listable": true,
+      "loopback_network_stack_usable": false,
+      "dns_resolvable": true,
+      "network_stack_usable": true,
+      "platform_importable_via_pythonpath": true
+    }
+  },
+  "decision": {
+    "gate": "Keep subprocess + Job Object for trusted/internal execution only",
+    "portfolio": "A",
+    "hostile_code_prerequisite": "B_container_minimum",
+    "rationale": "Allowlisted env prevents accidental secret inheritance in the tested envelope, but FS/net/host boundaries remain open: forbidden files, parent dirs, loopback/DNS, and platform PYTHONPATH are reachable. Resource governance \u2260 sandbox isolation. Do not enable participant code until a stronger execution boundary (containers on Linux, or stronger) exists.",
+    "participant_code_allowed": false,
+    "public_sandbox_ready": false,
+    "gaps_confirm_hostile_unsafe": true,
+    "observed": {
+      "secrets_not_in_child_env": true,
+      "forbidden_file_readable": true,
+      "parent_dir_listable": true,
+      "loopback_network_stack_usable": false,
+      "dns_resolvable": true,
+      "network_stack_usable": true,
+      "platform_importable_via_pythonpath": true
+    },
+    "forbidden_secret_names_checked": [
+      "ADMIN_DATABASE_URL",
+      "ANTHROPIC_API_KEY",
+      "AWS_ACCESS_KEY_ID",
+      "AWS_SECRET_ACCESS_KEY",
+      "AZURE_CLIENT_SECRET",
+      "CF_API_SECRET",
+      "DATABASE_URL",
+      "EXPERIMENT_DATABASE_URL",
+      "GH_TOKEN",
+      "GITHUB_TOKEN",
+      "GOOGLE_APPLICATION_CREDENTIALS",
+      "OPENAI_API_KEY",
+      "POSTGRES_PASSWORD",
+      "SECRET_KEY",
+      "SSH_AUTH_SOCK",
+      "TEST_DATABASE_URL"
+    ]
+  }
+}

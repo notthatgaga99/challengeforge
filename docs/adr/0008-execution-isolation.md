@@ -1,4 +1,4 @@
-# ADR 0008: Execution isolation, integration, ownership, and resource governance
+# ADR 0008: Execution isolation, integration, ownership, governance, and boundary
 
 ## Status
 
@@ -8,58 +8,60 @@ Accepted:
 2. **KEEP EXECUTION INTEGRATION** — opt-in durable `synthetic_execution`  
 3. **KEEP + OS OWNERSHIP** — Windows Job Object `KILL_ON_JOB_CLOSE` + recovery
    containment before requeue  
-4. **KEEP + SELECTIVE RESOURCE LIMITS** — Job Object process-count / job-memory /
-   CPU user-time / CPU-rate throttle where available; wall/output/workspace
-   app-enforced; network/FS/cgroup **not** claimed  
+4. **KEEP + SELECTIVE RESOURCE LIMITS** — Job Object + executor budgets; network/FS
+   jail **not** claimed  
+5. **BOUNDARY DECISION A** — Keep subprocess + Job Object for
+   **trusted/internal execution only**. Do **not** enable hostile participant
+   code until a stronger boundary exists. **Minimum for hostile code: B
+   (container-based execution)** on Linux; escalate to microVM / dedicated
+   hosts when threat or tenancy demands it.
 
 Participant code remains **forbidden**. Default mode remains `legacy`.
 
 ## Context
 
-Ownership answered who controls the process tree when a worker dies. Resource
-governance asks which host resources an execution may consume and what happens
-when budgets are exceeded — without pretending the platform is a sandbox.
+Ownership and resource governance bound lifecycle and consumption for a trusted
+corpus. They do **not** provide filesystem, network, or host-integrity isolation.
+Boundary probes show the child can still read out-of-workspace files, use
+loopback/DNS, and import platform code via trusted PYTHONPATH.
 
 ## Decision
 
-1. Keep ownership via KillOnJobClose + contain-before-requeue.  
-2. Extend Job Objects with selective limits: `ActiveProcessLimit`,
-   `JobMemoryLimit`, `PerJobUserTimeLimit`, optional CPU rate hard cap.  
-3. Keep wall time, stdout/stderr caps, and workspace byte caps in the executor.  
-4. Classify exceedances as distinct outcomes (`PROCESS_LIMIT`, `MEMORY_LIMIT`,
-   `CPU_LIMIT`, `WORKSPACE_LIMIT`, …) in metadata — no new durable status table.  
-5. Deterministic resource violations are terminal (no retry).  
-6. Do not add containers, supervisors, or an external execution service yet.
+1. Retain the current execution plane for trusted synthetic work only.  
+2. Treat env construction as an **allowlist** (`execution_environment`).  
+3. Document FS/net/host gaps explicitly; do not call Job Objects a sandbox.  
+4. Require container-class isolation (and secret-free execution hosts) before
+   any participant-code path.  
+5. Do not install Docker/Kubernetes/microVMs in this milestone.
 
 ## Alternatives
 
-| Option | Why deferred / partial |
+| Option | Role |
 |---|---|
-| Watchdog + observation only | Insufficient process/memory ceilings on Windows |
-| Full Job Object suite as “sandbox” | Still no net/FS jail; nesting caveats |
-| Containers / remote executor | Stronger isolation ≠ required yet for trusted corpus |
-| Blind requeue on limit | Would duplicate work / amplify resource use |
+| A Subprocess + Job Object | **Current** trusted envelope |
+| B Containers (Linux) | **Minimum** hostile-code boundary |
+| C MicroVM / VM | Stronger kernel separation |
+| D Dedicated execution service | Blast-radius / multi-tenant ops |
+| E Hybrid | Later scale |
 
 ## Evidence
 
-- `docs/execution-isolation.md`  
-- `docs/execution-evaluation-integration.md`  
-- `docs/execution-ownership-recovery.md`  
+- `docs/execution-isolation-boundary.md`  
 - `docs/execution-resource-governance.md`  
-- `tests/test_execution_governance.py`  
-- `scripts/execution_resource_governance_experiment.py`
+- `docs/execution-ownership-recovery.md`  
+- `scripts/execution_isolation_boundary_experiment.py`  
+- `tests/test_execution_isolation_boundary.py`
 
 ## Trade-offs
 
-**+** Honest ENFORCED vs OBSERVED vs NOT ENFORCED matrix; native OS levers; no new infra  
-**−** Windows-centric hard limits; nested-job process-count headroom; workspace poll race;
-CPU rate is throttle not isolation
+**+** Honest threat model; no false sandbox claims; clear upgrade path  
+**−** Participant execution deferred; Windows dev host ≠ Linux prod container semantics
 
 ## Reconsideration
 
-Job Objects unavailable/ineffective · workspace overshoot unacceptable · need
-net/FS deny for any participant code path · orphan/limit races in production.
+Participant code required · multi-tenant shared hosts · need net/FS deny ·
+Job Objects unavailable · kernel-escape threat dominates → C/D.
 
 ## Related
 
-ADR 0003, ADR 0005; ownership and evaluation pipeline docs.
+ADR 0003, ADR 0005; ownership, governance, evaluation pipeline docs.

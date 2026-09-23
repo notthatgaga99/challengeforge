@@ -47,6 +47,7 @@ TRUSTED_CORPUS: dict[str, ExecutionOutcome] = {
     "TIMEOUT": ExecutionOutcome.TIMEOUT,
     "MANY_FILES": ExecutionOutcome.SUCCESS,
     "DISK_HEAVY": ExecutionOutcome.SUCCESS,
+    "BOUNDARY_PROBE": ExecutionOutcome.SUCCESS,
     "FAILURE": ExecutionOutcome.NONZERO_EXIT,
 }
 
@@ -61,6 +62,7 @@ CORPUS_ALIASES: dict[str, str] = {
     "nonzero_exit": "FAILURE",
     "many_files": "MANY_FILES",
     "disk_heavy": "DISK_HEAVY",
+    "boundary_probe": "BOUNDARY_PROBE",
     "memory_heavy": "MEMORY_HEAVY",
     "memory_grow": "MEMORY_GROW",
     "sleep_ok": "SLEEP",

@@ -26,6 +26,7 @@ WORKLOAD_NAMES = (
     "PROCESS_HEAVY",
     "DISK_HEAVY",
     "MEMORY_GROW",
+    "BOUNDARY_PROBE",
 )
 
 
@@ -189,6 +190,84 @@ def _failure() -> int:
     return 7
 
 
+def _boundary_probe() -> int:
+    """Harmless probes of FS / env / network reachability (no exploits)."""
+    import json
+    import socket
+
+    report: dict[str, object] = {
+        "cwd": os.getcwd(),
+        "pid": os.getpid(),
+        "env_key_count": len(os.environ),
+        "has_database_url": "DATABASE_URL" in os.environ,
+        "has_aws_secret": "AWS_SECRET_ACCESS_KEY" in os.environ,
+        "has_pythonpath": "PYTHONPATH" in os.environ,
+        "pythonpath_set": bool(os.environ.get("PYTHONPATH")),
+        "workspace": os.environ.get("CF_WORKSPACE"),
+        "attempt_id_set": bool(os.environ.get("CF_EXECUTION_ATTEMPT_ID")),
+    }
+
+    forbidden = os.environ.get("CF_FORBIDDEN_PROBE")
+    report["forbidden_probe_configured"] = bool(forbidden)
+    report["forbidden_readable"] = False
+    report["forbidden_error"] = None
+    if forbidden:
+        try:
+            with open(forbidden, encoding="utf-8") as fh:
+                data = fh.read(64)
+            report["forbidden_readable"] = True
+            report["forbidden_len"] = len(data)
+        except OSError as exc:
+            report["forbidden_error"] = f"{type(exc).__name__}:{exc.errno}"
+
+    ws = Path(os.environ.get("CF_WORKSPACE") or ".")
+    parent = ws.parent
+    report["parent_listable"] = False
+    try:
+        names = os.listdir(parent)
+        report["parent_listable"] = True
+        report["parent_entry_count"] = len(names)
+    except OSError as exc:
+        report["parent_list_error"] = f"{type(exc).__name__}"
+
+    # Loopback TCP — connection refused still proves the network stack is usable.
+    report["loopback_socket_attempted"] = True
+    report["loopback_reachable_stack"] = False
+    try:
+        with socket.create_connection(("127.0.0.1", 9), timeout=0.5):
+            report["loopback_reachable_stack"] = True
+            report["loopback_connected"] = True
+    except ConnectionRefusedError:
+        report["loopback_reachable_stack"] = True
+        report["loopback_connected"] = False
+    except OSError as exc:
+        report["loopback_error"] = f"{type(exc).__name__}"
+
+    # DNS resolve — proves outbound name resolution exists (no HTTP fetch).
+    report["dns_resolve_attempted"] = True
+    report["dns_resolved"] = False
+    try:
+        socket.getaddrinfo("example.com", 80, type=socket.SOCK_STREAM)
+        report["dns_resolved"] = True
+    except OSError as exc:
+        report["dns_error"] = f"{type(exc).__name__}"
+
+    report["network_stack_usable"] = bool(
+        report["loopback_reachable_stack"] or report["dns_resolved"]
+    )
+    # Platform package import via PYTHONPATH (trusted-path leakage signal).
+    report["can_import_challengeforge"] = False
+    try:
+        import challengeforge  # noqa: F401
+
+        report["can_import_challengeforge"] = True
+    except Exception as exc:  # noqa: BLE001 — probe must never crash hard
+        report["import_error"] = type(exc).__name__
+
+    print("cf_boundary_probe " + json.dumps(report, default=str), flush=True)
+    return 0
+
+
 HANDLERS = {
     "LIGHT": _light,
     "CPU_HEAVY": _cpu_heavy,
@@ -202,6 +281,7 @@ HANDLERS = {
     "MANY_FILES": _many_files,
     "DISK_HEAVY": _disk_heavy,
     "FAILURE": _failure,
+    "BOUNDARY_PROBE": _boundary_probe,
 }
 
 
