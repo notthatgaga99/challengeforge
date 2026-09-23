@@ -174,7 +174,8 @@ class EvaluationRow(Base):
         CheckConstraint("current_stage >= 0", name="ck_evaluations_current_stage"),
         CheckConstraint(
             "evaluation_mode IN ("
-            "'legacy', 'always_expensive', 'fixed_progressive', 'resource_aware_adaptive'"
+            "'legacy', 'always_expensive', 'fixed_progressive', "
+            "'resource_aware_adaptive', 'synthetic_execution'"
             ")",
             name="ck_evaluations_evaluation_mode",
         ),

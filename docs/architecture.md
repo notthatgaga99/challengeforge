@@ -151,7 +151,9 @@ controller signal; pool-wait/in-flight are observed only.
 
 Untrusted **execution isolation** is the next control-plane boundary
 (`docs/execution-isolation.md`, ADR 0008): synthetic process executor only;
-participant code is not executed.
+participant code is not executed. Opt-in `synthetic_execution` evaluation mode
+orchestrates the executor through the durable queue
+(`docs/execution-evaluation-integration.md`) without accepting arbitrary uploads.
 
 ## 8. Important failure modes
 

@@ -373,6 +373,35 @@ class EvaluationRepository:
         row = result.scalar_one_or_none()
         return evaluation_to_domain(row) if row else None
 
+    async def release_for_retry(
+        self,
+        evaluation_id: UUID,
+        *,
+        worker_id: str,
+        result_metadata: dict,
+        failure_reason: str,
+    ) -> Evaluation | None:
+        """Release RUNNING → QUEUED after retryable infrastructure execution failure."""
+        stmt = (
+            update(EvaluationRow)
+            .where(
+                EvaluationRow.id == evaluation_id,
+                EvaluationRow.status == "running",
+                EvaluationRow.worker_id == worker_id,
+            )
+            .values(
+                status="queued",
+                started_at=None,
+                worker_id=None,
+                result_metadata=result_metadata,
+                failure_reason=failure_reason,
+            )
+            .returning(EvaluationRow)
+        )
+        result = await self.session.execute(stmt)
+        row = result.scalar_one_or_none()
+        return evaluation_to_domain(row) if row else None
+
     async def claim_next(
         self,
         *,

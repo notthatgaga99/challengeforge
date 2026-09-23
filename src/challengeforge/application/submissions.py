@@ -224,6 +224,7 @@ class SubmissionService:
                 "always_expensive",
                 "fixed_progressive",
                 "resource_aware_adaptive",
+                "synthetic_execution",
             }:
                 mode = raw_mode
             deadline_at = None

@@ -15,6 +15,8 @@ class EvaluationMode(StrEnum):
     ALWAYS_EXPENSIVE = "always_expensive"
     FIXED_PROGRESSIVE = "fixed_progressive"
     RESOURCE_AWARE_ADAPTIVE = "resource_aware_adaptive"
+    # Opt-in: trusted ProcessExecutor corpus (not participant code).
+    SYNTHETIC_EXECUTION = "synthetic_execution"
 
 
 @dataclass(frozen=True)

@@ -1,0 +1,1431 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T06:01:06.961333+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "cpu_count_physical": 10,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 1053.1
+    },
+    "profile": "full",
+    "claim": "Synthetic execution evaluation integration \u2014 not public code",
+    "trusted_corpus": [
+      "LIGHT",
+      "CPU_HEAVY",
+      "MEMORY_HEAVY",
+      "SLEEP",
+      "LARGE_OUTPUT",
+      "CHILD_PROCESS",
+      "TIMEOUT",
+      "MANY_FILES",
+      "FAILURE"
+    ],
+    "budget_labels": {
+      "wall_timeout": "ENFORCED",
+      "stdout_cap": "ENFORCED",
+      "stderr_cap": "ENFORCED",
+      "process_tree_cleanup": "ENFORCED",
+      "workspace_cleanup": "ENFORCED",
+      "scrubbed_env": "ENFORCED",
+      "peak_rss": "OBSERVED",
+      "process_count": "OBSERVED",
+      "cpu_accounting": "OBSERVED",
+      "network_deny": "NOT ENFORCED",
+      "cgroup_cpu_quota": "NOT ENFORCED",
+      "cgroup_memory": "NOT ENFORCED",
+      "filesystem_jail": "NOT ENFORCED"
+    },
+    "completed_at": "2026-09-23T06:02:26.666969+00:00"
+  },
+  "corpus": {
+    "cases": [
+      {
+        "workload": "LIGHT",
+        "expected_status": "succeeded",
+        "status": "succeeded",
+        "score": 100,
+        "failure_reason": null,
+        "execution_outcome": "SUCCESS",
+        "execution": {
+          "status": "succeeded",
+          "wall_ms": 569.146,
+          "evidence": {
+            "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n",
+            "stdout_preview": "light_ok checksum=4107543296\r\n"
+          },
+          "workload": "LIGHT",
+          "exit_code": 0,
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-light-mz87j0_e",
+          "cleanup_ms": 1819.4,
+          "startup_ms": 75.878,
+          "peak_rss_mb": null,
+          "stderr_bytes": 254,
+          "stdout_bytes": 30,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "CPU_HEAVY",
+        "expected_status": "succeeded",
+        "status": "succeeded",
+        "score": 100,
+        "failure_reason": null,
+        "execution_outcome": "SUCCESS",
+        "execution": {
+          "status": "succeeded",
+          "wall_ms": 811.146,
+          "evidence": {
+            "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n",
+            "stdout_preview": "cpu_heavy_ok checksum=631560480\r\n"
+          },
+          "workload": "CPU_HEAVY",
+          "exit_code": 0,
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-cpu_heavy-upo02thj",
+          "cleanup_ms": 1831.969,
+          "startup_ms": 75.857,
+          "peak_rss_mb": null,
+          "stderr_bytes": 254,
+          "stdout_bytes": 33,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "TIMEOUT",
+        "expected_status": "failed",
+        "status": "failed",
+        "score": null,
+        "failure_reason": "execution_timeout",
+        "execution_outcome": "TIMEOUT",
+        "execution": {
+          "status": "timeout",
+          "wall_ms": 5073.561,
+          "evidence": {
+            "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n",
+            "stdout_preview": ""
+          },
+          "workload": "TIMEOUT",
+          "exit_code": 15,
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-timeout-d84iehfg",
+          "cleanup_ms": 1790.215,
+          "startup_ms": 68.027,
+          "peak_rss_mb": null,
+          "stderr_bytes": 254,
+          "stdout_bytes": 0,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "LARGE_OUTPUT",
+        "expected_status": "failed",
+        "status": "failed",
+        "score": null,
+        "failure_reason": "execution_output_limit",
+        "execution_outcome": "OUTPUT_LIMIT",
+        "execution": {
+          "status": "output_limit",
+          "wall_ms": 595.74,
+          "evidence": {
+            "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n",
+            "stdout_preview": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          },
+          "workload": "LARGE_OUTPUT",
+          "exit_code": 15,
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-large_output-rqkt793v",
+          "cleanup_ms": 1799.849,
+          "startup_ms": 106.241,
+          "peak_rss_mb": null,
+          "stderr_bytes": 254,
+          "stdout_bytes": 32768,
+          "stderr_truncated": false,
+          "stdout_truncated": true,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "CHILD_PROCESS",
+        "expected_status": "succeeded",
+        "status": "succeeded",
+        "score": 100,
+        "failure_reason": null,
+        "execution_outcome": "SUCCESS",
+        "execution": {
+          "status": "succeeded",
+          "wall_ms": 951.598,
+          "evidence": {
+            "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n",
+            "stdout_preview": "child_spawned parent=40876\r\n"
+          },
+          "workload": "CHILD_PROCESS",
+          "exit_code": 0,
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-child_process-dzutmcf1",
+          "cleanup_ms": 2562.672,
+          "startup_ms": 94.651,
+          "peak_rss_mb": null,
+          "stderr_bytes": 254,
+          "stdout_bytes": 28,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": false,
+          "process_count_peak": 4,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "FAILURE",
+        "expected_status": "failed",
+        "status": "failed",
+        "score": null,
+        "failure_reason": "execution_nonzero_exit",
+        "execution_outcome": "NONZERO_EXIT",
+        "execution": {
+          "status": "failed",
+          "wall_ms": 640.777,
+          "evidence": {
+            "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\nfailure_expected\r\n",
+            "stdout_preview": ""
+          },
+          "workload": "FAILURE",
+          "exit_code": 7,
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-failure-xe92r97t",
+          "cleanup_ms": 1782.694,
+          "startup_ms": 83.422,
+          "peak_rss_mb": null,
+          "stderr_bytes": 272,
+          "stdout_bytes": 0,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      },
+      {
+        "workload": "MANY_FILES",
+        "expected_status": "succeeded",
+        "status": "succeeded",
+        "score": 100,
+        "failure_reason": null,
+        "execution_outcome": "SUCCESS",
+        "execution": {
+          "status": "succeeded",
+          "wall_ms": 707.102,
+          "evidence": {
+            "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n",
+            "stdout_preview": "many_files_ok n=50 dir=C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-many_files-2mpmy6q3\\many\r\n"
+          },
+          "workload": "MANY_FILES",
+          "exit_code": 0,
+          "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-many_files-2mpmy6q3",
+          "cleanup_ms": 1889.496,
+          "startup_ms": 75.591,
+          "peak_rss_mb": null,
+          "stderr_bytes": 254,
+          "stdout_bytes": 93,
+          "stderr_truncated": false,
+          "stdout_truncated": false,
+          "workspace_cleaned": true,
+          "process_count_peak": 2,
+          "leaked_pids_after_cleanup": []
+        },
+        "ok": true
+      }
+    ],
+    "all_ok": true,
+    "leaked_pids_total": 0
+  },
+  "tree": {
+    "evaluation_status": "succeeded",
+    "execution": {
+      "status": "succeeded",
+      "wall_ms": 867.904,
+      "evidence": {
+        "stderr_preview": "<frozen runpy>:128: RuntimeWarning: 'challengeforge.execution.workloads' found in sys.modules after import of package 'challengeforge.execution', but prior to execution of 'challengeforge.execution.workloads'; this may result in unpredictable behaviour\r\n",
+        "stdout_preview": "child_spawned parent=35284\r\n"
+      },
+      "workload": "CHILD_PROCESS",
+      "exit_code": 0,
+      "workspace": "C:\\Users\\emxxgag\\AppData\\Local\\Temp\\cf-exec-child_process-1das46dd",
+      "cleanup_ms": 2517.404,
+      "startup_ms": 63.565,
+      "peak_rss_mb": null,
+      "stderr_bytes": 254,
+      "stdout_bytes": 28,
+      "stderr_truncated": false,
+      "stdout_truncated": false,
+      "workspace_cleaned": false,
+      "process_count_peak": 4,
+      "leaked_pids_after_cleanup": []
+    },
+    "host_leaked_before": 0,
+    "host_leaked_after": 0,
+    "leaked_pids": []
+  },
+  "capacity": [
+    {
+      "concurrency": 1,
+      "workload": "CPU_HEAVY",
+      "batch_wall_s": 2.882,
+      "throughput_per_s": 0.347,
+      "statuses": {
+        "succeeded": 1
+      },
+      "mean_exec_wall_ms": 930.86
+    },
+    {
+      "concurrency": 2,
+      "workload": "CPU_HEAVY",
+      "batch_wall_s": 2.956,
+      "throughput_per_s": 0.677,
+      "statuses": {
+        "succeeded": 2
+      },
+      "mean_exec_wall_ms": 765.09
+    },
+    {
+      "concurrency": 4,
+      "workload": "CPU_HEAVY",
+      "batch_wall_s": 5.565,
+      "throughput_per_s": 0.719,
+      "statuses": {
+        "succeeded": 4
+      },
+      "mean_exec_wall_ms": 762.24
+    }
+  ],
+  "interactive": [
+    {
+      "label": "A_none",
+      "exec_concurrency": 0,
+      "interactive": {
+        "attempted": 60,
+        "offered_requests_per_second": 15.0,
+        "elapsed_seconds": 3.974,
+        "achieved_requests_per_second": 15.098,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 45,
+          "201": 15
+        },
+        "client_latency_ms": {
+          "mean_ms": 49.27,
+          "p50_ms": 43.03,
+          "p95_ms": 89.91,
+          "p99_ms": 108.68,
+          "max_ms": 108.68
+        },
+        "server_total_ms": {
+          "mean_ms": 19.84,
+          "p50_ms": 17.26,
+          "p95_ms": 35.18,
+          "p99_ms": 48.76,
+          "max_ms": 48.76
+        },
+        "pool_wait_ms": {
+          "mean_ms": 2.38,
+          "p50_ms": 2.02,
+          "p95_ms": 4.76,
+          "p99_ms": 5.66,
+          "max_ms": 5.66
+        },
+        "sql_ms": {
+          "mean_ms": 5.1,
+          "p50_ms": 4.13,
+          "p95_ms": 11.05,
+          "p99_ms": 16.8,
+          "max_ms": 16.8
+        },
+        "non_db_ms": {
+          "mean_ms": 12.36,
+          "p50_ms": 10.45,
+          "p95_ms": 20.55,
+          "p99_ms": 32.12,
+          "max_ms": 32.12
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 47.68,
+              "p50_ms": 37.95,
+              "p95_ms": 82.32,
+              "p99_ms": 82.32,
+              "max_ms": 82.32
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 19.38,
+              "p50_ms": 15.98,
+              "p95_ms": 35.18,
+              "p99_ms": 35.18,
+              "max_ms": 35.18
+            },
+            "pool_wait_ms": {
+              "mean_ms": 2.05,
+              "p50_ms": 2.02,
+              "p95_ms": 3.87,
+              "p99_ms": 3.87,
+              "max_ms": 3.87
+            },
+            "sql_ms": {
+              "mean_ms": 5.08,
+              "p50_ms": 4.17,
+              "p95_ms": 9.43,
+              "p99_ms": 9.43,
+              "max_ms": 9.43
+            },
+            "non_db_ms": {
+              "mean_ms": 12.25,
+              "p50_ms": 9.54,
+              "p95_ms": 23.3,
+              "p99_ms": 23.3,
+              "max_ms": 23.3
+            },
+            "identity_ms": {
+              "mean_ms": 2.61,
+              "p50_ms": 2.41,
+              "p95_ms": 4.84,
+              "p99_ms": 4.84,
+              "max_ms": 4.84
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 43.75,
+              "p50_ms": 38.52,
+              "p95_ms": 76.93,
+              "p99_ms": 76.93,
+              "max_ms": 76.93
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 15.96,
+              "p50_ms": 13.52,
+              "p95_ms": 32.27,
+              "p99_ms": 32.27,
+              "max_ms": 32.27
+            },
+            "pool_wait_ms": {
+              "mean_ms": 2.65,
+              "p50_ms": 1.99,
+              "p95_ms": 5.66,
+              "p99_ms": 5.66,
+              "max_ms": 5.66
+            },
+            "sql_ms": {
+              "mean_ms": 3.42,
+              "p50_ms": 2.98,
+              "p95_ms": 8.01,
+              "p99_ms": 8.01,
+              "max_ms": 8.01
+            },
+            "non_db_ms": {
+              "mean_ms": 9.89,
+              "p50_ms": 8.62,
+              "p95_ms": 19.97,
+              "p99_ms": 19.97,
+              "max_ms": 19.97
+            },
+            "identity_ms": {
+              "mean_ms": 2.85,
+              "p50_ms": 2.63,
+              "p95_ms": 6.17,
+              "p99_ms": 6.17,
+              "max_ms": 6.17
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 46.06,
+              "p50_ms": 41.35,
+              "p95_ms": 89.91,
+              "p99_ms": 89.91,
+              "max_ms": 89.91
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 16.11,
+              "p50_ms": 14.25,
+              "p95_ms": 29.17,
+              "p99_ms": 29.17,
+              "max_ms": 29.17
+            },
+            "pool_wait_ms": {
+              "mean_ms": 2.42,
+              "p50_ms": 2.46,
+              "p95_ms": 5.1,
+              "p99_ms": 5.1,
+              "max_ms": 5.1
+            },
+            "sql_ms": {
+              "mean_ms": 3.71,
+              "p50_ms": 3.09,
+              "p95_ms": 7.28,
+              "p99_ms": 7.28,
+              "max_ms": 7.28
+            },
+            "non_db_ms": {
+              "mean_ms": 9.98,
+              "p50_ms": 9.2,
+              "p95_ms": 17.49,
+              "p99_ms": 17.49,
+              "max_ms": 17.49
+            },
+            "identity_ms": {
+              "mean_ms": 2.65,
+              "p50_ms": 1.87,
+              "p95_ms": 5.16,
+              "p99_ms": 5.16,
+              "max_ms": 5.16
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 59.59,
+              "p50_ms": 52.41,
+              "p95_ms": 108.68,
+              "p99_ms": 108.68,
+              "max_ms": 108.68
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 27.91,
+              "p50_ms": 24.11,
+              "p95_ms": 48.76,
+              "p99_ms": 48.76,
+              "max_ms": 48.76
+            },
+            "pool_wait_ms": {
+              "mean_ms": 2.41,
+              "p50_ms": 2.02,
+              "p95_ms": 5.32,
+              "p99_ms": 5.32,
+              "max_ms": 5.32
+            },
+            "sql_ms": {
+              "mean_ms": 8.19,
+              "p50_ms": 7.14,
+              "p95_ms": 16.8,
+              "p99_ms": 16.8,
+              "max_ms": 16.8
+            },
+            "non_db_ms": {
+              "mean_ms": 17.32,
+              "p50_ms": 15.76,
+              "p95_ms": 32.12,
+              "p99_ms": 32.12,
+              "max_ms": 32.12
+            },
+            "identity_ms": {
+              "mean_ms": 2.65,
+              "p50_ms": 2.31,
+              "p95_ms": 4.17,
+              "p99_ms": 4.17,
+              "max_ms": 4.17
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 38.4,
+          "rss_mb": 87.39
+        },
+        "server_process": {
+          "pid": 33124,
+          "cpu_percent": 28.6,
+          "rss_mb": 85.37
+        },
+        "http_timeout_seconds": 5.0,
+        "load_generator_note": "sei interactive vs execution"
+      },
+      "client_p95_ms": 89.91,
+      "achieved_rps": 15.098,
+      "evaluations": []
+    },
+    {
+      "label": "B_one",
+      "exec_concurrency": 1,
+      "interactive": {
+        "attempted": 60,
+        "offered_requests_per_second": 15.0,
+        "elapsed_seconds": 3.979,
+        "achieved_requests_per_second": 15.079,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 45,
+          "201": 15
+        },
+        "client_latency_ms": {
+          "mean_ms": 52.32,
+          "p50_ms": 39.8,
+          "p95_ms": 112.38,
+          "p99_ms": 138.94,
+          "max_ms": 138.94
+        },
+        "server_total_ms": {
+          "mean_ms": 17.39,
+          "p50_ms": 15.18,
+          "p95_ms": 27.66,
+          "p99_ms": 41.29,
+          "max_ms": 41.29
+        },
+        "pool_wait_ms": {
+          "mean_ms": 1.77,
+          "p50_ms": 1.71,
+          "p95_ms": 2.09,
+          "p99_ms": 3.34,
+          "max_ms": 3.34
+        },
+        "sql_ms": {
+          "mean_ms": 4.52,
+          "p50_ms": 3.73,
+          "p95_ms": 8.29,
+          "p99_ms": 20.5,
+          "max_ms": 20.5
+        },
+        "non_db_ms": {
+          "mean_ms": 11.1,
+          "p50_ms": 9.83,
+          "p95_ms": 18.78,
+          "p99_ms": 21.26,
+          "max_ms": 21.26
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 55.68,
+              "p50_ms": 39.32,
+              "p95_ms": 138.94,
+              "p99_ms": 138.94,
+              "max_ms": 138.94
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 18.84,
+              "p50_ms": 16.73,
+              "p95_ms": 41.29,
+              "p99_ms": 41.29,
+              "max_ms": 41.29
+            },
+            "pool_wait_ms": {
+              "mean_ms": 1.65,
+              "p50_ms": 1.68,
+              "p95_ms": 2.02,
+              "p99_ms": 2.02,
+              "max_ms": 2.02
+            },
+            "sql_ms": {
+              "mean_ms": 5.93,
+              "p50_ms": 4.33,
+              "p95_ms": 20.5,
+              "p99_ms": 20.5,
+              "max_ms": 20.5
+            },
+            "non_db_ms": {
+              "mean_ms": 11.25,
+              "p50_ms": 10.14,
+              "p95_ms": 18.78,
+              "p99_ms": 18.78,
+              "max_ms": 18.78
+            },
+            "identity_ms": {
+              "mean_ms": 2.15,
+              "p50_ms": 2.06,
+              "p95_ms": 3.61,
+              "p99_ms": 3.61,
+              "max_ms": 3.61
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 49.5,
+              "p50_ms": 36.76,
+              "p95_ms": 123.65,
+              "p99_ms": 123.65,
+              "max_ms": 123.65
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 14.62,
+              "p50_ms": 12.87,
+              "p95_ms": 24.1,
+              "p99_ms": 24.1,
+              "max_ms": 24.1
+            },
+            "pool_wait_ms": {
+              "mean_ms": 1.84,
+              "p50_ms": 1.71,
+              "p95_ms": 3.34,
+              "p99_ms": 3.34,
+              "max_ms": 3.34
+            },
+            "sql_ms": {
+              "mean_ms": 3.06,
+              "p50_ms": 2.8,
+              "p95_ms": 5.38,
+              "p99_ms": 5.38,
+              "max_ms": 5.38
+            },
+            "non_db_ms": {
+              "mean_ms": 9.73,
+              "p50_ms": 7.93,
+              "p95_ms": 19.03,
+              "p99_ms": 19.03,
+              "max_ms": 19.03
+            },
+            "identity_ms": {
+              "mean_ms": 2.25,
+              "p50_ms": 2.04,
+              "p95_ms": 4.13,
+              "p99_ms": 4.13,
+              "max_ms": 4.13
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 44.51,
+              "p50_ms": 34.41,
+              "p95_ms": 112.38,
+              "p99_ms": 112.38,
+              "max_ms": 112.38
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 12.56,
+              "p50_ms": 12.07,
+              "p95_ms": 15.64,
+              "p99_ms": 15.64,
+              "max_ms": 15.64
+            },
+            "pool_wait_ms": {
+              "mean_ms": 1.73,
+              "p50_ms": 1.66,
+              "p95_ms": 2.09,
+              "p99_ms": 2.09,
+              "max_ms": 2.09
+            },
+            "sql_ms": {
+              "mean_ms": 2.65,
+              "p50_ms": 2.62,
+              "p95_ms": 3.35,
+              "p99_ms": 3.35,
+              "max_ms": 3.35
+            },
+            "non_db_ms": {
+              "mean_ms": 8.18,
+              "p50_ms": 7.63,
+              "p95_ms": 11.39,
+              "p99_ms": 11.39,
+              "max_ms": 11.39
+            },
+            "identity_ms": {
+              "mean_ms": 2.04,
+              "p50_ms": 2.04,
+              "p95_ms": 2.41,
+              "p99_ms": 2.41,
+              "max_ms": 2.41
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 59.57,
+              "p50_ms": 47.0,
+              "p95_ms": 134.78,
+              "p99_ms": 134.78,
+              "max_ms": 134.78
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 23.54,
+              "p50_ms": 22.28,
+              "p95_ms": 30.73,
+              "p99_ms": 30.73,
+              "max_ms": 30.73
+            },
+            "pool_wait_ms": {
+              "mean_ms": 1.85,
+              "p50_ms": 1.78,
+              "p95_ms": 3.27,
+              "p99_ms": 3.27,
+              "max_ms": 3.27
+            },
+            "sql_ms": {
+              "mean_ms": 6.44,
+              "p50_ms": 6.13,
+              "p95_ms": 9.98,
+              "p99_ms": 9.98,
+              "max_ms": 9.98
+            },
+            "non_db_ms": {
+              "mean_ms": 15.25,
+              "p50_ms": 14.68,
+              "p95_ms": 21.26,
+              "p99_ms": 21.26,
+              "max_ms": 21.26
+            },
+            "identity_ms": {
+              "mean_ms": 2.14,
+              "p50_ms": 2.1,
+              "p95_ms": 3.55,
+              "p99_ms": 3.55,
+              "max_ms": 3.55
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 31.0,
+          "rss_mb": 87.42
+        },
+        "server_process": {
+          "pid": 33124,
+          "cpu_percent": 23.1,
+          "rss_mb": 85.42
+        },
+        "http_timeout_seconds": 5.0,
+        "load_generator_note": "sei interactive vs execution"
+      },
+      "client_p95_ms": 112.38,
+      "achieved_rps": 15.079,
+      "evaluations": [
+        {
+          "status": "succeeded",
+          "outcome": "SUCCESS"
+        }
+      ]
+    },
+    {
+      "label": "C_two",
+      "exec_concurrency": 2,
+      "interactive": {
+        "attempted": 60,
+        "offered_requests_per_second": 15.0,
+        "elapsed_seconds": 3.99,
+        "achieved_requests_per_second": 15.038,
+        "error_count": 0,
+        "timeout_count": 0,
+        "status_codes": {
+          "200": 45,
+          "201": 15
+        },
+        "client_latency_ms": {
+          "mean_ms": 37.14,
+          "p50_ms": 35.02,
+          "p95_ms": 51.92,
+          "p99_ms": 65.26,
+          "max_ms": 65.26
+        },
+        "server_total_ms": {
+          "mean_ms": 16.89,
+          "p50_ms": 15.48,
+          "p95_ms": 29.74,
+          "p99_ms": 31.89,
+          "max_ms": 31.89
+        },
+        "pool_wait_ms": {
+          "mean_ms": 1.86,
+          "p50_ms": 1.76,
+          "p95_ms": 2.06,
+          "p99_ms": 5.64,
+          "max_ms": 5.64
+        },
+        "sql_ms": {
+          "mean_ms": 5.22,
+          "p50_ms": 4.17,
+          "p95_ms": 12.93,
+          "p99_ms": 19.96,
+          "max_ms": 19.96
+        },
+        "non_db_ms": {
+          "mean_ms": 9.81,
+          "p50_ms": 8.68,
+          "p95_ms": 14.5,
+          "p99_ms": 23.21,
+          "max_ms": 23.21
+        },
+        "query_counts": {
+          "queries_per_request": {
+            "mean": 4.5,
+            "p50": 3.0,
+            "p95": 7.0,
+            "max": 7
+          },
+          "category_counts_p50": {
+            "identity": 1.0,
+            "challenge": 1.0,
+            "sql": 2.0,
+            "hackathon": 1.0,
+            "submission": 1.0,
+            "evaluation": 1.0
+          }
+        },
+        "by_endpoint": {
+          "challenge_read": {
+            "client_latency_ms": {
+              "mean_ms": 38.68,
+              "p50_ms": 35.81,
+              "p95_ms": 61.59,
+              "p99_ms": 61.59,
+              "max_ms": 61.59
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 17.86,
+              "p50_ms": 15.8,
+              "p95_ms": 31.89,
+              "p99_ms": 31.89,
+              "max_ms": 31.89
+            },
+            "pool_wait_ms": {
+              "mean_ms": 1.81,
+              "p50_ms": 1.79,
+              "p95_ms": 2.06,
+              "p99_ms": 2.06,
+              "max_ms": 2.06
+            },
+            "sql_ms": {
+              "mean_ms": 6.01,
+              "p50_ms": 4.4,
+              "p95_ms": 19.96,
+              "p99_ms": 19.96,
+              "max_ms": 19.96
+            },
+            "non_db_ms": {
+              "mean_ms": 10.04,
+              "p50_ms": 9.61,
+              "p95_ms": 14.57,
+              "p99_ms": 14.57,
+              "max_ms": 14.57
+            },
+            "identity_ms": {
+              "mean_ms": 2.25,
+              "p50_ms": 2.13,
+              "p95_ms": 4.1,
+              "p99_ms": 4.1,
+              "max_ms": 4.1
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 5.0,
+                "p50": 5.0,
+                "p95": 5.0,
+                "max": 5
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "challenge": 1.0,
+                "sql": 2.0,
+                "hackathon": 1.0
+              }
+            }
+          },
+          "evaluation_status": {
+            "client_latency_ms": {
+              "mean_ms": 32.89,
+              "p50_ms": 30.2,
+              "p95_ms": 51.92,
+              "p99_ms": 51.92,
+              "max_ms": 51.92
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 13.9,
+              "p50_ms": 12.19,
+              "p95_ms": 27.69,
+              "p99_ms": 27.69,
+              "max_ms": 27.69
+            },
+            "pool_wait_ms": {
+              "mean_ms": 1.97,
+              "p50_ms": 1.85,
+              "p95_ms": 4.11,
+              "p99_ms": 4.11,
+              "max_ms": 4.11
+            },
+            "sql_ms": {
+              "mean_ms": 4.58,
+              "p50_ms": 2.86,
+              "p95_ms": 15.85,
+              "p99_ms": 15.85,
+              "max_ms": 15.85
+            },
+            "non_db_ms": {
+              "mean_ms": 7.35,
+              "p50_ms": 7.29,
+              "p95_ms": 8.85,
+              "p99_ms": 8.85,
+              "max_ms": 8.85
+            },
+            "identity_ms": {
+              "mean_ms": 2.2,
+              "p50_ms": 2.08,
+              "p95_ms": 4.33,
+              "p99_ms": 4.33,
+              "max_ms": 4.33
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "evaluation": 1.0
+              }
+            }
+          },
+          "participant_history": {
+            "client_latency_ms": {
+              "mean_ms": 32.79,
+              "p50_ms": 30.31,
+              "p95_ms": 48.03,
+              "p99_ms": 48.03,
+              "max_ms": 48.03
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 12.58,
+              "p50_ms": 11.92,
+              "p95_ms": 23.1,
+              "p99_ms": 23.1,
+              "max_ms": 23.1
+            },
+            "pool_wait_ms": {
+              "mean_ms": 1.94,
+              "p50_ms": 1.74,
+              "p95_ms": 5.64,
+              "p99_ms": 5.64,
+              "max_ms": 5.64
+            },
+            "sql_ms": {
+              "mean_ms": 3.31,
+              "p50_ms": 2.82,
+              "p95_ms": 10.63,
+              "p99_ms": 10.63,
+              "max_ms": 10.63
+            },
+            "non_db_ms": {
+              "mean_ms": 7.32,
+              "p50_ms": 7.15,
+              "p95_ms": 8.19,
+              "p99_ms": 8.19,
+              "max_ms": 8.19
+            },
+            "identity_ms": {
+              "mean_ms": 2.23,
+              "p50_ms": 2.1,
+              "p95_ms": 4.44,
+              "p99_ms": 4.44,
+              "max_ms": 4.44
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 3.0,
+                "p50": 3.0,
+                "p95": 3.0,
+                "max": 3
+              },
+              "category_counts_p50": {
+                "identity": 2.0,
+                "submission": 1.0
+              }
+            }
+          },
+          "submission_creation": {
+            "client_latency_ms": {
+              "mean_ms": 44.2,
+              "p50_ms": 41.48,
+              "p95_ms": 65.26,
+              "p99_ms": 65.26,
+              "max_ms": 65.26
+            },
+            "requests": 15,
+            "errors": 0,
+            "timeouts": 0,
+            "server_profiles_captured": 15,
+            "server_total_ms": {
+              "mean_ms": 23.24,
+              "p50_ms": 22.26,
+              "p95_ms": 31.68,
+              "p99_ms": 31.68,
+              "max_ms": 31.68
+            },
+            "pool_wait_ms": {
+              "mean_ms": 1.73,
+              "p50_ms": 1.75,
+              "p95_ms": 1.95,
+              "p99_ms": 1.95,
+              "max_ms": 1.95
+            },
+            "sql_ms": {
+              "mean_ms": 6.98,
+              "p50_ms": 6.5,
+              "p95_ms": 12.93,
+              "p99_ms": 12.93,
+              "max_ms": 12.93
+            },
+            "non_db_ms": {
+              "mean_ms": 14.54,
+              "p50_ms": 13.53,
+              "p95_ms": 23.21,
+              "p99_ms": 23.21,
+              "max_ms": 23.21
+            },
+            "identity_ms": {
+              "mean_ms": 2.04,
+              "p50_ms": 2.04,
+              "p95_ms": 2.41,
+              "p99_ms": 2.41,
+              "max_ms": 2.41
+            },
+            "queue_position_ms": {
+              "mean_ms": 0.0,
+              "p50_ms": 0.0,
+              "p95_ms": 0.0,
+              "p99_ms": 0.0,
+              "max_ms": 0.0
+            },
+            "query_counts": {
+              "queries_per_request": {
+                "mean": 7.0,
+                "p50": 7.0,
+                "p95": 7.0,
+                "max": 7
+              },
+              "category_counts_p50": {
+                "identity": 1.0,
+                "submission": 1.0,
+                "challenge": 1.0,
+                "sql": 3.0,
+                "hackathon": 1.0
+              }
+            }
+          }
+        },
+        "client_process": {
+          "cpu_percent": 25.9,
+          "rss_mb": 87.47
+        },
+        "server_process": {
+          "pid": 33124,
+          "cpu_percent": 27.4,
+          "rss_mb": 85.53
+        },
+        "http_timeout_seconds": 5.0,
+        "load_generator_note": "sei interactive vs execution"
+      },
+      "client_p95_ms": 51.92,
+      "achieved_rps": 15.038,
+      "evaluations": [
+        {
+          "status": "succeeded",
+          "outcome": "SUCCESS"
+        },
+        {
+          "status": "succeeded",
+          "outcome": "SUCCESS"
+        },
+        {
+          "status": "failed",
+          "outcome": "TIMEOUT"
+        }
+      ]
+    }
+  ],
+  "decision": {
+    "gate": "KEEP EXECUTION INTEGRATION",
+    "rationale": "Trusted synthetic_execution composes with durable QUEUED/RUNNING/SUCCEEDED|FAILED, process-tree cleanup held under orchestration, and participant code remains forbidden. Network/cgroup still NOT ENFORCED.",
+    "participant_code_allowed": false,
+    "public_sandbox_ready": false,
+    "budget_labels": {
+      "wall_timeout": "ENFORCED",
+      "stdout_cap": "ENFORCED",
+      "stderr_cap": "ENFORCED",
+      "process_tree_cleanup": "ENFORCED",
+      "workspace_cleanup": "ENFORCED",
+      "scrubbed_env": "ENFORCED",
+      "peak_rss": "OBSERVED",
+      "process_count": "OBSERVED",
+      "cpu_accounting": "OBSERVED",
+      "network_deny": "NOT ENFORCED",
+      "cgroup_cpu_quota": "NOT ENFORCED",
+      "cgroup_memory": "NOT ENFORCED",
+      "filesystem_jail": "NOT ENFORCED"
+    },
+    "interactive_cells": 3
+  }
+}

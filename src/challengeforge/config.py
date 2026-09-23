@@ -39,7 +39,12 @@ class Settings(BaseSettings):
         "always_expensive",
         "fixed_progressive",
         "resource_aware_adaptive",
+        "synthetic_execution",
     ] = "legacy"
+    # Synthetic execution budgets (opt-in mode only).
+    execution_wall_timeout_seconds: float = 5.0
+    execution_max_stdout_bytes: int = Field(default=256 * 1024, ge=1024)
+    execution_max_stderr_bytes: int = Field(default=256 * 1024, ge=1024)
     # Backlog health thresholds (observability / messaging — not submission rejection)
     evaluation_busy_queue_depth: int = 20
     evaluation_busy_oldest_age_seconds: float = 5.0

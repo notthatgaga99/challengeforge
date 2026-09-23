@@ -251,6 +251,10 @@ class EvaluationWorker:
                 return await self._run_legacy(
                     claimed, submission, factory, eval_started
                 )
+            if mode == EvaluationMode.SYNTHETIC_EXECUTION:
+                return await self._run_synthetic_execution(
+                    claimed, submission, factory, eval_started
+                )
             return await self._run_progressive(
                 claimed, submission, factory, eval_started, mode, pressure
             )
@@ -319,6 +323,113 @@ class EvaluationWorker:
             workload_class=outcome.workload_class.value,
             wall_ms=round(wall_ms, 3),
             evaluator="legacy",
+        )
+        return True
+
+    async def _run_synthetic_execution(
+        self, claimed, submission, factory, eval_started: float
+    ) -> bool:
+        """Trusted ProcessExecutor corpus — never participant source."""
+        from challengeforge.evaluation.synthetic_execution import run_synthetic_execution
+        from challengeforge.execution.limits import ExecutionLimits
+
+        limits = ExecutionLimits(
+            wall_timeout_seconds=float(
+                getattr(self.settings, "execution_wall_timeout_seconds", 5.0)
+            ),
+            max_stdout_bytes=int(
+                getattr(self.settings, "execution_max_stdout_bytes", 256 * 1024)
+            ),
+            max_stderr_bytes=int(
+                getattr(self.settings, "execution_max_stderr_bytes", 256 * 1024)
+            ),
+        )
+        try:
+            record = await asyncio.to_thread(
+                run_synthetic_execution,
+                evaluation_id=claimed.id,
+                submission_id=submission.id,
+                metadata=submission.metadata or {},
+                workload_class=claimed.workload_class.value,
+                attempt_count=int(claimed.attempt_count),
+                max_attempts=int(self.settings.evaluation_max_attempts),
+                limits=limits,
+            )
+        except ValueError as exc:
+            async with factory() as fail_session:
+                await EvaluationRepository(fail_session).mark_failed(
+                    claimed.id,
+                    failure_reason=f"invalid_execution_workload: {exc}",
+                    result_metadata={
+                        "evaluator": "synthetic_execution_v1",
+                        "error": str(exc),
+                    },
+                    worker_id=self.worker_id,
+                )
+                await fail_session.commit()
+            self.jobs_failed += 1
+            return True
+
+        wall_ms = (time.perf_counter() - eval_started) * 1000.0
+        if record.evaluation_terminal == "requeue":
+            async with factory() as session:
+                await EvaluationRepository(session).release_for_retry(
+                    claimed.id,
+                    worker_id=self.worker_id,
+                    result_metadata=record.result_metadata,
+                    failure_reason=record.failure_reason or "execution_retry",
+                )
+                await session.commit()
+            logger.info(
+                "evaluation_execution_requeued",
+                evaluation_id=str(claimed.id),
+                outcome=record.outcome.value,
+                wall_ms=round(wall_ms, 3),
+            )
+            return True
+
+        if record.evaluation_terminal == "succeeded":
+            async with factory() as ok_session:
+                result = await EvaluationRepository(ok_session).mark_succeeded(
+                    claimed.id,
+                    score=int(record.score or 0),
+                    result_metadata=record.result_metadata,
+                    worker_id=self.worker_id,
+                )
+                await ok_session.commit()
+            if result is None:
+                return True
+            self.jobs_completed += 1
+            logger.info(
+                "evaluation_succeeded",
+                evaluation_id=str(result.id),
+                submission_id=str(result.submission_id),
+                worker_id=self.worker_id,
+                status="succeeded",
+                score=result.score,
+                wall_ms=round(wall_ms, 3),
+                evaluator="synthetic_execution",
+                execution_outcome=record.outcome.value,
+            )
+            return True
+
+        async with factory() as fail_session:
+            result = await EvaluationRepository(fail_session).mark_failed(
+                claimed.id,
+                failure_reason=record.failure_reason or "execution_failed",
+                result_metadata=record.result_metadata,
+                worker_id=self.worker_id,
+            )
+            await fail_session.commit()
+        self.jobs_failed += 1
+        logger.info(
+            "evaluation_failed",
+            evaluation_id=str(claimed.id),
+            failure_reason=record.failure_reason,
+            execution_outcome=record.outcome.value,
+            wall_ms=round(wall_ms, 3),
+            evaluator="synthetic_execution",
+            status="failed" if result else "abandoned",
         )
         return True
 

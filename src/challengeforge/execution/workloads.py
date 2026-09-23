@@ -76,10 +76,13 @@ def _child_process() -> int:
     if os.name == "nt":
         import subprocess
 
+        # Do not CREATE_NEW_PROCESS_GROUP here — stay visible in the parent tree.
         subprocess.Popen(
-            [sys.executable, "-c", "import time; time.sleep(30)"],
+            [sys.executable, "-c", "import time; time.sleep(8)"],
             cwd=child_cwd,
-            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,  # type: ignore[attr-defined]
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL,
         )
     else:
         pid = os.fork()
@@ -88,7 +91,7 @@ def _child_process() -> int:
                 os.chdir(child_cwd)
             except OSError:
                 pass
-            time.sleep(30)
+            time.sleep(8)
             os._exit(0)
     time.sleep(0.2)
     print(f"child_spawned parent={os.getpid()}", flush=True)

@@ -71,7 +71,9 @@ class ProgressivePolicy:
         if self.mode == EvaluationMode.FIXED_PROGRESSIVE:
             return EscalationDecision(EscalationAction.CONTINUE, "uncertain_escalate")
 
-        assert self.mode == EvaluationMode.RESOURCE_AWARE_ADAPTIVE
+        if self.mode != EvaluationMode.RESOURCE_AWARE_ADAPTIVE:
+            return EscalationDecision(EscalationAction.FINISH, "unsupported_mode_finish")
+
         now = now or datetime.now(timezone.utc)
         deadline_near = False
         if deadline_at is not None:

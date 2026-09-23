@@ -125,7 +125,8 @@ class ProcessExecutor:
             )
         )
         env = self._scrubbed_env(work_dir)
-        cmd = [sys.executable, "-m", "challengeforge.execution.workloads", workload]
+        workloads_py = Path(__file__).with_name("workloads.py")
+        cmd = [sys.executable, str(workloads_py), workload]
         kwargs: dict[str, Any] = {
             "cwd": str(work_dir),
             "env": env,
@@ -304,6 +305,17 @@ class ProcessExecutor:
                 pids.append(p.pid)
                 p.terminate()
             except (psutil.Error, psutil.NoSuchProcess):
+                pass
+        # Windows: also ask the OS to kill the whole tree (covers breakaway children).
+        if os.name == "nt" and proc.pid:
+            try:
+                subprocess.run(
+                    ["taskkill", "/F", "/T", "/PID", str(proc.pid)],
+                    capture_output=True,
+                    timeout=max(1.0, grace + 1.0),
+                    check=False,
+                )
+            except Exception:
                 pass
         _gone, alive = psutil.wait_procs(targets, timeout=max(0.05, grace))
         for p in alive:
