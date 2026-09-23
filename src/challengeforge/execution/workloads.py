@@ -1,6 +1,6 @@
-"""Deterministic synthetic workloads for the execution-isolation prototype.
+"""Deterministic synthetic workloads for the execution plane.
 
-Invoked as: python -m challengeforge.execution.workloads <NAME> [args...]
+Invoked as: python workloads.py <NAME>
 Never used for participant uploads.
 """
 
@@ -23,6 +23,9 @@ WORKLOAD_NAMES = (
     "TIMEOUT",
     "MANY_FILES",
     "FAILURE",
+    "PROCESS_HEAVY",
+    "DISK_HEAVY",
+    "MEMORY_GROW",
 )
 
 
@@ -35,7 +38,6 @@ def _light() -> int:
 
 
 def _cpu_heavy() -> int:
-    # ~bounded CPU burn (deterministic iteration count).
     x = 0
     for i in range(3_000_000):
         x = (x + i * i) & 0xFFFFFFFF
@@ -44,13 +46,31 @@ def _cpu_heavy() -> int:
 
 
 def _memory_heavy() -> int:
-    # ~32 MiB allocation, touch pages, hold briefly.
     size = 32 * 1024 * 1024
     buf = bytearray(size)
     for i in range(0, size, 4096):
         buf[i] = i & 0xFF
     time.sleep(0.2)
     print(f"memory_heavy_ok bytes={len(buf)}", flush=True)
+    return 0
+
+
+def _memory_grow() -> int:
+    """Step allocations (~4 MiB) until host/job stops us — keep steps small."""
+    chunks: list[bytearray] = []
+    step = 4 * 1024 * 1024
+    try:
+        for n in range(64):  # hard stop at ~256 MiB locally
+            buf = bytearray(step)
+            for i in range(0, step, 4096):
+                buf[i] = (n + i) & 0xFF
+            chunks.append(buf)
+            print(f"memory_grow step={n} total_mb={(n + 1) * 4}", flush=True)
+            time.sleep(0.05)
+    except MemoryError:
+        print("cf_memory_limit", flush=True)
+        return 76
+    print(f"memory_grow_done chunks={len(chunks)}", flush=True)
     return 0
 
 
@@ -62,7 +82,6 @@ def _sleep() -> int:
 
 def _large_output() -> int:
     chunk = b"x" * 1024
-    # Write a lot quickly; executor should cap.
     for _ in range(10_000):
         sys.stdout.buffer.write(chunk)
         sys.stdout.buffer.flush()
@@ -70,13 +89,10 @@ def _large_output() -> int:
 
 
 def _child_process() -> int:
-    # Spawn a child that would outlive a short parent if not tree-cleaned.
-    # Use a neutral cwd so the executor workspace is not locked by the child.
     child_cwd = tempfile.gettempdir()
     if os.name == "nt":
         import subprocess
 
-        # Do not CREATE_NEW_PROCESS_GROUP here — stay visible in the parent tree.
         subprocess.Popen(
             [sys.executable, "-c", "import time; time.sleep(8)"],
             cwd=child_cwd,
@@ -98,6 +114,39 @@ def _child_process() -> int:
     return 0
 
 
+def _process_heavy() -> int:
+    """Attempt many short-lived children; report quota failures explicitly."""
+    import subprocess
+
+    target = int(os.environ.get("CF_PROCESS_HEAVY_N", "20"))
+    spawned = 0
+    children: list[subprocess.Popen[bytes]] = []
+    for i in range(target):
+        try:
+            p = subprocess.Popen(
+                [sys.executable, "-c", "import time; time.sleep(2)"],
+                cwd=tempfile.gettempdir(),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                stdin=subprocess.DEVNULL,
+            )
+            children.append(p)
+            spawned += 1
+            print(f"spawned {i} pid={p.pid}", flush=True)
+            time.sleep(0.05)
+        except OSError as exc:
+            win = getattr(exc, "winerror", None)
+            print(
+                f"cf_process_limit spawned={spawned} winerror={win} err={exc}",
+                flush=True,
+            )
+            time.sleep(0.3)
+            return 75
+    time.sleep(0.4)
+    print(f"process_heavy_ok spawned={spawned}", flush=True)
+    return 0
+
+
 def _timeout() -> int:
     while True:
         time.sleep(1.0)
@@ -113,6 +162,28 @@ def _many_files() -> int:
     return 0
 
 
+def _disk_heavy() -> int:
+    """Write progressively larger files under CF_WORKSPACE."""
+    root = Path(os.environ.get("CF_WORKSPACE", "."))
+    d = root / "disk"
+    d.mkdir(parents=True, exist_ok=True)
+    chunk = b"y" * (64 * 1024)
+    target_mb = int(os.environ.get("CF_DISK_HEAVY_MB", "8"))
+    written = 0
+    n = 0
+    while written < target_mb * 1024 * 1024:
+        path = d / f"blob_{n}.bin"
+        with path.open("wb") as fh:
+            for _ in range(16):  # 1 MiB per file
+                fh.write(chunk)
+                written += len(chunk)
+        n += 1
+        print(f"disk_heavy written_mb={written // (1024 * 1024)} files={n}", flush=True)
+        time.sleep(0.05)
+    print(f"disk_heavy_ok bytes={written}", flush=True)
+    return 0
+
+
 def _failure() -> int:
     print("failure_expected", file=sys.stderr, flush=True)
     return 7
@@ -122,11 +193,14 @@ HANDLERS = {
     "LIGHT": _light,
     "CPU_HEAVY": _cpu_heavy,
     "MEMORY_HEAVY": _memory_heavy,
+    "MEMORY_GROW": _memory_grow,
     "SLEEP": _sleep,
     "LARGE_OUTPUT": _large_output,
     "CHILD_PROCESS": _child_process,
+    "PROCESS_HEAVY": _process_heavy,
     "TIMEOUT": _timeout,
     "MANY_FILES": _many_files,
+    "DISK_HEAVY": _disk_heavy,
     "FAILURE": _failure,
 }
 

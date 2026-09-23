@@ -155,7 +155,9 @@ participant code is not executed. Opt-in `synthetic_execution` evaluation mode
 orchestrates the executor through the durable queue
 (`docs/execution-evaluation-integration.md`) without accepting arbitrary uploads.
 Worker-death ownership uses Windows Job Objects where available
-(`docs/execution-ownership-recovery.md`).
+(`docs/execution-ownership-recovery.md`). Selective resource budgets
+(process/memory/CPU/workspace) are documented in
+`docs/execution-resource-governance.md` — ownership ≠ governance ≠ sandbox.
 
 ## 8. Important failure modes
 

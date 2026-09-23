@@ -15,6 +15,7 @@ data/
 .pgserver-migration/
 .pgserver-migration-backfill/
 .pgserver-*/
+.cf_gov_ws/
 *.log
 .coverage
 htmlcov/

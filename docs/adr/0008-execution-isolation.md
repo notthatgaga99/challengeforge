@@ -1,4 +1,4 @@
-# ADR 0008: Execution isolation, integration, and ownership
+# ADR 0008: Execution isolation, integration, ownership, and resource governance
 
 ## Status
 
@@ -8,55 +8,58 @@ Accepted:
 2. **KEEP EXECUTION INTEGRATION** — opt-in durable `synthetic_execution`  
 3. **KEEP + OS OWNERSHIP** — Windows Job Object `KILL_ON_JOB_CLOSE` + recovery
    containment before requeue  
+4. **KEEP + SELECTIVE RESOURCE LIMITS** — Job Object process-count / job-memory /
+   CPU user-time / CPU-rate throttle where available; wall/output/workspace
+   app-enforced; network/FS/cgroup **not** claimed  
 
-Participant code remains **forbidden**. Network/cgroup/FS jail **not** claimed.
-Default mode remains `legacy`.
+Participant code remains **forbidden**. Default mode remains `legacy`.
 
 ## Context
 
-After integrating ProcessExecutor with the evaluation queue, worker death could
-leave Postgres `RUNNING` while an OS execution survived — enabling duplicate
-execution on stale requeue.
+Ownership answered who controls the process tree when a worker dies. Resource
+governance asks which host resources an execution may consume and what happens
+when budgets are exceeded — without pretending the platform is a sandbox.
 
 ## Decision
 
-1. Assign each synthetic execution to a Windows Job Object with
-   `JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE` when available.
-2. Persist `execution_attempt` metadata (id, root_pid, workspace, ownership)
-   at process start (`begin_execution_attempt`).
-3. Change `recover_stale_running` to **contain** live attempts before requeue;
-   if containment fails → fail with `orphan_suspected` (no second start).
-4. Do not add a supervisor process or external executor service yet.
-5. Do not add a new durable status enum; use metadata + FAILED reason.
+1. Keep ownership via KillOnJobClose + contain-before-requeue.  
+2. Extend Job Objects with selective limits: `ActiveProcessLimit`,
+   `JobMemoryLimit`, `PerJobUserTimeLimit`, optional CPU rate hard cap.  
+3. Keep wall time, stdout/stderr caps, and workspace byte caps in the executor.  
+4. Classify exceedances as distinct outcomes (`PROCESS_LIMIT`, `MEMORY_LIMIT`,
+   `CPU_LIMIT`, `WORKSPACE_LIMIT`, …) in metadata — no new durable status table.  
+5. Deterministic resource violations are terminal (no retry).  
+6. Do not add containers, supervisors, or an external execution service yet.
 
 ## Alternatives
 
-| Option | Why deferred |
+| Option | Why deferred / partial |
 |---|---|
-| Worker-only ownership | Orphans on hard kill (measured) |
-| Local supervisor | Extra failure domain without evidence yet |
-| Containers / remote service | Ownership ≠ sandbox; unjustified for this gap |
-| Blind requeue | Creates duplicate execution risk |
+| Watchdog + observation only | Insufficient process/memory ceilings on Windows |
+| Full Job Object suite as “sandbox” | Still no net/FS jail; nesting caveats |
+| Containers / remote executor | Stronger isolation ≠ required yet for trusted corpus |
+| Blind requeue on limit | Would duplicate work / amplify resource use |
 
 ## Evidence
 
 - `docs/execution-isolation.md`  
 - `docs/execution-evaluation-integration.md`  
 - `docs/execution-ownership-recovery.md`  
-- `tests/test_execution_ownership.py`  
-- `scripts/execution_ownership_experiment.py`
+- `docs/execution-resource-governance.md`  
+- `tests/test_execution_governance.py`  
+- `scripts/execution_resource_governance_experiment.py`
 
 ## Trade-offs
 
-**+** Native OS lifecycle coupling; duplicate prevention; no new infra  
-**−** Windows-centric hard guarantee; POSIX relies more on recovery kill;
-quarantine may fail evaluations that could have been retried
+**+** Honest ENFORCED vs OBSERVED vs NOT ENFORCED matrix; native OS levers; no new infra  
+**−** Windows-centric hard limits; nested-job process-count headroom; workspace poll race;
+CPU rate is throttle not isolation
 
 ## Reconsideration
 
-Supervisor or remote executor if Job Objects unavailable / ineffective in the
-deployment target, or if orphan_suspected becomes common.
+Job Objects unavailable/ineffective · workspace overshoot unacceptable · need
+net/FS deny for any participant code path · orphan/limit races in production.
 
 ## Related
 
-ADR 0003, ADR 0005, evaluation pipeline docs.
+ADR 0003, ADR 0005; ownership and evaluation pipeline docs.

@@ -10,7 +10,8 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any
 
-from challengeforge.execution.limits import ExecutionLimits
+from challengeforge.execution.job_object import job_objects_available
+from challengeforge.execution.limits import ExecutionLimits, budget_enforcement_matrix
 from challengeforge.execution.process_executor import ExecutionResult
 from challengeforge.execution.workloads import WORKLOAD_NAMES
 
@@ -22,10 +23,15 @@ class ExecutionOutcome(StrEnum):
     NONZERO_EXIT = "NONZERO_EXIT"
     TIMEOUT = "TIMEOUT"
     OUTPUT_LIMIT = "OUTPUT_LIMIT"
-    RESOURCE_LIMIT = "RESOURCE_LIMIT"
+    PROCESS_LIMIT = "PROCESS_LIMIT"
+    MEMORY_LIMIT = "MEMORY_LIMIT"
+    CPU_LIMIT = "CPU_LIMIT"
+    WORKSPACE_LIMIT = "WORKSPACE_LIMIT"
+    RESOURCE_LIMIT = "RESOURCE_LIMIT"  # legacy alias → prefer specific limits
     START_FAILURE = "START_FAILURE"
     EXECUTOR_ERROR = "EXECUTOR_ERROR"
     CLEANUP_ERROR = "CLEANUP_ERROR"
+    ORPHAN_SUSPECTED = "ORPHAN_SUSPECTED"
 
 
 # Trusted corpus only — never arbitrary participant source.
@@ -33,33 +39,36 @@ TRUSTED_CORPUS: dict[str, ExecutionOutcome] = {
     "LIGHT": ExecutionOutcome.SUCCESS,
     "CPU_HEAVY": ExecutionOutcome.SUCCESS,
     "MEMORY_HEAVY": ExecutionOutcome.SUCCESS,
+    "MEMORY_GROW": ExecutionOutcome.SUCCESS,
     "SLEEP": ExecutionOutcome.SUCCESS,
     "LARGE_OUTPUT": ExecutionOutcome.OUTPUT_LIMIT,
     "CHILD_PROCESS": ExecutionOutcome.SUCCESS,
+    "PROCESS_HEAVY": ExecutionOutcome.SUCCESS,
     "TIMEOUT": ExecutionOutcome.TIMEOUT,
     "MANY_FILES": ExecutionOutcome.SUCCESS,
+    "DISK_HEAVY": ExecutionOutcome.SUCCESS,
     "FAILURE": ExecutionOutcome.NONZERO_EXIT,
 }
 
-# Alias names used in experiments / metadata (map → WORKLOAD_NAMES).
 CORPUS_ALIASES: dict[str, str] = {
     "light_success": "LIGHT",
     "cpu_heavy_success": "CPU_HEAVY",
-    "sleep_timeout": "TIMEOUT",  # intentional: corpus expects TIMEOUT
+    "sleep_timeout": "TIMEOUT",
     "large_stdout": "LARGE_OUTPUT",
     "large_stderr": "LARGE_OUTPUT",
     "child_process": "CHILD_PROCESS",
+    "process_heavy": "PROCESS_HEAVY",
     "nonzero_exit": "FAILURE",
     "many_files": "MANY_FILES",
+    "disk_heavy": "DISK_HEAVY",
     "memory_heavy": "MEMORY_HEAVY",
+    "memory_grow": "MEMORY_GROW",
     "sleep_ok": "SLEEP",
 }
 
 
 @dataclass(frozen=True)
 class ExecutionRequest:
-    """What the orchestrator asks the executor to run (trusted workload name)."""
-
     execution_id: str
     workload: str
     limits: ExecutionLimits
@@ -67,8 +76,6 @@ class ExecutionRequest:
 
 @dataclass
 class EvaluationExecutionRecord:
-    """Bridge object: execution evidence + evaluation disposition."""
-
     outcome: ExecutionOutcome
     execution: ExecutionResult
     evaluation_terminal: str  # succeeded | failed | requeue
@@ -79,7 +86,6 @@ class EvaluationExecutionRecord:
 
 
 def resolve_workload(raw: str | None, *, workload_class: str | None = None) -> str:
-    """Map metadata / alias / class fallback to a trusted WORKLOAD_NAMES entry."""
     if isinstance(raw, str) and raw.strip():
         key = raw.strip()
         if key in WORKLOAD_NAMES:
@@ -91,7 +97,6 @@ def resolve_workload(raw: str | None, *, workload_class: str | None = None) -> s
         if upper in WORKLOAD_NAMES:
             return upper
         raise ValueError(f"untrusted or unknown execution_workload: {raw!r}")
-    # Class fallback — different vocabulary from executor names.
     mapping = {
         "light": "LIGHT",
         "medium": "SLEEP",
@@ -102,46 +107,52 @@ def resolve_workload(raw: str | None, *, workload_class: str | None = None) -> s
     return "LIGHT"
 
 
+_STATUS_TO_OUTCOME = {
+    "succeeded": ExecutionOutcome.SUCCESS,
+    "failed": ExecutionOutcome.NONZERO_EXIT,
+    "timeout": ExecutionOutcome.TIMEOUT,
+    "output_limit": ExecutionOutcome.OUTPUT_LIMIT,
+    "process_limit": ExecutionOutcome.PROCESS_LIMIT,
+    "memory_limit": ExecutionOutcome.MEMORY_LIMIT,
+    "cpu_limit": ExecutionOutcome.CPU_LIMIT,
+    "workspace_limit": ExecutionOutcome.WORKSPACE_LIMIT,
+    "rss_limit": ExecutionOutcome.MEMORY_LIMIT,
+    "error": ExecutionOutcome.START_FAILURE,
+}
+
+
 def outcome_from_result(result: ExecutionResult) -> ExecutionOutcome:
     status = result.status
     if status == "succeeded":
-        # PID leaks are a hard cleanup failure. Workspace rmtree flakiness on
-        # Windows without leaks is recorded in evidence but not elevated to
-        # CLEANUP_ERROR (still visible via workspace_cleaned=false).
         if result.leaked_pids_after_cleanup:
             return ExecutionOutcome.CLEANUP_ERROR
         return ExecutionOutcome.SUCCESS
-    if status == "failed":
-        return ExecutionOutcome.NONZERO_EXIT
-    if status == "timeout":
-        return ExecutionOutcome.TIMEOUT
-    if status == "output_limit":
-        return ExecutionOutcome.OUTPUT_LIMIT
-    if status == "rss_limit":
-        return ExecutionOutcome.RESOURCE_LIMIT
-    if status == "error":
-        return ExecutionOutcome.START_FAILURE
-    return ExecutionOutcome.EXECUTOR_ERROR
+    return _STATUS_TO_OUTCOME.get(status, ExecutionOutcome.EXECUTOR_ERROR)
 
 
-def disposition(outcome: ExecutionOutcome, *, attempt_count: int, max_attempts: int) -> tuple[str, bool, int | None, str | None]:
-    """Map execution outcome → (terminal, retryable, score, failure_reason).
+_DETERMINISTIC_FAIL = (
+    ExecutionOutcome.NONZERO_EXIT,
+    ExecutionOutcome.TIMEOUT,
+    ExecutionOutcome.OUTPUT_LIMIT,
+    ExecutionOutcome.PROCESS_LIMIT,
+    ExecutionOutcome.MEMORY_LIMIT,
+    ExecutionOutcome.CPU_LIMIT,
+    ExecutionOutcome.WORKSPACE_LIMIT,
+    ExecutionOutcome.RESOURCE_LIMIT,
+    ExecutionOutcome.ORPHAN_SUSPECTED,
+)
 
-    Returns evaluation_terminal in {succeeded, failed, requeue}.
-    """
+
+def disposition(
+    outcome: ExecutionOutcome, *, attempt_count: int, max_attempts: int
+) -> tuple[str, bool, int | None, str | None]:
+    """Map execution outcome → (terminal, retryable, score, failure_reason)."""
     if outcome == ExecutionOutcome.SUCCESS:
         return "succeeded", False, 100, None
     if outcome == ExecutionOutcome.CLEANUP_ERROR:
-        # Process finished but cleanup incomplete — fail observably, do not score.
         return "failed", False, None, "execution_cleanup_incomplete"
-    if outcome in (
-        ExecutionOutcome.NONZERO_EXIT,
-        ExecutionOutcome.TIMEOUT,
-        ExecutionOutcome.OUTPUT_LIMIT,
-        ExecutionOutcome.RESOURCE_LIMIT,
-    ):
+    if outcome in _DETERMINISTIC_FAIL:
         return "failed", False, None, f"execution_{outcome.value.lower()}"
-    # Infrastructure-ish
     if outcome in (ExecutionOutcome.START_FAILURE, ExecutionOutcome.EXECUTOR_ERROR):
         if attempt_count < max_attempts:
             return "requeue", True, None, f"execution_{outcome.value.lower()}_retry"
@@ -150,17 +161,24 @@ def disposition(outcome: ExecutionOutcome, *, attempt_count: int, max_attempts: 
 
 
 def budget_labels() -> dict[str, str]:
-    """Mandatory ENFORCED / OBSERVED / NOT ENFORCED map for this host prototype."""
+    """ENFORCED / OBSERVED / NOT_ENFORCED / ENFORCED_THROTTLE for this host."""
+    matrix = budget_enforcement_matrix(job_objects=job_objects_available())
+    # Preserve prior key names expected by docs/tests.
     return {
-        "wall_timeout": "ENFORCED",
-        "stdout_cap": "ENFORCED",
-        "stderr_cap": "ENFORCED",
-        "process_tree_cleanup": "ENFORCED",
-        "workspace_cleanup": "ENFORCED",
-        "scrubbed_env": "ENFORCED",
-        "peak_rss": "OBSERVED",
-        "process_count": "OBSERVED",
-        "cpu_accounting": "OBSERVED",
+        "wall_timeout": matrix["wall_timeout"],
+        "stdout_cap": matrix["stdout_cap"],
+        "stderr_cap": matrix["stderr_cap"],
+        "process_tree_cleanup": matrix["process_tree_cleanup"],
+        "workspace_cleanup": matrix["workspace_cleanup"],
+        "scrubbed_env": matrix["scrubbed_env"],
+        "peak_rss": matrix["peak_rss"],
+        "process_count": matrix["process_count"],
+        "job_memory": matrix["job_memory"],
+        "cpu_user_time": matrix["cpu_user_time"],
+        "cpu_rate": matrix["cpu_rate"],
+        "cpu_accounting": matrix["cpu_accounting"],
+        "workspace_bytes": matrix["workspace_bytes"],
+        "kill_on_job_close": matrix["kill_on_job_close"],
         "network_deny": "NOT ENFORCED",
         "cgroup_cpu_quota": "NOT ENFORCED",
         "cgroup_memory": "NOT ENFORCED",

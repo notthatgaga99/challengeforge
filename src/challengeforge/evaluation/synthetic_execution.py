@@ -12,6 +12,7 @@ from uuid import UUID
 from challengeforge.execution.contract import (
     EvaluationExecutionRecord,
     ExecutionRequest,
+    budget_labels,
     disposition,
     outcome_from_result,
     resolve_workload,
@@ -93,11 +94,8 @@ def run_synthetic_execution(
         "execution": result.to_dict(),
         "execution_attempt": attempt.to_metadata(),
         "retryable": retryable,
-        "budgets": {
-            "wall_timeout_seconds": lim.wall_timeout_seconds,
-            "max_stdout_bytes": lim.max_stdout_bytes,
-            "max_stderr_bytes": lim.max_stderr_bytes,
-        },
+        "budgets": lim.to_dict(),
+        "budget_labels": budget_labels(),
     }
     return EvaluationExecutionRecord(
         outcome=outcome,

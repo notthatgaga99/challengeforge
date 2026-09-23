@@ -1,0 +1,187 @@
+{
+  "metadata": {
+    "started_at": "2026-09-23T07:05:56.984564+00:00",
+    "environment": {
+      "platform": "Windows-10-10.0.26200-SP0",
+      "python": "3.11.0",
+      "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+      "cpu_count_logical": 12,
+      "total_memory_mb": 16016.4,
+      "available_memory_mb": 1348.2,
+      "job_objects_available": true,
+      "ownership_mechanism": "windows_job_object_kill_on_close",
+      "process_already_in_job": null
+    },
+    "claim": "Selective resource governance \u2014 not public sandbox",
+    "completed_at": "2026-09-23T07:06:42.074183+00:00"
+  },
+  "probe": {
+    "budget_labels": {
+      "wall_timeout": "ENFORCED",
+      "stdout_cap": "ENFORCED",
+      "stderr_cap": "ENFORCED",
+      "process_tree_cleanup": "ENFORCED",
+      "workspace_cleanup": "ENFORCED",
+      "scrubbed_env": "ENFORCED",
+      "peak_rss": "OBSERVED",
+      "process_count": "ENFORCED",
+      "job_memory": "ENFORCED",
+      "cpu_user_time": "ENFORCED",
+      "cpu_rate": "ENFORCED_THROTTLE",
+      "cpu_accounting": "OBSERVED",
+      "workspace_bytes": "ENFORCED",
+      "kill_on_job_close": "ENFORCED",
+      "network_deny": "NOT ENFORCED",
+      "cgroup_cpu_quota": "NOT ENFORCED",
+      "cgroup_memory": "NOT ENFORCED",
+      "filesystem_jail": "NOT ENFORCED"
+    },
+    "process_limit": {
+      "status": "process_limit",
+      "process_count_peak": 2,
+      "leaked": [],
+      "enforced": true
+    },
+    "memory_limit": {
+      "status": "memory_limit",
+      "peak_rss_mb": 29.574,
+      "leaked": [],
+      "enforced": true
+    },
+    "cpu_user_time": {
+      "status": "cpu_limit",
+      "wall_ms": 962.989,
+      "exit_code": 3221225540,
+      "enforced_terminal": true,
+      "note": "long burn under PerJobUserTimeLimit=0.2s",
+      "stderr_preview": ""
+    },
+    "cpu_rate_throttle": {
+      "uncapped_wall_ms": 572.794,
+      "capped_wall_ms": 741.923,
+      "capped_applied": {
+        "kill_on_job_close": true,
+        "cpu_rate_percent": 5.0
+      },
+      "enforced_throttle": true
+    },
+    "workspace_limit": {
+      "status": "workspace_limit",
+      "peak_workspace_bytes": 1048576,
+      "leaked": [],
+      "enforced": true
+    },
+    "output_limit": {
+      "status": "output_limit",
+      "stdout_bytes": 8192,
+      "enforced": true
+    },
+    "ownership_with_limits": {
+      "alive_after_job_close": false,
+      "containment": {
+        "execution_attempt_id": "b4881100-5874-4dd6-a25f-bcd3fa140b79",
+        "root_pid": 21292,
+        "was_alive": false,
+        "killed_pids": [],
+        "still_alive": [],
+        "workspace_exists": false,
+        "contained": true
+      },
+      "ok": true
+    }
+  },
+  "pressure": [
+    {
+      "concurrency": 1,
+      "batch_s": 2.165,
+      "statuses": [
+        "succeeded"
+      ],
+      "leaked_any": false,
+      "mean_wall_ms": 375.66
+    },
+    {
+      "concurrency": 2,
+      "batch_s": 4.579,
+      "statuses": [
+        "succeeded",
+        "succeeded"
+      ],
+      "leaked_any": false,
+      "mean_wall_ms": 479.09
+    },
+    {
+      "concurrency": 4,
+      "batch_s": 9.838,
+      "statuses": [
+        "succeeded",
+        "succeeded",
+        "process_limit",
+        "workspace_limit"
+      ],
+      "leaked_any": false,
+      "mean_wall_ms": 657.73
+    }
+  ],
+  "capacity": [
+    {
+      "governance": false,
+      "n": 3,
+      "mean_wall_ms": 440.09,
+      "batch_s": 6.587
+    },
+    {
+      "governance": true,
+      "n": 3,
+      "mean_wall_ms": 399.12,
+      "batch_s": 6.581
+    }
+  ],
+  "decision": {
+    "gate": "KEEP + SELECTIVE RESOURCE LIMITS",
+    "rationale": "Windows Job Objects enforce process-count and job-memory ceilings; CPU rate is a throttle; wall/output/workspace remain app-enforced; network/FS jail still NOT ENFORCED. Ownership KillOnJobClose still holds.",
+    "participant_code_allowed": false,
+    "public_sandbox_ready": false,
+    "budget_labels": {
+      "wall_timeout": "ENFORCED",
+      "stdout_cap": "ENFORCED",
+      "stderr_cap": "ENFORCED",
+      "process_tree_cleanup": "ENFORCED",
+      "workspace_cleanup": "ENFORCED",
+      "scrubbed_env": "ENFORCED",
+      "peak_rss": "OBSERVED",
+      "process_count": "ENFORCED",
+      "job_memory": "ENFORCED",
+      "cpu_user_time": "ENFORCED",
+      "cpu_rate": "ENFORCED_THROTTLE",
+      "cpu_accounting": "OBSERVED",
+      "workspace_bytes": "ENFORCED",
+      "kill_on_job_close": "ENFORCED",
+      "network_deny": "NOT ENFORCED",
+      "cgroup_cpu_quota": "NOT ENFORCED",
+      "cgroup_memory": "NOT ENFORCED",
+      "filesystem_jail": "NOT ENFORCED"
+    }
+  },
+  "interactive_regression": {
+    "source": "docs/execution-resource-governance-interactive.json",
+    "cells": [
+      {
+        "label": "A_none",
+        "client_p95_ms": 358.66,
+        "achieved_rps": 15.009
+      },
+      {
+        "label": "B_one",
+        "client_p95_ms": 163.55,
+        "achieved_rps": 14.549
+      },
+      {
+        "label": "C_two",
+        "client_p95_ms": 262.29,
+        "achieved_rps": 14.968
+      }
+    ],
+    "note": "Healthy envelope; no governance-specific collapse vs A_none"
+  }
+}

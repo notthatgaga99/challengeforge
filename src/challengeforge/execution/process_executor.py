@@ -1,4 +1,4 @@
-"""Process-level synthetic executor with tree cleanup and I/O caps."""
+"""Process-level synthetic executor with tree cleanup and resource budgets."""
 
 from __future__ import annotations
 
@@ -16,7 +16,8 @@ from typing import Any, Callable, IO
 import psutil
 
 from challengeforge.execution.job_object import (
-    create_kill_on_close_job,
+    JobResourceLimits,
+    create_job,
     job_objects_available,
     ownership_mechanism,
 )
@@ -26,7 +27,9 @@ from challengeforge.execution.limits import ExecutionLimits
 @dataclass
 class ExecutionResult:
     workload: str
-    status: str  # succeeded | failed | timeout | output_limit | rss_limit | error
+    status: str
+    # succeeded | failed | timeout | output_limit | process_limit |
+    # memory_limit | cpu_limit | workspace_limit | error
     exit_code: int | None
     wall_ms: float
     startup_ms: float
@@ -37,6 +40,7 @@ class ExecutionResult:
     stderr_truncated: bool
     peak_rss_mb: float | None
     process_count_peak: int
+    peak_workspace_bytes: int | None = None
     leaked_pids_after_cleanup: list[int] = field(default_factory=list)
     workspace: str | None = None
     workspace_cleaned: bool = False
@@ -60,6 +64,7 @@ class ExecutionResult:
                 round(self.peak_rss_mb, 3) if self.peak_rss_mb is not None else None
             ),
             "process_count_peak": self.process_count_peak,
+            "peak_workspace_bytes": self.peak_workspace_bytes,
             "leaked_pids_after_cleanup": self.leaked_pids_after_cleanup,
             "workspace": self.workspace,
             "workspace_cleaned": self.workspace_cleaned,
@@ -78,7 +83,9 @@ class _StreamCap:
         self.buf = bytearray()
         self.truncated = False
         self._limit_hit = threading.Event()
-        self._thread = threading.Thread(target=self._run, name="cf-exec-stream", daemon=True)
+        self._thread = threading.Thread(
+            target=self._run, name="cf-exec-stream", daemon=True
+        )
 
     def start(self) -> None:
         self._thread.start()
@@ -93,7 +100,6 @@ class _StreamCap:
                 if remaining <= 0:
                     self.truncated = True
                     self._limit_hit.set()
-                    # Drain and discard to avoid blocking the child on a full pipe.
                     continue
                 if len(chunk) > remaining:
                     self.buf.extend(chunk[:remaining])
@@ -110,6 +116,20 @@ class _StreamCap:
     @property
     def limit_hit(self) -> bool:
         return self._limit_hit.is_set() or self.truncated
+
+
+def _dir_size_bytes(root: Path) -> int:
+    total = 0
+    try:
+        for dirpath, _dirnames, filenames in os.walk(root):
+            for name in filenames:
+                try:
+                    total += (Path(dirpath) / name).stat().st_size
+                except OSError:
+                    pass
+    except OSError:
+        pass
+    return total
 
 
 class ProcessExecutor:
@@ -156,13 +176,27 @@ class ProcessExecutor:
 
         job = None
         ownership = "pid_tracking_only"
+        job_applied: dict[str, Any] = {}
         if use_os_ownership and job_objects_available():
             try:
-                job = create_kill_on_close_job(name=None)
+                resources = JobResourceLimits(
+                    max_active_processes=limits.max_process_count,
+                    max_job_memory_bytes=(
+                        int(limits.max_job_memory_mb * 1024 * 1024)
+                        if limits.max_job_memory_mb is not None
+                        else None
+                    ),
+                    max_cpu_seconds=limits.max_cpu_seconds,
+                    cpu_rate_percent=limits.cpu_rate_percent,
+                )
+                job = create_job(resources)
                 ownership = ownership_mechanism()
-            except OSError:
+                if job is not None:
+                    job_applied = dict(job.applied)
+            except OSError as exc:
                 job = None
                 ownership = "pid_tracking_only"
+                job_applied = {"create_error": str(exc)}
         elif use_os_ownership:
             ownership = ownership_mechanism()
 
@@ -189,24 +223,19 @@ class ProcessExecutor:
                 workspace=str(work_dir),
                 workspace_cleaned=True,
                 ownership=ownership,
-                evidence={"error": str(exc)},
+                evidence={"error": str(exc), "job_applied": job_applied},
             )
         startup_ms = (time.perf_counter() - startup_begin) * 1000.0
 
+        assign_error = None
         if job is not None:
             try:
                 job.assign(proc.pid)
             except OSError as exc:
-                # Fall back to pid tracking; continue the run.
                 ownership = "pid_tracking_only"
                 job.close()
                 job = None
-                # stash assign error in evidence later
                 assign_error = str(exc)
-            else:
-                assign_error = None
-        else:
-            assign_error = None
 
         pgid = None
         if os.name != "nt":
@@ -237,19 +266,24 @@ class ProcessExecutor:
         parent = psutil.Process(proc.pid)
         peak_rss: float | None = None
         peak_procs = 1
+        peak_workspace = 0
         status = "succeeded"
         deadline = time.perf_counter() + max(0.05, limits.wall_timeout_seconds)
         last_rss_poll = 0.0
+        last_ws_poll = 0.0
         root_pid = proc.pid
+        limit_reason: str | None = None
 
         try:
             while True:
                 now = time.perf_counter()
                 if now >= deadline:
                     status = "timeout"
+                    limit_reason = "wall_timeout"
                     break
                 if out_cap.limit_hit or err_cap.limit_hit:
                     status = "output_limit"
+                    limit_reason = "stdout" if out_cap.limit_hit else "stderr"
                     break
                 rc = proc.poll()
                 if rc is not None:
@@ -257,33 +291,67 @@ class ProcessExecutor:
                     err_cap.join(timeout=1.0)
                     if out_cap.truncated or err_cap.truncated:
                         status = "output_limit"
-                    elif rc != 0:
-                        status = "failed"
+                        limit_reason = "stdout" if out_cap.truncated else "stderr"
                     else:
-                        status = "succeeded"
+                        classified = self._classify_resource_exit(rc, limits)
+                        if classified is not None:
+                            status, limit_reason = classified
+                        elif rc != 0:
+                            status = "failed"
+                        else:
+                            status = "succeeded"
                     break
-                if limits.max_rss_mb is not None and (
-                    now - last_rss_poll >= limits.rss_poll_interval_seconds
-                ):
+
+                # Process-count ceiling (app poll + OS ActiveProcessLimit).
+                try:
+                    nprocs = 1 + len(parent.children(recursive=True))
+                    peak_procs = max(peak_procs, nprocs)
+                    if (
+                        limits.max_process_count is not None
+                        and nprocs >= limits.max_process_count
+                    ):
+                        status = "process_limit"
+                        limit_reason = "active_process_limit"
+                        break
+                except (psutil.Error, psutil.NoSuchProcess):
+                    pass
+
+                if now - last_rss_poll >= limits.rss_poll_interval_seconds:
                     last_rss_poll = now
                     rss = self._tree_rss_mb(parent)
                     if rss is not None:
                         peak_rss = rss if peak_rss is None else max(peak_rss, rss)
-                        if rss > limits.max_rss_mb:
-                            status = "rss_limit"
+                        if (
+                            limits.max_rss_mb is not None
+                            and rss > limits.max_rss_mb
+                        ):
+                            status = "memory_limit"
+                            limit_reason = "rss_soft_watch"
                             break
-                try:
-                    peak_procs = max(
-                        peak_procs, 1 + len(parent.children(recursive=True))
-                    )
-                except (psutil.Error, psutil.NoSuchProcess):
-                    pass
+
+                if (
+                    limits.max_workspace_bytes is not None
+                    and now - last_ws_poll >= limits.workspace_poll_interval_seconds
+                ):
+                    last_ws_poll = now
+                    ws_bytes = _dir_size_bytes(work_dir)
+                    peak_workspace = max(peak_workspace, ws_bytes)
+                    if ws_bytes > limits.max_workspace_bytes:
+                        status = "workspace_limit"
+                        limit_reason = "workspace_bytes"
+                        break
+
                 time.sleep(0.02)
         finally:
             wall_ms = (time.perf_counter() - t_start) * 1000.0
             c0 = time.perf_counter()
+            peak_job_mem = None
+            if job is not None:
+                try:
+                    peak_job_mem = job.query_peak_job_memory()
+                except Exception:
+                    peak_job_mem = None
             leaked = self._terminate_tree(proc, parent, limits.grace_terminate_seconds)
-            # Closing the job handle also kills remaining members (KillOnJobClose).
             if job is not None:
                 try:
                     job.close()
@@ -300,7 +368,14 @@ class ProcessExecutor:
             time.sleep(0.15)
             if peak_rss is None:
                 peak_rss = self._tree_rss_mb(parent)
+            if peak_workspace == 0 and work_dir.exists():
+                peak_workspace = _dir_size_bytes(work_dir)
             exit_code = proc.poll()
+            # Re-classify after forced terminate if we already set a limit status.
+            if status == "succeeded" and limits.max_cpu_seconds is not None:
+                if exit_code not in (0, None) and abs(int(exit_code or 0)) > 1000:
+                    status = "cpu_limit"
+                    limit_reason = "job_user_time"
             keep_ws = bool(
                 limits.workspace_retain_on_failure and status not in ("succeeded",)
             )
@@ -309,10 +384,27 @@ class ProcessExecutor:
 
         out = bytes(out_cap.buf)
         err = bytes(err_cap.buf)
+        # Workload self-reported resource signals (deterministic corpus).
+        combined = (out + err).decode("utf-8", errors="replace")
+        if status in ("succeeded", "failed"):
+            if "cf_process_limit" in combined:
+                status = "process_limit"
+                limit_reason = limit_reason or "workload_signal"
+            elif "cf_memory_limit" in combined:
+                status = "memory_limit"
+                limit_reason = limit_reason or "workload_signal"
+            elif "cf_workspace_limit" in combined:
+                status = "workspace_limit"
+                limit_reason = limit_reason or "workload_signal"
+
         evidence = {
             "stdout_preview": out[:512].decode("utf-8", errors="replace"),
             "stderr_preview": err[:512].decode("utf-8", errors="replace"),
             "pgid": pgid,
+            "job_applied": job_applied,
+            "limit_reason": limit_reason,
+            "peak_job_memory_bytes": peak_job_mem,
+            "budgets": limits.to_dict(),
         }
         if assign_error:
             evidence["job_assign_error"] = assign_error
@@ -329,6 +421,7 @@ class ProcessExecutor:
             stderr_truncated=err_cap.truncated,
             peak_rss_mb=peak_rss,
             process_count_peak=peak_procs,
+            peak_workspace_bytes=peak_workspace or None,
             leaked_pids_after_cleanup=leaked,
             workspace=str(work_dir),
             workspace_cleaned=cleaned,
@@ -336,6 +429,17 @@ class ProcessExecutor:
             ownership=ownership,
             evidence=evidence,
         )
+
+    def _classify_resource_exit(
+        self,
+        rc: int,
+        limits: ExecutionLimits,
+    ) -> tuple[str, str] | None:
+        """Return (status, reason) if exit maps to a resource limit, else None."""
+        # NTSTATUS-style / large codes often mean OS job kill (CPU time).
+        if limits.max_cpu_seconds is not None and abs(rc) > 1000:
+            return "cpu_limit", "job_user_time"
+        return None
 
     def cleanup_only(self, workspace: Path) -> bool:
         """Idempotent workspace cleanup (Invariant 8)."""
@@ -383,7 +487,6 @@ class ProcessExecutor:
                 p.terminate()
             except (psutil.Error, psutil.NoSuchProcess):
                 pass
-        # Windows: also ask the OS to kill the whole tree (covers breakaway children).
         if os.name == "nt" and proc.pid:
             try:
                 subprocess.run(
