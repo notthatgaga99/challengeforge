@@ -7,6 +7,7 @@ from challengeforge.domain.exceptions import PermissionDenied, ValidationFailed
 from challengeforge.identity import CurrentUser
 from challengeforge.persistence.repositories import (
     ChallengeRepository,
+    DocumentChunkRepository,
     EvaluationRepository,
     HackathonRepository,
     IngestionJobRepository,
@@ -45,6 +46,10 @@ class UnitOfWork:
     @property
     def ingestion_jobs(self) -> IngestionJobRepository:
         return IngestionJobRepository(self.session)
+
+    @property
+    def document_chunks(self) -> DocumentChunkRepository:
+        return DocumentChunkRepository(self.session)
 
 
 def require_organizer(user: CurrentUser) -> None:

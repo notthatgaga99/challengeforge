@@ -129,8 +129,9 @@ final key (`docs/large-upload-architecture.md`). Streaming ≠ resumability;
 optional `X-Content-SHA256` ≠ deduplication. Default size cap remains 5 MiB.
 
 **Ingestion:** committed artifacts enqueue durable Postgres `ingestion_jobs`
-(PARSE→NORMALIZE→READY synthetic processor). See
-`docs/ingestion-pipeline-reliability.md` / ADR 0010. Not chunking/RAG.
+(PARSE→NORMALIZE→CHUNK→READY). Canonical text + hybrid chunks persist in
+`document_chunks` (see `docs/chunking-and-representation.md` / ADR 0011).
+Not embeddings/RAG.
 
 Replacing the filesystem with object storage later should not change submission
 use cases — the dual-write problem remains behind the same protocol.

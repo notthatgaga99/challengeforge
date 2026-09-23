@@ -13,6 +13,7 @@ from challengeforge.domain.enums import (
 from challengeforge.domain.models import (
     Challenge,
     ChallengeSpecification,
+    DocumentChunk,
     Evaluation,
     EvaluationCriterion,
     Hackathon,
@@ -22,6 +23,7 @@ from challengeforge.domain.models import (
 )
 from challengeforge.persistence.models import (
     ChallengeRow,
+    DocumentChunkRow,
     EvaluationRow,
     HackathonRow,
     IngestionJobRow,
@@ -135,6 +137,29 @@ def ingestion_to_domain(row: IngestionJobRow) -> IngestionJob:
         error_code=row.error_code,
         error_message=row.error_message,
         result_key=row.result_key,
+    )
+
+
+def chunk_to_domain(row: DocumentChunkRow) -> DocumentChunk:
+    path = row.heading_path or []
+    return DocumentChunk(
+        id=row.id,
+        ingestion_job_id=row.ingestion_job_id,
+        submission_id=row.submission_id,
+        artifact_key=row.artifact_key,
+        parser_version=row.parser_version,
+        chunker_version=row.chunker_version,
+        ordinal=row.ordinal,
+        content=row.content,
+        content_sha256=row.content_sha256,
+        char_start=row.char_start,
+        char_end=row.char_end,
+        line_start=row.line_start,
+        line_end=row.line_end,
+        block_type=row.block_type,
+        heading_path=tuple(str(x) for x in path),
+        oversized_split=bool(row.oversized_split),
+        created_at=row.created_at,
     )
 
 

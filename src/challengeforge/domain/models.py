@@ -117,3 +117,24 @@ class IngestionJob:
     error_code: str | None = None
     error_message: str | None = None
     result_key: str | None = None
+
+
+@dataclass(frozen=True)
+class DocumentChunk:
+    id: UUID
+    ingestion_job_id: UUID
+    submission_id: UUID
+    artifact_key: str
+    parser_version: str
+    chunker_version: str
+    ordinal: int
+    content: str
+    content_sha256: str
+    char_start: int
+    char_end: int
+    line_start: int
+    line_end: int
+    block_type: str
+    heading_path: tuple[str, ...]
+    oversized_split: bool
+    created_at: datetime

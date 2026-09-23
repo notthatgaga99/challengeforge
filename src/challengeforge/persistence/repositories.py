@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from uuid import UUID, uuid4
 
-from sqlalchemy import func, select, update
+from sqlalchemy import delete, func, select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -9,6 +9,7 @@ from sqlalchemy.orm import selectinload
 from challengeforge.domain.enums import ChallengeStatus, HackathonStatus
 from challengeforge.domain.models import (
     Challenge,
+    DocumentChunk,
     Evaluation,
     Hackathon,
     IngestionJob,
@@ -17,6 +18,7 @@ from challengeforge.domain.models import (
 )
 from challengeforge.persistence.mapping import (
     challenge_to_domain,
+    chunk_to_domain,
     evaluation_to_domain,
     hackathon_to_domain,
     ingestion_to_domain,
@@ -26,6 +28,7 @@ from challengeforge.persistence.mapping import (
 from challengeforge.persistence.models import (
     ChallengeRow,
     ChallengeSpecificationRow,
+    DocumentChunkRow,
     EvaluationCriterionRow,
     EvaluationRow,
     EvaluationSchedulerStateRow,
@@ -1158,3 +1161,79 @@ class IngestionJobRepository:
         )
         result = await self.session.execute(stmt)
         return {status: int(count) for status, count in result.all()}
+
+
+class DocumentChunkRepository:
+    """Durable chunk sets keyed by ingestion_job_id (complete-on-succeed)."""
+
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def replace_for_job(
+        self,
+        *,
+        ingestion_job_id: UUID,
+        submission_id: UUID,
+        artifact_key: str,
+        parser_version: str,
+        chunker_version: str,
+        chunks: list | tuple,
+    ) -> list[DocumentChunk]:
+        """Atomically replace all chunks for a job (idempotent re-ingest)."""
+        await self.session.execute(
+            delete(DocumentChunkRow).where(
+                DocumentChunkRow.ingestion_job_id == ingestion_job_id
+            )
+        )
+        now = utcnow()
+        rows: list[DocumentChunkRow] = []
+        for draft in chunks:
+            row = DocumentChunkRow(
+                id=uuid4(),
+                ingestion_job_id=ingestion_job_id,
+                submission_id=submission_id,
+                artifact_key=artifact_key,
+                parser_version=parser_version,
+                chunker_version=chunker_version,
+                ordinal=int(draft.ordinal),
+                content=draft.content,
+                content_sha256=draft.content_sha256,
+                char_start=int(draft.char_start),
+                char_end=int(draft.char_end),
+                line_start=int(draft.line_start),
+                line_end=int(draft.line_end),
+                block_type=draft.block_type,
+                heading_path=list(draft.heading_path),
+                oversized_split=bool(draft.oversized_split),
+                created_at=now,
+            )
+            self.session.add(row)
+            rows.append(row)
+        await self.session.flush()
+        return [chunk_to_domain(r) for r in rows]
+
+    async def delete_for_job(self, ingestion_job_id: UUID) -> int:
+        result = await self.session.execute(
+            delete(DocumentChunkRow).where(
+                DocumentChunkRow.ingestion_job_id == ingestion_job_id
+            )
+        )
+        return int(result.rowcount or 0)
+
+    async def list_for_job(self, ingestion_job_id: UUID) -> list[DocumentChunk]:
+        rows = (
+            await self.session.execute(
+                select(DocumentChunkRow)
+                .where(DocumentChunkRow.ingestion_job_id == ingestion_job_id)
+                .order_by(DocumentChunkRow.ordinal.asc())
+            )
+        ).scalars().all()
+        return [chunk_to_domain(r) for r in rows]
+
+    async def count_for_job(self, ingestion_job_id: UUID) -> int:
+        result = await self.session.execute(
+            select(func.count()).where(
+                DocumentChunkRow.ingestion_job_id == ingestion_job_id
+            )
+        )
+        return int(result.scalar_one())

@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     ingestion_max_attempts: int = 3
     ingestion_poll_interval_seconds: float = 0.25
     ingestion_retry_delay_seconds: float = 0.0
+    ingestion_chunk_max_chars: int = Field(default=1200, ge=64, le=100_000)
     # Environment-specific operating envelope from the laptop experiment.
     # These are explicit limits, not an auto-scaling or resource prediction model.
     evaluation_max_workers: int = Field(default=1, ge=1)

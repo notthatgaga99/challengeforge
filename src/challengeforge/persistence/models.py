@@ -4,7 +4,18 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import CheckConstraint, DateTime, Float, ForeignKey, Index, Integer, Text, text
+from sqlalchemy import (
+    Boolean,
+    CheckConstraint,
+    DateTime,
+    Float,
+    ForeignKey,
+    Index,
+    Integer,
+    Text,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -286,3 +297,54 @@ class IngestionJobRow(Base):
     result_key: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class DocumentChunkRow(Base):
+    """Durable retrieval chunk produced by a successful ingestion job."""
+
+    __tablename__ = "document_chunks"
+    __table_args__ = (
+        CheckConstraint("ordinal >= 0", name="ck_document_chunks_ordinal"),
+        CheckConstraint(
+            "char_start >= 0 AND char_end >= char_start",
+            name="ck_document_chunks_chars",
+        ),
+        CheckConstraint(
+            "line_start >= 1 AND line_end >= line_start",
+            name="ck_document_chunks_lines",
+        ),
+        UniqueConstraint(
+            "ingestion_job_id",
+            "ordinal",
+            name="uq_document_chunks_job_ordinal",
+        ),
+        Index("ix_document_chunks_artifact_key", "artifact_key"),
+        Index("ix_document_chunks_job", "ingestion_job_id"),
+        Index("ix_document_chunks_versions", "parser_version", "chunker_version"),
+    )
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    ingestion_job_id: Mapped[UUID] = mapped_column(
+        ForeignKey("ingestion_jobs.id", ondelete="CASCADE"), nullable=False
+    )
+    submission_id: Mapped[UUID] = mapped_column(
+        ForeignKey("submissions.id", ondelete="CASCADE"), nullable=False
+    )
+    artifact_key: Mapped[str] = mapped_column(Text, nullable=False)
+    parser_version: Mapped[str] = mapped_column(Text, nullable=False)
+    chunker_version: Mapped[str] = mapped_column(Text, nullable=False)
+    ordinal: Mapped[int] = mapped_column(Integer, nullable=False)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    content_sha256: Mapped[str] = mapped_column(Text, nullable=False)
+    char_start: Mapped[int] = mapped_column(Integer, nullable=False)
+    char_end: Mapped[int] = mapped_column(Integer, nullable=False)
+    line_start: Mapped[int] = mapped_column(Integer, nullable=False)
+    line_end: Mapped[int] = mapped_column(Integer, nullable=False)
+    block_type: Mapped[str] = mapped_column(Text, nullable=False)
+    heading_path: Mapped[list[Any]] = mapped_column(
+        JSONB, nullable=False, server_default=text("'[]'::jsonb")
+    )
+    oversized_split: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("false")
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

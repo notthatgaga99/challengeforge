@@ -10,7 +10,8 @@
 > **At-least-once execution ≠ exactly-once effects.**  
 > Effects are made safe by stable `result_key` overwrite + conditional completion.
 
-Chunking / embeddings / RAG are **out of scope**.
+Chunking / embeddings / RAG follow separately; this doc covers job durability.
+See `docs/chunking-and-representation.md` once chunks exist.
 
 ---
 

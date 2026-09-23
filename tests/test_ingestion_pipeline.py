@@ -139,6 +139,10 @@ async def test_ingestion_job_lifecycle(database_url: str, tmp_path: Path):
         assert job is not None
         assert job.status == IngestionStatus.SUCCEEDED
         assert job.result_key and storage.exists(job.result_key)
+        from challengeforge.persistence.repositories import DocumentChunkRepository
+
+        chunks = await DocumentChunkRepository(session).list_for_job(job_ids[0])
+        assert len(chunks) >= 1
     await engine.dispose()
 
 
