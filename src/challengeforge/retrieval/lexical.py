@@ -16,6 +16,8 @@ from enum import StrEnum
 from typing import Any, Sequence
 from uuid import UUID
 
+# Any used for optional embedding_provider without importing providers here.
+
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -72,10 +74,12 @@ async def retrieve(
     top_k: int = 10,
     filters: RetrievalFilters | None = None,
     retrieval_version: str = RETRIEVAL_VERSION_FTS,
+    embedding_provider: Any | None = None,
 ) -> list[RetrievedChunk]:
     """Retrieve top-k chunks from succeeded ingestion jobs only.
 
     Ordering: score DESC, chunk_id ASC (deterministic ties).
+    Dense/hybrid versions require ``embedding_provider``.
     """
     if top_k < 1:
         raise ValueError("top_k must be >= 1")
@@ -92,6 +96,35 @@ async def retrieve(
         return await _retrieve_struct(session, q, top_k=top_k, filters=filters)
     if version == RETRIEVAL_VERSION_FTS:
         return await _retrieve_fts(session, q, top_k=top_k, filters=filters)
+
+    # Lazy import avoids circular dependency with dense.py
+    from challengeforge.retrieval.dense import (
+        RETRIEVAL_VERSION_DENSE,
+        RETRIEVAL_VERSION_HYBRID_RRF,
+        retrieve_dense,
+        retrieve_hybrid_rrf,
+    )
+
+    if version in (RETRIEVAL_VERSION_DENSE, RETRIEVAL_VERSION_HYBRID_RRF):
+        if embedding_provider is None:
+            raise ValueError(
+                f"retrieval_version={version} requires embedding_provider"
+            )
+        if version == RETRIEVAL_VERSION_DENSE:
+            return await retrieve_dense(
+                session,
+                q,
+                provider=embedding_provider,
+                top_k=top_k,
+                filters=filters,
+            )
+        return await retrieve_hybrid_rrf(
+            session,
+            q,
+            provider=embedding_provider,
+            top_k=top_k,
+            filters=filters,
+        )
     raise ValueError(f"Unknown retrieval_version: {retrieval_version}")
 
 

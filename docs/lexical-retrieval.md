@@ -162,6 +162,9 @@ Semantic paraphrase, synonymy without shared tokens, “intent” matching, answ
 **Not** “embeddings are better.”  
 **Because** the corpus includes paraphrase queries where lexical retrieval systematically misses relevant chunks that use different wording. That is a concrete failure mode for a semantic retrieval experiment to target — later, with measurement against this same corpus.
 
+**Design (accepted):** `docs/semantic-retrieval-design.md` / ADR 0013 — dense +
+pgvector + hybrid RRF. Implementation is a follow-up milestone.
+
 ## Reconsideration triggers
 
 - PG FTS latency unacceptable at real corpus size  

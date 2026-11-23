@@ -16,7 +16,7 @@ from sqlalchemy import (
     UniqueConstraint,
     text,
 )
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -347,4 +347,20 @@ class DocumentChunkRow(Base):
     oversized_split: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")
     )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ChunkEmbeddingRow(Base):
+    """Dense embedding for a chunk under a specific embedding_version."""
+
+    __tablename__ = "chunk_embeddings"
+    __table_args__ = (Index("ix_chunk_embeddings_version", "embedding_version"),)
+
+    chunk_id: Mapped[UUID] = mapped_column(
+        ForeignKey("document_chunks.id", ondelete="CASCADE"), primary_key=True
+    )
+    embedding_version: Mapped[str] = mapped_column(Text, primary_key=True)
+    embedding: Mapped[list[float]] = mapped_column(ARRAY(Float), nullable=False)
+    content_sha256: Mapped[str] = mapped_column(Text, nullable=False)
+    dimensions: Mapped[int] = mapped_column(Integer, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

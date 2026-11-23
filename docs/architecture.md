@@ -133,7 +133,12 @@ optional `X-Content-SHA256` ≠ deduplication. Default size cap remains 5 MiB.
 `document_chunks` (see `docs/chunking-and-representation.md` / ADR 0011).
 
 **Retrieval (lexical baseline):** PostgreSQL FTS over succeeded-job chunks
-(`docs/lexical-retrieval.md` / ADR 0012). Not embeddings/RAG.
+(`docs/lexical-retrieval.md` / ADR 0012). Live default remains lexical.
+
+**Semantic retrieval (measured):** dense + `chunk_embeddings` + hybrid RRF
+(`cf-dense-1` / `cf-hybrid-rrf-1`) — `docs/semantic-retrieval-design.md` /
+ADR 0013 / results JSON. Live default remains lexical until product flip.
+No LLM/RAG answers yet.
 
 Replacing the filesystem with object storage later should not change submission
 use cases — the dual-write problem remains behind the same protocol.

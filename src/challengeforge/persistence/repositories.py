@@ -28,6 +28,7 @@ from challengeforge.persistence.mapping import (
 from challengeforge.persistence.models import (
     ChallengeRow,
     ChallengeSpecificationRow,
+    ChunkEmbeddingRow,
     DocumentChunkRow,
     EvaluationCriterionRow,
     EvaluationRow,
@@ -1234,6 +1235,71 @@ class DocumentChunkRepository:
         result = await self.session.execute(
             select(func.count()).where(
                 DocumentChunkRow.ingestion_job_id == ingestion_job_id
+            )
+        )
+        return int(result.scalar_one())
+
+    async def list_succeeded(self) -> list[DocumentChunk]:
+        rows = (
+            await self.session.execute(
+                select(DocumentChunkRow)
+                .join(
+                    IngestionJobRow,
+                    IngestionJobRow.id == DocumentChunkRow.ingestion_job_id,
+                )
+                .where(IngestionJobRow.status == "succeeded")
+                .order_by(DocumentChunkRow.created_at.asc(), DocumentChunkRow.id.asc())
+            )
+        ).scalars().all()
+        return [chunk_to_domain(r) for r in rows]
+
+
+class ChunkEmbeddingRepository:
+    """Versioned dense embeddings keyed by (chunk_id, embedding_version)."""
+
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def upsert_many(
+        self,
+        *,
+        embedding_version: str,
+        items: list[tuple[UUID, list[float], str]],
+    ) -> int:
+        """items: (chunk_id, embedding, content_sha256)."""
+        if not items:
+            return 0
+        now = utcnow()
+        dim = len(items[0][1])
+        for chunk_id, embedding, content_sha256 in items:
+            if len(embedding) != dim:
+                raise ValueError("all embeddings must share dimensions")
+            existing = await self.session.get(
+                ChunkEmbeddingRow, (chunk_id, embedding_version)
+            )
+            if existing is None:
+                self.session.add(
+                    ChunkEmbeddingRow(
+                        chunk_id=chunk_id,
+                        embedding_version=embedding_version,
+                        embedding=list(embedding),
+                        content_sha256=content_sha256,
+                        dimensions=dim,
+                        created_at=now,
+                    )
+                )
+            else:
+                existing.embedding = list(embedding)
+                existing.content_sha256 = content_sha256
+                existing.dimensions = dim
+                existing.created_at = now
+        await self.session.flush()
+        return len(items)
+
+    async def count_for_version(self, embedding_version: str) -> int:
+        result = await self.session.execute(
+            select(func.count()).where(
+                ChunkEmbeddingRow.embedding_version == embedding_version
             )
         )
         return int(result.scalar_one())

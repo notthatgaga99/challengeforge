@@ -1,5 +1,20 @@
-"""Retrieval package — lexical baseline over durable document_chunks."""
+"""Retrieval package — lexical baseline + dense/hybrid semantic retrieval."""
 
+from challengeforge.retrieval.dense import (
+    RETRIEVAL_VERSION_DENSE,
+    RETRIEVAL_VERSION_HYBRID_RRF,
+    index_chunks,
+    retrieve_dense,
+    retrieve_hybrid_rrf,
+    rrf_fuse,
+)
+from challengeforge.retrieval.embeddings import (
+    CurriculumConceptEmbeddingProvider,
+    EmbeddingProvider,
+    StubHashEmbeddingProvider,
+    cosine_similarity,
+    default_experiment_provider,
+)
 from challengeforge.retrieval.lexical import (
     RETRIEVAL_VERSION_FTS,
     RETRIEVAL_VERSION_SIMPLE,
@@ -21,10 +36,21 @@ __all__ = [
     "RETRIEVAL_VERSION_FTS",
     "RETRIEVAL_VERSION_SIMPLE",
     "RETRIEVAL_VERSION_STRUCT",
+    "RETRIEVAL_VERSION_DENSE",
+    "RETRIEVAL_VERSION_HYBRID_RRF",
     "RetrievedChunk",
     "RetrievalFilters",
+    "EmbeddingProvider",
+    "StubHashEmbeddingProvider",
+    "CurriculumConceptEmbeddingProvider",
+    "cosine_similarity",
+    "default_experiment_provider",
     "normalize_query",
     "retrieve",
+    "retrieve_dense",
+    "retrieve_hybrid_rrf",
+    "index_chunks",
+    "rrf_fuse",
     "evaluate_query",
     "macro_average",
     "precision_at_k",
