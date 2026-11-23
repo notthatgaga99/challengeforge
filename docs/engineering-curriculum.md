@@ -5,7 +5,28 @@ Rolling log of fast-build curriculum milestones.
 
 ---
 
-## Rate Limits / Abuse Budgets (current)
+## Outbox HTTP Webhook Sink (current)
+
+| Field | Entry |
+|---|---|
+| Decision | **KEEP** `HttpWebhookNotificationSink` (httpx) behind `NotificationSink` |
+| Config | `OUTBOX_WEBHOOK_URL` (empty → logging); optional secret + timeout |
+| Delivery | POST JSON + `Idempotency-Key`; non-2xx stays pending |
+| Concepts learned | Completing outbox with a real side effect; at-least-once + receiver dedupe; sink vs relay responsibilities |
+| Alternatives understood | Sync notify after commit · Kafka fan-out · HTTP webhook sink |
+| Evidence | ADR 0021, `docs/outbox-webhook-sink-design.md`, `outbox/sinks.py`, tests |
+| Runner | `python -m challengeforge.outbox` |
+
+Suggested interview prompts:
+
+1. Why is HTTP delivery outside the business transaction?  
+2. What must a webhook receiver do with duplicate `Idempotency-Key` values?  
+3. How does the relay recover from a 500 without a backoff table?  
+4. When would you replace HTTP polling with a message bus?
+
+---
+
+## Rate Limits / Abuse Budgets
 
 | Field | Entry |
 |---|---|

@@ -41,6 +41,11 @@ class Settings(BaseSettings):
     rate_limit_artifact_upload: int = Field(default=60, ge=1)
     rate_limit_submission_submit: int = Field(default=30, ge=1)
     rate_limit_search: int = Field(default=60, ge=1)
+    # Outbox webhook sink (ADR 0021) — empty URL keeps LoggingNotificationSink.
+    outbox_webhook_url: str | None = None
+    outbox_webhook_timeout_seconds: float = Field(default=5.0, gt=0)
+    outbox_webhook_secret: str | None = None
+    outbox_poll_interval_seconds: float = Field(default=1.0, gt=0)
     # Environment-specific operating envelope from the laptop experiment.
     # These are explicit limits, not an auto-scaling or resource prediction model.
     evaluation_max_workers: int = Field(default=1, ge=1)

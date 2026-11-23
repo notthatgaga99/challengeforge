@@ -154,7 +154,9 @@ Candidate `cf-hybrid-rerank-1` (ADR 0019) reranks hybrid shortlists; not live de
 
 **Transactional outbox:** `outbox_events` written in the same TX as eval succeed /
 hackathon close (ADR 0017); `OutboxRelay` delivers via pluggable sinks
-(at-least-once; sink idempotency required).
+(at-least-once; sink idempotency required). HTTP webhook sink (ADR 0021) when
+`OUTBOX_WEBHOOK_URL` is set; otherwise logging. Run relay with
+`python -m challengeforge.outbox`.
 
 **Abuse budgets (ADR 0020):** Postgres fixed-window `rate_limit_buckets` per
 authenticated subject + action (`submission_create`, `artifact_upload`,

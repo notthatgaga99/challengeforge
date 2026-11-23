@@ -30,7 +30,8 @@ of domain events without Redis/Kafka.
 4. `OutboxRelay.drain_once()` claims with `FOR UPDATE SKIP LOCKED`, delivers via
    `NotificationSink`, marks published (or records attempt/error).
 5. Default sink: `RecordingNotificationSink` (tests) / `LoggingNotificationSink`
-   (dev). Real HTTP webhooks plug the same interface later.
+   (dev). Production HTTP: `HttpWebhookNotificationSink` when
+   `OUTBOX_WEBHOOK_URL` is set (ADR 0021).
 6. Delivery is **at-least-once**; sinks must be idempotent on `idempotency_key`.
 
 ## 4. Non-goals

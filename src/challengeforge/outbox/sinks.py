@@ -5,9 +5,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
+import httpx
 import structlog
 
 logger = structlog.get_logger(__name__)
+
+SECRET_HEADER = "X-ChallengeForge-Secret"
 
 
 @dataclass(frozen=True)
@@ -60,3 +63,51 @@ class RecordingNotificationSink:
             return
         self.seen_keys.add(event.idempotency_key)
         self.delivered.append(event)
+
+
+class WebhookDeliveryError(RuntimeError):
+    """Raised when the webhook receiver rejects or is unreachable."""
+
+
+@dataclass
+class HttpWebhookNotificationSink:
+    """POST DeliveredEvent JSON to a configured URL (ADR 0021).
+
+    At-least-once: receivers must dedupe on ``Idempotency-Key``.
+    """
+
+    url: str
+    timeout_seconds: float = 5.0
+    secret: str | None = None
+    client: httpx.AsyncClient | None = None
+
+    async def deliver(self, event: DeliveredEvent) -> None:
+        headers = {
+            "Content-Type": "application/json",
+            "Idempotency-Key": event.idempotency_key,
+        }
+        if self.secret:
+            headers[SECRET_HEADER] = self.secret
+        body = {
+            "event_id": event.event_id,
+            "event_type": event.event_type,
+            "aggregate_type": event.aggregate_type,
+            "aggregate_id": event.aggregate_id,
+            "idempotency_key": event.idempotency_key,
+            "payload": event.payload,
+        }
+        owns_client = self.client is None
+        client = self.client or httpx.AsyncClient(
+            timeout=httpx.Timeout(self.timeout_seconds)
+        )
+        try:
+            response = await client.post(self.url, json=body, headers=headers)
+        except httpx.HTTPError as exc:
+            raise WebhookDeliveryError(f"webhook transport error: {exc}") from exc
+        finally:
+            if owns_client:
+                await client.aclose()
+        if response.status_code < 200 or response.status_code >= 300:
+            raise WebhookDeliveryError(
+                f"webhook HTTP {response.status_code}: {response.text[:500]}"
+            )
