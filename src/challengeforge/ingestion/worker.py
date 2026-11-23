@@ -139,7 +139,7 @@ class IngestionWorker:
         async with self.session_factory() as session:
             chunks = DocumentChunkRepository(session)
             jobs = IngestionJobRepository(session)
-            await chunks.replace_for_job(
+            persisted = await chunks.replace_for_job(
                 ingestion_job_id=claimed.id,
                 submission_id=claimed.submission_id,
                 artifact_key=claimed.artifact_key,
@@ -147,6 +147,22 @@ class IngestionWorker:
                 chunker_version=result.chunker_version,
                 chunks=result.chunks,
             )
+            # Index dense embeddings in the same TX (ADR 0018 hybrid default).
+            from challengeforge.retrieval.dense import index_chunks
+            from challengeforge.retrieval.embeddings import (
+                resolve_product_embedding_provider,
+            )
+
+            try:
+                provider = resolve_product_embedding_provider(
+                    self.settings.retrieval_embedding_provider
+                )
+                await index_chunks(session, provider, persisted)
+            except Exception:
+                log.exception(
+                    "ingestion_embed_failed job_id=%s — continuing; hybrid degrades to lexical",
+                    claimed.id,
+                )
             if self.crash_after_chunk_persist:
                 await session.commit()
                 raise RuntimeError("simulated crash after chunk persist before succeed")

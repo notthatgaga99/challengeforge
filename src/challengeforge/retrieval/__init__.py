@@ -16,6 +16,8 @@ from challengeforge.retrieval.embeddings import (
     StubHashEmbeddingProvider,
     cosine_similarity,
     default_experiment_provider,
+    resolve_product_embedding_provider,
+    version_requires_embeddings,
 )
 from challengeforge.retrieval.lexical import (
     RETRIEVAL_VERSION_FTS,
@@ -48,6 +50,8 @@ __all__ = [
     "LocalMiniLMEmbeddingProvider",
     "cosine_similarity",
     "default_experiment_provider",
+    "resolve_product_embedding_provider",
+    "version_requires_embeddings",
     "resolve_retrieval_scope",
     "normalize_query",
     "retrieve",

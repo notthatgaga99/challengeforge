@@ -30,8 +30,10 @@ class Settings(BaseSettings):
     ingestion_poll_interval_seconds: float = 0.25
     ingestion_retry_delay_seconds: float = 0.0
     ingestion_chunk_max_chars: int = Field(default=1200, ge=64, le=100_000)
-    retrieval_default_version: str = "cf-lex-fts-1"
+    # ADR 0018: hybrid is the live default; set cf-lex-fts-1 to roll back.
+    retrieval_default_version: str = "cf-hybrid-rrf-1"
     retrieval_default_top_k: int = Field(default=10, ge=1, le=100)
+    retrieval_embedding_provider: Literal["curriculum", "minilm", "stub"] = "curriculum"
     # Environment-specific operating envelope from the laptop experiment.
     # These are explicit limits, not an auto-scaling or resource prediction model.
     evaluation_max_workers: int = Field(default=1, ge=1)

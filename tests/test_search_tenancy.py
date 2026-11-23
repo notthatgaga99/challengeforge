@@ -300,18 +300,25 @@ async def test_search_service_scopes_empty_for_participant_without_chunks():
                 settings=Settings(database_url="postgresql+asyncpg://x"),
             )
             svc = SearchService(uow)
-            hits = await svc.search_hackathon(
+            hits, version = await svc.search_hackathon(
                 CurrentUser(
                     id=PARTICIPANT_ID, display_name="Pat", role=UserRole.PARTICIPANT
                 ),
                 hack_id,
                 query="anything",
+                retrieval_version="cf-lex-fts-1",
             )
             assert hits == []
+            assert version == "cf-lex-fts-1"
             foreign = CurrentUser(
                 id=uuid4(), display_name="OtherOrg", role=UserRole.ORGANIZER
             )
             with pytest.raises(PermissionDenied):
-                await svc.search_hackathon(foreign, hack_id, query="anything")
+                await svc.search_hackathon(
+                    foreign,
+                    hack_id,
+                    query="anything",
+                    retrieval_version="cf-lex-fts-1",
+                )
     finally:
         await engine.dispose()

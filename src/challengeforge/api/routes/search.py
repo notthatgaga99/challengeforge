@@ -22,7 +22,7 @@ async def search_hackathon(
     actor: CurrentUser = Depends(get_current_user),
     service: SearchService = Depends(search_service),
 ) -> SearchResponse:
-    hits = await service.search_hackathon(
+    hits, effective_version = await service.search_hackathon(
         actor,
         hackathon_id,
         query=payload.query,
@@ -33,7 +33,7 @@ async def search_hackathon(
     return SearchResponse(
         hackathon_id=hackathon_id,
         query=payload.query,
-        retrieval_version=payload.retrieval_version,
+        retrieval_version=effective_version,
         hits=[
             SearchHitResponse(
                 chunk_id=h.chunk_id,

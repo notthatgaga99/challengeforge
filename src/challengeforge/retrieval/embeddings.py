@@ -232,3 +232,24 @@ def default_experiment_provider() -> EmbeddingProvider:
         return LocalMiniLMEmbeddingProvider()
     except RuntimeError:
         return CurriculumConceptEmbeddingProvider()
+
+
+def resolve_product_embedding_provider(name: str = "curriculum") -> EmbeddingProvider:
+    """Resolve the product-path encoder from settings (ADR 0018)."""
+    key = (name or "curriculum").strip().lower()
+    if key == "stub":
+        return StubHashEmbeddingProvider()
+    if key == "minilm":
+        return LocalMiniLMEmbeddingProvider()
+    if key == "curriculum":
+        return CurriculumConceptEmbeddingProvider()
+    raise ValueError(f"Unknown retrieval_embedding_provider: {name}")
+
+
+def version_requires_embeddings(retrieval_version: str) -> bool:
+    from challengeforge.retrieval.dense import (
+        RETRIEVAL_VERSION_DENSE,
+        RETRIEVAL_VERSION_HYBRID_RRF,
+    )
+
+    return retrieval_version in (RETRIEVAL_VERSION_DENSE, RETRIEVAL_VERSION_HYBRID_RRF)

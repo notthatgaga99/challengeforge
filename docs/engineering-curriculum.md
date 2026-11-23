@@ -5,7 +5,19 @@ Rolling log of fast-build curriculum milestones.
 
 ---
 
-## Transactional Outbox (current)
+## Promote Hybrid Default (current)
+
+| Field | Entry |
+|---|---|
+| Decision | **KEEP live default `cf-hybrid-rrf-1`** via `Settings.retrieval_default_version` |
+| Rollback | `RETRIEVAL_DEFAULT_VERSION=cf-lex-fts-1` |
+| Encoder | `retrieval_embedding_provider=curriculum` (default); optional minilm/stub |
+| Ingest | Embeddings indexed in same TX as chunk persist |
+| Evidence | ADR 0018, `docs/promote-hybrid-default-design.md`, tests |
+
+---
+
+## Transactional Outbox
 
 | Field | Entry |
 |---|---|

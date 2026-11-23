@@ -142,9 +142,10 @@ class UserResponse(BaseModel):
 
 class SearchRequest(BaseModel):
     query: str
-    top_k: int = Field(default=10, ge=1, le=50)
+    top_k: int | None = Field(default=None, ge=1, le=50)
     challenge_id: UUID | None = None
-    retrieval_version: str = "cf-lex-fts-1"
+    # None → Settings.retrieval_default_version (ADR 0018 hybrid default).
+    retrieval_version: str | None = None
 
 
 class SearchHitResponse(BaseModel):

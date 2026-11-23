@@ -145,6 +145,9 @@ lexical). No LLM/RAG answers yet.
 (`POST /hackathons/{id}/search`, ADR 0015) — organizers own hackathon scope;
 participants see only their own succeeded-job chunks.
 
+**Live retrieval default (ADR 0018):** `cf-hybrid-rrf-1` via settings; roll back with
+`RETRIEVAL_DEFAULT_VERSION=cf-lex-fts-1`. Ingest indexes curriculum embeddings by default.
+
 **Leaderboards:** `leaderboard_entries` snapshot on evaluation succeed (ADR 0016);
 `GET /challenges/{id}/leaderboard`; participants only after hackathon `closed`.
 
