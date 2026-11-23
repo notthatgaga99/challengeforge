@@ -251,5 +251,10 @@ def version_requires_embeddings(retrieval_version: str) -> bool:
         RETRIEVAL_VERSION_DENSE,
         RETRIEVAL_VERSION_HYBRID_RRF,
     )
+    from challengeforge.retrieval.rerank import RETRIEVAL_VERSION_HYBRID_RERANK
 
-    return retrieval_version in (RETRIEVAL_VERSION_DENSE, RETRIEVAL_VERSION_HYBRID_RRF)
+    return retrieval_version in (
+        RETRIEVAL_VERSION_DENSE,
+        RETRIEVAL_VERSION_HYBRID_RRF,
+        RETRIEVAL_VERSION_HYBRID_RERANK,
+    )

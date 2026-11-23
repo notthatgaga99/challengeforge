@@ -88,11 +88,13 @@ async def retrieve(
     filters: RetrievalFilters | None = None,
     retrieval_version: str = RETRIEVAL_VERSION_FTS,
     embedding_provider: Any | None = None,
+    rerank_provider: Any | None = None,
 ) -> list[RetrievedChunk]:
     """Retrieve top-k chunks from succeeded ingestion jobs only.
 
     Ordering: score DESC, chunk_id ASC (deterministic ties).
-    Dense/hybrid versions require ``embedding_provider``.
+    Dense/hybrid/rerank versions require ``embedding_provider``.
+    ``cf-hybrid-rerank-1`` also accepts ``rerank_provider`` (curriculum default).
     """
     if top_k < 1:
         raise ValueError("top_k must be >= 1")
@@ -110,13 +112,33 @@ async def retrieve(
     if version == RETRIEVAL_VERSION_FTS:
         return await _retrieve_fts(session, q, top_k=top_k, filters=filters)
 
-    # Lazy import avoids circular dependency with dense.py
+    # Lazy import avoids circular dependency with dense/rerank modules.
     from challengeforge.retrieval.dense import (
         RETRIEVAL_VERSION_DENSE,
         RETRIEVAL_VERSION_HYBRID_RRF,
         retrieve_dense,
         retrieve_hybrid_rrf,
     )
+    from challengeforge.retrieval.rerank import (
+        RETRIEVAL_VERSION_HYBRID_RERANK,
+        LexicalOverlapRerankProvider,
+        retrieve_hybrid_rerank,
+    )
+
+    if version == RETRIEVAL_VERSION_HYBRID_RERANK:
+        if embedding_provider is None:
+            raise ValueError(
+                f"retrieval_version={version} requires embedding_provider"
+            )
+        reranker = rerank_provider or LexicalOverlapRerankProvider()
+        return await retrieve_hybrid_rerank(
+            session,
+            q,
+            provider=embedding_provider,
+            reranker=reranker,
+            top_k=top_k,
+            filters=filters,
+        )
 
     if version in (RETRIEVAL_VERSION_DENSE, RETRIEVAL_VERSION_HYBRID_RRF):
         if embedding_provider is None:

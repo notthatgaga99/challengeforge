@@ -147,6 +147,7 @@ participants see only their own succeeded-job chunks.
 
 **Live retrieval default (ADR 0018):** `cf-hybrid-rrf-1` via settings; roll back with
 `RETRIEVAL_DEFAULT_VERSION=cf-lex-fts-1`. Ingest indexes curriculum embeddings by default.
+Candidate `cf-hybrid-rerank-1` (ADR 0019) reranks hybrid shortlists; not live default yet.
 
 **Leaderboards:** `leaderboard_entries` snapshot on evaluation succeed (ADR 0016);
 `GET /challenges/{id}/leaderboard`; participants only after hackathon `closed`.

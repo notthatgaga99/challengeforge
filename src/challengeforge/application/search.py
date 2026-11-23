@@ -64,6 +64,7 @@ class SearchService:
         )
 
         provider = None
+        reranker = None
         if version_requires_embeddings(version):
             try:
                 provider = resolve_product_embedding_provider(
@@ -73,6 +74,13 @@ class SearchService:
                 raise ValidationFailed(
                     f"Embedding provider unavailable for {version}: {exc}"
                 ) from exc
+            from challengeforge.retrieval.rerank import (
+                RETRIEVAL_VERSION_HYBRID_RERANK,
+                LexicalOverlapRerankProvider,
+            )
+
+            if version == RETRIEVAL_VERSION_HYBRID_RERANK:
+                reranker = LexicalOverlapRerankProvider()
 
         hits = await retrieve(
             self.uow.session,
@@ -81,5 +89,6 @@ class SearchService:
             filters=filters,
             retrieval_version=version,
             embedding_provider=provider,
+            rerank_provider=reranker,
         )
         return hits, version

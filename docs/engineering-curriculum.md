@@ -5,7 +5,20 @@ Rolling log of fast-build curriculum milestones.
 
 ---
 
-## Promote Hybrid Default (current)
+## Cross-Encoder Rerank (current)
+
+| Field | Entry |
+|---|---|
+| Decision | **HOLD promote** rerank; stage implemented as `cf-hybrid-rerank-1` |
+| Measured | Hybrid MRR 0.95 > curriculum-overlap rerank 0.81 on same corpus |
+| Concepts learned | Candidate gen vs ranking; why a weak reranker can hurt; at-least-measure-before-promote |
+| Alternatives understood | Cross-encoder-only · score soup · hybrid→rerank |
+| Evidence | ADR 0019, `docs/rerank-bakeoff-results.json`, `retrieval/rerank.py` |
+| Live default | Unchanged (`cf-hybrid-rrf-1`, ADR 0018) |
+
+---
+
+## Promote Hybrid Default
 
 | Field | Entry |
 |---|---|

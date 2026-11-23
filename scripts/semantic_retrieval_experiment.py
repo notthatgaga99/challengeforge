@@ -159,7 +159,9 @@ def resolve_relevant(query: dict, doc_chunks: dict[str, list]) -> set[str]:
     return relevant
 
 
-async def eval_version(factory, corpus, doc_chunks, version, provider=None):
+async def eval_version(
+    factory, corpus, doc_chunks, version, provider=None, rerank_provider=None
+):
     ks = (1, 3, 5, 10)
     metrics_list = []
     per_query = []
@@ -177,6 +179,7 @@ async def eval_version(factory, corpus, doc_chunks, version, provider=None):
                 top_k=10,
                 retrieval_version=version,
                 embedding_provider=provider,
+                rerank_provider=rerank_provider,
             )
             latency_ms = (time.perf_counter() - t0) * 1000
             m = evaluate_query(
