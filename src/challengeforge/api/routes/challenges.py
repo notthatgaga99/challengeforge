@@ -8,6 +8,7 @@ from challengeforge.api.deps import (
     get_app_settings,
     get_current_user,
     get_storage,
+    get_uow,
     leaderboard_service,
     submission_service,
 )
@@ -23,6 +24,7 @@ from challengeforge.api.schemas import (
     SubmissionResponse,
     SubmissionUpdateRequest,
 )
+from challengeforge.application import UnitOfWork
 from challengeforge.application.challenges import ChallengeService
 from challengeforge.application.evaluations import (
     EvaluationBacklogStatus,
@@ -30,6 +32,10 @@ from challengeforge.application.evaluations import (
     ParticipantEvaluationView,
 )
 from challengeforge.application.leaderboards import LeaderboardService
+from challengeforge.application.rate_limits import (
+    ACTION_ARTIFACT_UPLOAD,
+    RateLimitService,
+)
 from challengeforge.application.submissions import SubmissionService
 from challengeforge.config import Settings
 from challengeforge.domain.models import Evaluation, Submission
@@ -247,18 +253,22 @@ async def attach_artifact(
     service: SubmissionService = Depends(submission_service),
     storage: ArtifactStorage = Depends(get_storage),
     settings: Settings = Depends(get_app_settings),
+    uow: UnitOfWork = Depends(get_uow),
     file: UploadFile = File(...),
     content_sha256: str | None = Header(default=None, alias="X-Content-SHA256"),
 ) -> SubmissionResponse:
     """Stream upload to staging, finalize to final key, then commit metadata.
 
     Does not buffer the entire body in memory. Streaming ≠ resumability.
+    Abuse budget is checked before the body is streamed (ADR 0020).
     """
     from challengeforge.application.uploads import (
         cleanup_incoming,
         iter_upload_file,
         stream_to_incoming,
     )
+
+    await RateLimitService(uow).check(actor, ACTION_ARTIFACT_UPLOAD)
 
     incoming = None
     try:
@@ -274,6 +284,7 @@ async def attach_artifact(
             submission_id,
             incoming,
             artifact_filename=file.filename,
+            consume_rate_limit=False,
         )
         return serialize_submission(item)
     except Exception:

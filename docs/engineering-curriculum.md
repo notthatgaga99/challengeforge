@@ -5,7 +5,28 @@ Rolling log of fast-build curriculum milestones.
 
 ---
 
-## Cross-Encoder Rerank (current)
+## Rate Limits / Abuse Budgets (current)
+
+| Field | Entry |
+|---|---|
+| Decision | **KEEP** Postgres fixed-window `rate_limit_buckets` per actor+action |
+| Actions | `submission_create` · `artifact_upload` · `submission_submit` · `search` |
+| HTTP | `429 rate_limited` + `Retry-After` |
+| Concepts learned | Fixed vs sliding window; why counters must commit independently of read-only requests; idempotent replay must not burn quota |
+| Alternatives understood | In-process counters · Redis token bucket · Postgres buckets |
+| Evidence | ADR 0020, `docs/rate-limits-design.md`, `application/rate_limits.py`, tests |
+| Kill switch | `RATE_LIMIT_ENABLED=false` |
+
+Suggested interview prompts:
+
+1. Why not keep rate-limit counters only in process memory?  
+2. Why commit the counter even when the business request later fails or is read-only?  
+3. Should an idempotent create replay consume quota? Why or why not?  
+4. When would you graduate from Postgres buckets to Redis?
+
+---
+
+## Cross-Encoder Rerank
 
 | Field | Entry |
 |---|---|

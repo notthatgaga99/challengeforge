@@ -117,7 +117,11 @@ async def test_attach_incoming_compensates_on_commit_fail(tmp_path: Path):
     from challengeforge.persistence.models import SubmissionRow
 
     store = LocalFilesystemStorage(tmp_path / "artifacts")
-    settings = Settings(artifact_root=tmp_path / "artifacts", artifact_max_bytes=1024)
+    settings = Settings(
+        artifact_root=tmp_path / "artifacts",
+        artifact_max_bytes=1024,
+        rate_limit_enabled=False,
+    )
     with io.BytesIO(b"payload") as fh:
         incoming = sync_stream_to_incoming(store.incoming_root(), fh, max_bytes=1024)
 

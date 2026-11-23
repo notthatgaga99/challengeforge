@@ -156,6 +156,12 @@ Candidate `cf-hybrid-rerank-1` (ADR 0019) reranks hybrid shortlists; not live de
 hackathon close (ADR 0017); `OutboxRelay` delivers via pluggable sinks
 (at-least-once; sink idempotency required).
 
+**Abuse budgets (ADR 0020):** Postgres fixed-window `rate_limit_buckets` per
+authenticated subject + action (`submission_create`, `artifact_upload`,
+`submission_submit`, `search`). Over budget → `429` + `Retry-After`. Kill switch:
+`RATE_LIMIT_ENABLED=false`. Idempotent create replays do not consume quota.
+Artifact HTTP uploads check budget before the body is streamed.
+
 Replacing the filesystem with object storage later should not change submission
 use cases — the dual-write problem remains behind the same protocol.
 

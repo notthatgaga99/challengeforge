@@ -445,3 +445,23 @@ class OutboxEventRow(Base):
     )
     last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
 
+
+class RateLimitBucketRow(Base):
+    """Fixed-window counter for abuse budgets (ADR 0020)."""
+
+    __tablename__ = "rate_limit_buckets"
+    __table_args__ = (
+        CheckConstraint("count >= 0", name="ck_rate_limit_buckets_count"),
+        Index("ix_rate_limit_buckets_window", "window_started_at"),
+    )
+
+    subject_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True)
+    action: Mapped[str] = mapped_column(Text, primary_key=True)
+    window_started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), primary_key=True
+    )
+    count: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
+

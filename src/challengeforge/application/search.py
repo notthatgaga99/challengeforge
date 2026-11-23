@@ -5,6 +5,7 @@ from __future__ import annotations
 from uuid import UUID
 
 from challengeforge.application import UnitOfWork, require_non_empty
+from challengeforge.application.rate_limits import ACTION_SEARCH, RateLimitService
 from challengeforge.domain.exceptions import NotFoundError, ValidationFailed
 from challengeforge.identity import CurrentUser
 from challengeforge.retrieval.authz import resolve_retrieval_scope
@@ -42,6 +43,8 @@ class SearchService:
         )
         if effective_top_k < 1 or effective_top_k > 50:
             raise ValidationFailed("top_k must be between 1 and 50.")
+
+        await RateLimitService(self.uow).check(actor, ACTION_SEARCH)
 
         version = self.resolve_retrieval_version(retrieval_version)
 

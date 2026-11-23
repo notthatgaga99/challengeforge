@@ -3,7 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from challengeforge.domain.exceptions import DomainError, Unauthenticated
+from challengeforge.domain.exceptions import DomainError, RateLimited, Unauthenticated
 
 
 def _request_id(request: Request) -> str:
@@ -21,6 +21,14 @@ def error_body(request: Request, code: str, message: str) -> dict:
 
 
 def register_error_handlers(app: FastAPI) -> None:
+    @app.exception_handler(RateLimited)
+    async def rate_limited_handler(request: Request, exc: RateLimited) -> JSONResponse:
+        return JSONResponse(
+            status_code=429,
+            content=error_body(request, exc.code, exc.message),
+            headers={"Retry-After": str(exc.retry_after_seconds)},
+        )
+
     @app.exception_handler(DomainError)
     async def domain_error_handler(request: Request, exc: DomainError) -> JSONResponse:
         return JSONResponse(

@@ -35,3 +35,14 @@ class ConflictError(DomainError):
 class Unauthenticated(DomainError):
     code = "unauthenticated"
     http_status = 401
+
+
+class RateLimited(DomainError):
+    """Abuse budget exceeded — maps to HTTP 429."""
+
+    code = "rate_limited"
+    http_status = 429
+
+    def __init__(self, message: str, *, retry_after_seconds: int) -> None:
+        super().__init__(message)
+        self.retry_after_seconds = max(1, int(retry_after_seconds))

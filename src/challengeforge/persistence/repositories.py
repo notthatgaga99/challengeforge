@@ -39,6 +39,7 @@ from challengeforge.persistence.models import (
     IngestionJobRow,
     LeaderboardEntryRow,
     OutboxEventRow,
+    RateLimitBucketRow,
     SubmissionRow,
     UserRow,
 )
@@ -1559,3 +1560,62 @@ class OutboxRepository:
         )
         row = result.scalar_one_or_none()
         return _outbox_to_domain(row) if row else None
+
+
+class RateLimitRepository:
+    """Fixed-window counters keyed by subject + action + window start."""
+
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    @staticmethod
+    def window_start(now: datetime, window_seconds: int) -> datetime:
+        epoch = int(now.timestamp())
+        aligned = epoch - (epoch % window_seconds)
+        return datetime.fromtimestamp(aligned, tz=timezone.utc)
+
+    async def increment(
+        self,
+        *,
+        subject_id: UUID,
+        action: str,
+        window_started_at: datetime,
+    ) -> int:
+        now = utcnow()
+        stmt = (
+            pg_insert(RateLimitBucketRow)
+            .values(
+                subject_id=subject_id,
+                action=action,
+                window_started_at=window_started_at,
+                count=1,
+                updated_at=now,
+            )
+            .on_conflict_do_update(
+                index_elements=["subject_id", "action", "window_started_at"],
+                set_={
+                    "count": RateLimitBucketRow.count + 1,
+                    "updated_at": now,
+                },
+            )
+            .returning(RateLimitBucketRow.count)
+        )
+        result = await self.session.execute(stmt)
+        return int(result.scalar_one())
+
+    async def get_count(
+        self,
+        *,
+        subject_id: UUID,
+        action: str,
+        window_started_at: datetime,
+    ) -> int:
+        result = await self.session.execute(
+            select(RateLimitBucketRow.count).where(
+                RateLimitBucketRow.subject_id == subject_id,
+                RateLimitBucketRow.action == action,
+                RateLimitBucketRow.window_started_at == window_started_at,
+            )
+        )
+        value = result.scalar_one_or_none()
+        return int(value or 0)

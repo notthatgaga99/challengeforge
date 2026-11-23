@@ -10,6 +10,12 @@ from challengeforge.application.evaluator import parse_workload_class
 from challengeforge.application import UnitOfWork, require_participant
 from challengeforge.application.artifacts import compensate_delete
 from challengeforge.application.idempotency import submission_request_fingerprint
+from challengeforge.application.rate_limits import (
+    ACTION_ARTIFACT_UPLOAD,
+    ACTION_SUBMISSION_CREATE,
+    ACTION_SUBMISSION_SUBMIT,
+    RateLimitService,
+)
 from challengeforge.application.uploads import IncomingUpload
 
 from challengeforge.domain.enums import ChallengeStatus, HackathonStatus, SubmissionStatus
@@ -108,6 +114,8 @@ class SubmissionService:
             if existing is not None:
                 assert request_fingerprint is not None
                 return self._replay_or_conflict(existing, request_fingerprint)
+
+        await RateLimitService(self.uow).check(actor, ACTION_SUBMISSION_CREATE)
 
         # The shared row lock is held through INSERT + COMMIT. Challenge close
         # takes the conflicting exclusive lock, so one operation wins first.
@@ -250,6 +258,7 @@ class SubmissionService:
         incoming: IncomingUpload,
         *,
         artifact_filename: str | None = None,
+        consume_rate_limit: bool = True,
     ) -> Submission:
         """Finalize a staged upload into a durable artifact_key (blob-first).
 
@@ -257,6 +266,9 @@ class SubmissionService:
         moves it to the final key, then commits metadata. On commit failure the
         published key is compensating-deleted; staging is owned by the caller
         until ``mark_finalized``.
+
+        HTTP uploads check the abuse budget before streaming and pass
+        ``consume_rate_limit=False`` so the counter is not double-charged.
         """
         row = await self.uow.submissions.get_row(submission_id)
         if row is None:
@@ -267,6 +279,9 @@ class SubmissionService:
             raise ValidationFailed("Only submissions in CREATED can be updated.")
         if incoming.size > self.uow.settings.artifact_max_bytes:
             raise ValidationFailed("Artifact exceeds the size limit.")
+
+        if consume_rate_limit:
+            await RateLimitService(self.uow).check(actor, ACTION_ARTIFACT_UPLOAD)
 
         previous_artifact_key = row.artifact_key
         suffix = ""
@@ -308,6 +323,7 @@ class SubmissionService:
         commit together. Neither half can persist alone.
         """
         require_participant(actor)
+        await RateLimitService(self.uow).check(actor, ACTION_SUBMISSION_SUBMIT)
         transitioned = await self.uow.submissions.transition_if_created(
             submission_id=submission_id,
             participant_id=actor.id,

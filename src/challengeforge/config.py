@@ -34,6 +34,13 @@ class Settings(BaseSettings):
     retrieval_default_version: str = "cf-hybrid-rrf-1"
     retrieval_default_top_k: int = Field(default=10, ge=1, le=100)
     retrieval_embedding_provider: Literal["curriculum", "minilm", "stub"] = "curriculum"
+    # Abuse budgets (ADR 0020) — fixed window per authenticated subject.
+    rate_limit_enabled: bool = True
+    rate_limit_window_seconds: int = Field(default=60, ge=1, le=3600)
+    rate_limit_submission_create: int = Field(default=30, ge=1)
+    rate_limit_artifact_upload: int = Field(default=60, ge=1)
+    rate_limit_submission_submit: int = Field(default=30, ge=1)
+    rate_limit_search: int = Field(default=60, ge=1)
     # Environment-specific operating envelope from the laptop experiment.
     # These are explicit limits, not an auto-scaling or resource prediction model.
     evaluation_max_workers: int = Field(default=1, ge=1)
