@@ -261,7 +261,7 @@ Full machine-readable output: `docs/semantic-retrieval-results.json`.
 
 **Decision:** hybrid RRF is the **candidate** product default. Live default stays
 lexical until an explicit flip. Curriculum encoder demonstrates the *effect*;
-optional MiniLM remains for a later comparison run.
+MiniLM bakeoff measured in ADR 0014 / `docs/minilm-bakeoff-results.json`.
 
 ---
 

@@ -5,7 +5,32 @@ Rolling log of fast-build curriculum milestones.
 
 ---
 
-## Semantic Retrieval Implementation (current)
+## MiniLM Bakeoff (current)
+
+| Field | Entry |
+|---|---|
+| Decision | **KEEP MiniLM as preferred real encoder**; curriculum stays offline/CI demo; **live default still lexical** |
+| Concepts learned | Educational encoder ≠ production claim; same-corpus bakeoffs; optional heavy deps (`[embeddings]`) |
+| Alternatives understood | Curriculum concept-v1 · MiniLM-L6-v2 · stub hash · (deferred E5/BGE, cross-encoder) |
+| Experiment | `scripts/minilm_bakeoff_experiment.py` → `docs/minilm-bakeoff-results.json` |
+| Measured | Lex MRR 0.75 / para-zero 2; curriculum hybrid MRR 1.0; MiniLM hybrid MRR 0.9; both dense/hybrid para-zero 0 |
+| Evidence proves | Real MiniLM closes paraphrase gap vs lexical; curriculum can outperform MiniLM on a jargon-tuned toy corpus |
+| Does not prove | MiniLM ranking quality at scale; that curriculum generalizes; RAG quality |
+| Can explain | Why curriculum beating MiniLM here is not a production claim; why live default stays lexical |
+| Still cannot explain confidently | When to promote hybrid live; cross-encoder value; E5/BGE vs MiniLM |
+| Evidence in repo | ADR 0014, bakeoff results JSON |
+| Reconsideration triggers | Larger corpus · promote-hybrid · identifier regressions · stronger local models |
+
+Suggested interview prompts:
+
+1. Why might a hand-tuned toy encoder beat MiniLM on a 10-query set?  
+2. What does a fair encoder bakeoff hold constant?  
+3. Why keep heavy embedding deps optional?  
+4. When would you flip the live default to hybrid?
+
+---
+
+## Semantic Retrieval Implementation
 
 | Field | Entry |
 |---|---|
@@ -15,11 +40,11 @@ Rolling log of fast-build curriculum milestones.
 | Experiment | `scripts/semantic_retrieval_experiment.py` → `docs/semantic-retrieval-results.json` |
 | Measured | Lexical paraphrase zero-hits=2; dense=0; hybrid Recall@5=1.0 / MRR=1.0 on judged queries (curriculum encoder) |
 | Evidence proves | Semantic retrieval can recover paraphrase misses lexical fails; hybrid preserves exact/identifier wins |
-| Does not prove | Production MiniLM/E5 quality; web-scale ANN; RAG answer quality |
+| Does not prove | Production MiniLM/E5 quality at scale; web-scale ANN; RAG answer quality (partially addressed by ADR 0014 bakeoff) |
 | Can explain | Why hybrid beats either alone on this corpus; why stub ≠ semantic proof; why version embeddings |
 | Still cannot explain confidently | Best RRF depth in production; when to add cross-encoder rerank |
 | Evidence in repo | ADR 0013, design doc, results JSON, `challengeforge.retrieval.dense` / `.embeddings` |
-| Reconsideration triggers | Scale · MiniLM comparison · identifier regressions · ranking-only failures · tenancy |
+| Reconsideration triggers | Scale · MiniLM comparison (done → ADR 0014) · identifier regressions · ranking-only failures · tenancy |
 
 Suggested interview prompts (design-level; not marked mastered):
 

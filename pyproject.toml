@@ -28,6 +28,9 @@ dev = [
     "pgserver>=0.1.4,<1",
     "psutil>=7,<8",
 ]
+embeddings = [
+    "sentence-transformers>=3.0,<4",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

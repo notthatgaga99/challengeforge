@@ -56,9 +56,13 @@ curriculum without jumping to a vector product unmeasured.
 
 ## Reconsideration
 
-pgvector inadequate at scale · local model too weak · hybrid hurts identifiers ·
-ranking-only failures → rerank · tenancy filters become mandatory
+pgvector inadequate at scale · hybrid hurts identifiers ·
+ranking-only failures → rerank · tenancy filters become mandatory ·
+promote hybrid to live default (product gate)
+
+MiniLM vs curriculum bakeoff: **ADR 0014**.
 
 ## Related
 
-ADR 0012 (lexical baseline), ADR 0011 (chunking), ADR 0010 (ingestion).
+ADR 0012 (lexical baseline), ADR 0011 (chunking), ADR 0010 (ingestion),
+ADR 0014 (MiniLM bakeoff).

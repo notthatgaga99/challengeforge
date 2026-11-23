@@ -1,0 +1,1344 @@
+{
+  "metadata": {
+    "started_at": "2026-11-23T11:55:22.236477+00:00",
+    "completed_at": "2026-11-23T11:56:26.697386+00:00",
+    "environment": "laptop",
+    "corpus": "docs/lexical-retrieval-corpus.json",
+    "purpose": "curriculum vs MiniLM bakeoff on same judged queries"
+  },
+  "lexical_control": {
+    "retrieval_version": "cf-lex-fts-1",
+    "mrr": 0.75,
+    "recall_at_5": 0.8,
+    "paraphrase_zero_hits": 2,
+    "full": {
+      "aggregate": {
+        "n_queries": 10,
+        "recall_at": {
+          "1": 0.65,
+          "3": 0.8,
+          "5": 0.8,
+          "10": 0.8
+        },
+        "precision_at": {
+          "1": 0.7,
+          "3": 0.3,
+          "5": 0.18,
+          "10": 0.09
+        },
+        "mrr": 0.75,
+        "zero_hit_rate": 0.2
+      },
+      "queries": [
+        {
+          "query_id": "q_exact_skip_locked",
+          "type": "exact_phrase",
+          "expect_lexical_fail": false,
+          "latency_ms": 5.902,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+        },
+        {
+          "query_id": "q_identifier_recover",
+          "type": "code_identifier",
+          "expect_lexical_fail": false,
+          "latency_ms": 1.909,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 0.5,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.6666666666666666,
+            "5": 0.4,
+            "10": 0.2
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "top_preview": "# Code\n\n```python\ndef recover_stale_running(stale_before, max_attempts):\n    \"\"\"Requeue or fail stale RUNNING rows.\"\"\"\n "
+        },
+        {
+          "query_id": "q_rare_idempotency",
+          "type": "rare_term",
+          "expect_lexical_fail": false,
+          "latency_ms": 2.3,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "top_preview": "# Idempotency\n\nAt-least-once execution is acceptable when effects are idempotent.\nOverwrite the same result_key and use "
+        },
+        {
+          "query_id": "q_multi_worker_crash",
+          "type": "multi_word_phrase",
+          "expect_lexical_fail": false,
+          "latency_ms": 2.592,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "top_preview": "# Worker crash recovery\n\nWhen a worker disappears, stale RUNNING evaluations are requeued after worker failure.\nThe reco"
+        },
+        {
+          "query_id": "q_prose_txn",
+          "type": "prose",
+          "expect_lexical_fail": false,
+          "latency_ms": 1.877,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "top_preview": "# Database transaction retries\n\nTransient serialization failures may retry the transaction.\nDo not confuse this with ing"
+        },
+        {
+          "query_id": "q_unicode",
+          "type": "unicode",
+          "expect_lexical_fail": false,
+          "latency_ms": 2.514,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "top_preview": "# Unicode\n\nCanonical text preserves \u4f60\u597d and Caf\u00e9 and emoji \ud83d\ude80 for provenance.\nChunk budgets count Unicode code points, not"
+        },
+        {
+          "query_id": "q_noise_locked",
+          "type": "noise_risk",
+          "expect_lexical_fail": false,
+          "latency_ms": 1.736,
+          "n_hits": 2,
+          "recall_at": {
+            "1": 0.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 0.5,
+          "first_relevant_rank": 2,
+          "zero_hit": false,
+          "top_preview": "# File locking\n\nApplication-level file locks are unrelated to SQL row locks.\nA locked file does not imply SKIP LOCKED se"
+        },
+        {
+          "query_id": "q_paraphrase_crash",
+          "type": "semantic_paraphrase",
+          "expect_lexical_fail": true,
+          "latency_ms": 1.226,
+          "n_hits": 0,
+          "recall_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "mrr": 0.0,
+          "first_relevant_rank": null,
+          "zero_hit": true,
+          "top_preview": null
+        },
+        {
+          "query_id": "q_paraphrase_claim",
+          "type": "semantic_paraphrase",
+          "expect_lexical_fail": true,
+          "latency_ms": 1.173,
+          "n_hits": 0,
+          "recall_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "precision_at": {
+            "1": 0.0,
+            "3": 0.0,
+            "5": 0.0,
+            "10": 0.0
+          },
+          "mrr": 0.0,
+          "first_relevant_rank": null,
+          "zero_hit": true,
+          "top_preview": null
+        },
+        {
+          "query_id": "q_upload_finalize",
+          "type": "exact_term",
+          "expect_lexical_fail": false,
+          "latency_ms": 1.23,
+          "n_hits": 1,
+          "recall_at": {
+            "1": 1.0,
+            "3": 1.0,
+            "5": 1.0,
+            "10": 1.0
+          },
+          "precision_at": {
+            "1": 1.0,
+            "3": 0.3333333333333333,
+            "5": 0.2,
+            "10": 0.1
+          },
+          "mrr": 1.0,
+          "first_relevant_rank": 1,
+          "zero_hit": false,
+          "top_preview": "# Large uploads\n\nStream multipart bodies to .incoming then atomic finalize to the final artifact key.\nStreaming is not r"
+        }
+      ]
+    }
+  },
+  "arms": {
+    "curriculum": {
+      "embedding_version": "curriculum:concept-v1:128:cosine",
+      "provider_class": "CurriculumConceptEmbeddingProvider",
+      "indexed_embeddings": 8,
+      "versions": {
+        "cf-dense-1": {
+          "aggregate": {
+            "n_queries": 10,
+            "recall_at": {
+              "1": 0.8,
+              "3": 0.95,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 0.8,
+              "3": 0.3333,
+              "5": 0.22,
+              "10": 0.11
+            },
+            "mrr": 0.9,
+            "zero_hit_rate": 0.0
+          },
+          "queries": [
+            {
+              "query_id": "q_exact_skip_locked",
+              "type": "exact_phrase",
+              "expect_lexical_fail": false,
+              "latency_ms": 7.776,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_identifier_recover",
+              "type": "code_identifier",
+              "expect_lexical_fail": false,
+              "latency_ms": 3.751,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.0,
+                "3": 0.5,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 0.0,
+                "3": 0.3333333333333333,
+                "5": 0.4,
+                "10": 0.2
+              },
+              "mrr": 0.5,
+              "first_relevant_rank": 2,
+              "zero_hit": false,
+              "top_preview": "# File locking\n\nApplication-level file locks are unrelated to SQL row locks.\nA locked file does not imply SKIP LOCKED se"
+            },
+            {
+              "query_id": "q_rare_idempotency",
+              "type": "rare_term",
+              "expect_lexical_fail": false,
+              "latency_ms": 3.731,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Idempotency\n\nAt-least-once execution is acceptable when effects are idempotent.\nOverwrite the same result_key and use "
+            },
+            {
+              "query_id": "q_multi_worker_crash",
+              "type": "multi_word_phrase",
+              "expect_lexical_fail": false,
+              "latency_ms": 3.732,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Worker crash recovery\n\nWhen a worker disappears, stale RUNNING evaluations are requeued after worker failure.\nThe reco"
+            },
+            {
+              "query_id": "q_prose_txn",
+              "type": "prose",
+              "expect_lexical_fail": false,
+              "latency_ms": 3.077,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Database transaction retries\n\nTransient serialization failures may retry the transaction.\nDo not confuse this with ing"
+            },
+            {
+              "query_id": "q_unicode",
+              "type": "unicode",
+              "expect_lexical_fail": false,
+              "latency_ms": 3.787,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 0.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 0.5,
+              "first_relevant_rank": 2,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_noise_locked",
+              "type": "noise_risk",
+              "expect_lexical_fail": false,
+              "latency_ms": 2.255,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_paraphrase_crash",
+              "type": "semantic_paraphrase",
+              "expect_lexical_fail": true,
+              "latency_ms": 1.974,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Worker crash recovery\n\nWhen a worker disappears, stale RUNNING evaluations are requeued after worker failure.\nThe reco"
+            },
+            {
+              "query_id": "q_paraphrase_claim",
+              "type": "semantic_paraphrase",
+              "expect_lexical_fail": true,
+              "latency_ms": 2.403,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_upload_finalize",
+              "type": "exact_term",
+              "expect_lexical_fail": false,
+              "latency_ms": 2.495,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Large uploads\n\nStream multipart bodies to .incoming then atomic finalize to the final artifact key.\nStreaming is not r"
+            }
+          ]
+        },
+        "cf-hybrid-rrf-1": {
+          "aggregate": {
+            "n_queries": 10,
+            "recall_at": {
+              "1": 0.95,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 1.0,
+              "3": 0.3667,
+              "5": 0.22,
+              "10": 0.11
+            },
+            "mrr": 1.0,
+            "zero_hit_rate": 0.0
+          },
+          "queries": [
+            {
+              "query_id": "q_exact_skip_locked",
+              "type": "exact_phrase",
+              "expect_lexical_fail": false,
+              "latency_ms": 5.594,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_identifier_recover",
+              "type": "code_identifier",
+              "expect_lexical_fail": false,
+              "latency_ms": 5.01,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.5,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.6666666666666666,
+                "5": 0.4,
+                "10": 0.2
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Code\n\n```python\ndef recover_stale_running(stale_before, max_attempts):\n    \"\"\"Requeue or fail stale RUNNING rows.\"\"\"\n "
+            },
+            {
+              "query_id": "q_rare_idempotency",
+              "type": "rare_term",
+              "expect_lexical_fail": false,
+              "latency_ms": 6.896,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Idempotency\n\nAt-least-once execution is acceptable when effects are idempotent.\nOverwrite the same result_key and use "
+            },
+            {
+              "query_id": "q_multi_worker_crash",
+              "type": "multi_word_phrase",
+              "expect_lexical_fail": false,
+              "latency_ms": 3.79,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Worker crash recovery\n\nWhen a worker disappears, stale RUNNING evaluations are requeued after worker failure.\nThe reco"
+            },
+            {
+              "query_id": "q_prose_txn",
+              "type": "prose",
+              "expect_lexical_fail": false,
+              "latency_ms": 6.017,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Database transaction retries\n\nTransient serialization failures may retry the transaction.\nDo not confuse this with ing"
+            },
+            {
+              "query_id": "q_unicode",
+              "type": "unicode",
+              "expect_lexical_fail": false,
+              "latency_ms": 7.254,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Unicode\n\nCanonical text preserves \u4f60\u597d and Caf\u00e9 and emoji \ud83d\ude80 for provenance.\nChunk budgets count Unicode code points, not"
+            },
+            {
+              "query_id": "q_noise_locked",
+              "type": "noise_risk",
+              "expect_lexical_fail": false,
+              "latency_ms": 5.222,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_paraphrase_crash",
+              "type": "semantic_paraphrase",
+              "expect_lexical_fail": true,
+              "latency_ms": 4.858,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Worker crash recovery\n\nWhen a worker disappears, stale RUNNING evaluations are requeued after worker failure.\nThe reco"
+            },
+            {
+              "query_id": "q_paraphrase_claim",
+              "type": "semantic_paraphrase",
+              "expect_lexical_fail": true,
+              "latency_ms": 5.251,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_upload_finalize",
+              "type": "exact_term",
+              "expect_lexical_fail": false,
+              "latency_ms": 5.013,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Large uploads\n\nStream multipart bodies to .incoming then atomic finalize to the final artifact key.\nStreaming is not r"
+            }
+          ]
+        }
+      },
+      "summary": {
+        "dense_mrr": 0.9,
+        "hybrid_mrr": 1.0,
+        "dense_recall_at_5": 1.0,
+        "hybrid_recall_at_5": 1.0,
+        "paraphrase_zero_hits": {
+          "dense": 0,
+          "hybrid": 0
+        }
+      }
+    },
+    "minilm": {
+      "embedding_version": "local:all-MiniLM-L6-v2:384:cosine",
+      "provider_class": "LocalMiniLMEmbeddingProvider",
+      "indexed_embeddings": 8,
+      "versions": {
+        "cf-dense-1": {
+          "aggregate": {
+            "n_queries": 10,
+            "recall_at": {
+              "1": 0.55,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 0.6,
+              "3": 0.3667,
+              "5": 0.22,
+              "10": 0.11
+            },
+            "mrr": 0.8,
+            "zero_hit_rate": 0.0
+          },
+          "queries": [
+            {
+              "query_id": "q_exact_skip_locked",
+              "type": "exact_phrase",
+              "expect_lexical_fail": false,
+              "latency_ms": 237.098,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 0.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 0.5,
+              "first_relevant_rank": 2,
+              "zero_hit": false,
+              "top_preview": "# File locking\n\nApplication-level file locks are unrelated to SQL row locks.\nA locked file does not imply SKIP LOCKED se"
+            },
+            {
+              "query_id": "q_identifier_recover",
+              "type": "code_identifier",
+              "expect_lexical_fail": false,
+              "latency_ms": 368.123,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.5,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.6666666666666666,
+                "5": 0.4,
+                "10": 0.2
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Code\n\n```python\ndef recover_stale_running(stale_before, max_attempts):\n    \"\"\"Requeue or fail stale RUNNING rows.\"\"\"\n "
+            },
+            {
+              "query_id": "q_rare_idempotency",
+              "type": "rare_term",
+              "expect_lexical_fail": false,
+              "latency_ms": 178.822,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Idempotency\n\nAt-least-once execution is acceptable when effects are idempotent.\nOverwrite the same result_key and use "
+            },
+            {
+              "query_id": "q_multi_worker_crash",
+              "type": "multi_word_phrase",
+              "expect_lexical_fail": false,
+              "latency_ms": 177.465,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 0.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 0.5,
+              "first_relevant_rank": 2,
+              "zero_hit": false,
+              "top_preview": "# Database transaction retries\n\nTransient serialization failures may retry the transaction.\nDo not confuse this with ing"
+            },
+            {
+              "query_id": "q_prose_txn",
+              "type": "prose",
+              "expect_lexical_fail": false,
+              "latency_ms": 146.933,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Database transaction retries\n\nTransient serialization failures may retry the transaction.\nDo not confuse this with ing"
+            },
+            {
+              "query_id": "q_unicode",
+              "type": "unicode",
+              "expect_lexical_fail": false,
+              "latency_ms": 59.533,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Unicode\n\nCanonical text preserves \u4f60\u597d and Caf\u00e9 and emoji \ud83d\ude80 for provenance.\nChunk budgets count Unicode code points, not"
+            },
+            {
+              "query_id": "q_noise_locked",
+              "type": "noise_risk",
+              "expect_lexical_fail": false,
+              "latency_ms": 154.555,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 0.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 0.5,
+              "first_relevant_rank": 2,
+              "zero_hit": false,
+              "top_preview": "# File locking\n\nApplication-level file locks are unrelated to SQL row locks.\nA locked file does not imply SKIP LOCKED se"
+            },
+            {
+              "query_id": "q_paraphrase_crash",
+              "type": "semantic_paraphrase",
+              "expect_lexical_fail": true,
+              "latency_ms": 113.53,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 0.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 0.5,
+              "first_relevant_rank": 2,
+              "zero_hit": false,
+              "top_preview": "# Database transaction retries\n\nTransient serialization failures may retry the transaction.\nDo not confuse this with ing"
+            },
+            {
+              "query_id": "q_paraphrase_claim",
+              "type": "semantic_paraphrase",
+              "expect_lexical_fail": true,
+              "latency_ms": 508.806,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_upload_finalize",
+              "type": "exact_term",
+              "expect_lexical_fail": false,
+              "latency_ms": 1189.871,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Large uploads\n\nStream multipart bodies to .incoming then atomic finalize to the final artifact key.\nStreaming is not r"
+            }
+          ]
+        },
+        "cf-hybrid-rrf-1": {
+          "aggregate": {
+            "n_queries": 10,
+            "recall_at": {
+              "1": 0.75,
+              "3": 1.0,
+              "5": 1.0,
+              "10": 1.0
+            },
+            "precision_at": {
+              "1": 0.8,
+              "3": 0.3667,
+              "5": 0.22,
+              "10": 0.11
+            },
+            "mrr": 0.9,
+            "zero_hit_rate": 0.0
+          },
+          "queries": [
+            {
+              "query_id": "q_exact_skip_locked",
+              "type": "exact_phrase",
+              "expect_lexical_fail": false,
+              "latency_ms": 1877.335,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_identifier_recover",
+              "type": "code_identifier",
+              "expect_lexical_fail": false,
+              "latency_ms": 650.485,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.5,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.6666666666666666,
+                "5": 0.4,
+                "10": 0.2
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Code\n\n```python\ndef recover_stale_running(stale_before, max_attempts):\n    \"\"\"Requeue or fail stale RUNNING rows.\"\"\"\n "
+            },
+            {
+              "query_id": "q_rare_idempotency",
+              "type": "rare_term",
+              "expect_lexical_fail": false,
+              "latency_ms": 148.929,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Idempotency\n\nAt-least-once execution is acceptable when effects are idempotent.\nOverwrite the same result_key and use "
+            },
+            {
+              "query_id": "q_multi_worker_crash",
+              "type": "multi_word_phrase",
+              "expect_lexical_fail": false,
+              "latency_ms": 138.337,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Worker crash recovery\n\nWhen a worker disappears, stale RUNNING evaluations are requeued after worker failure.\nThe reco"
+            },
+            {
+              "query_id": "q_prose_txn",
+              "type": "prose",
+              "expect_lexical_fail": false,
+              "latency_ms": 87.147,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Database transaction retries\n\nTransient serialization failures may retry the transaction.\nDo not confuse this with ing"
+            },
+            {
+              "query_id": "q_unicode",
+              "type": "unicode",
+              "expect_lexical_fail": false,
+              "latency_ms": 66.059,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Unicode\n\nCanonical text preserves \u4f60\u597d and Caf\u00e9 and emoji \ud83d\ude80 for provenance.\nChunk budgets count Unicode code points, not"
+            },
+            {
+              "query_id": "q_noise_locked",
+              "type": "noise_risk",
+              "expect_lexical_fail": false,
+              "latency_ms": 60.46,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 0.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 0.5,
+              "first_relevant_rank": 2,
+              "zero_hit": false,
+              "top_preview": "# File locking\n\nApplication-level file locks are unrelated to SQL row locks.\nA locked file does not imply SKIP LOCKED se"
+            },
+            {
+              "query_id": "q_paraphrase_crash",
+              "type": "semantic_paraphrase",
+              "expect_lexical_fail": true,
+              "latency_ms": 55.262,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 0.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 0.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 0.5,
+              "first_relevant_rank": 2,
+              "zero_hit": false,
+              "top_preview": "# Database transaction retries\n\nTransient serialization failures may retry the transaction.\nDo not confuse this with ing"
+            },
+            {
+              "query_id": "q_paraphrase_claim",
+              "type": "semantic_paraphrase",
+              "expect_lexical_fail": true,
+              "latency_ms": 97.819,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Claiming jobs\n\nWorkers claim the next job using FOR UPDATE SKIP LOCKED so concurrent workers do not block each other.\n"
+            },
+            {
+              "query_id": "q_upload_finalize",
+              "type": "exact_term",
+              "expect_lexical_fail": false,
+              "latency_ms": 50.657,
+              "n_hits": 8,
+              "recall_at": {
+                "1": 1.0,
+                "3": 1.0,
+                "5": 1.0,
+                "10": 1.0
+              },
+              "precision_at": {
+                "1": 1.0,
+                "3": 0.3333333333333333,
+                "5": 0.2,
+                "10": 0.1
+              },
+              "mrr": 1.0,
+              "first_relevant_rank": 1,
+              "zero_hit": false,
+              "top_preview": "# Large uploads\n\nStream multipart bodies to .incoming then atomic finalize to the final artifact key.\nStreaming is not r"
+            }
+          ]
+        }
+      },
+      "summary": {
+        "dense_mrr": 0.8,
+        "hybrid_mrr": 0.9,
+        "dense_recall_at_5": 1.0,
+        "hybrid_recall_at_5": 1.0,
+        "paraphrase_zero_hits": {
+          "dense": 0,
+          "hybrid": 0
+        }
+      }
+    }
+  },
+  "comparison": {
+    "lexical": {
+      "mrr": 0.75,
+      "recall_at_5": 0.8,
+      "paraphrase_zero_hits": 2
+    },
+    "curriculum": {
+      "dense_mrr": 0.9,
+      "hybrid_mrr": 1.0,
+      "dense_recall_at_5": 1.0,
+      "hybrid_recall_at_5": 1.0,
+      "paraphrase_zero_hits": {
+        "dense": 0,
+        "hybrid": 0
+      }
+    },
+    "minilm": {
+      "dense_mrr": 0.8,
+      "hybrid_mrr": 0.9,
+      "dense_recall_at_5": 1.0,
+      "hybrid_recall_at_5": 1.0,
+      "paraphrase_zero_hits": {
+        "dense": 0,
+        "hybrid": 0
+      }
+    },
+    "hybrid_mrr_delta_minilm_minus_curriculum": -0.1,
+    "dense_mrr_delta_minilm_minus_curriculum": -0.1
+  },
+  "decision": {
+    "gate": "KEEP MiniLM as preferred real encoder (paraphrase closed); curriculum remains offline/CI demo; live default still lexical (MiniLM hybrid MRR trails curriculum on this small corpus)",
+    "live_default_still": "cf-lex-fts-1",
+    "candidate_hybrid": "cf-hybrid-rrf-1",
+    "preferred_real_encoder": "local:all-MiniLM-L6-v2:384:cosine",
+    "curriculum_role": "offline/CI semantic geometry demo (not production quality claim)",
+    "rationale": "Same corpus and metrics as semantic retrieval milestone. MiniLM is a real bi-encoder; curriculum is educational. Product search default remains lexical until an explicit promote milestone.",
+    "notes": "Curriculum hybrid MRR=1.0 vs MiniLM hybrid MRR=0.9 on a 10-query corpus hand-tuned for ChallengeForge jargon. Both close paraphrase zero-hits (lexical=2 \u2192 dense/hybrid=0). Curriculum is not a production quality claim."
+  }
+}

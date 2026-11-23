@@ -198,6 +198,11 @@ class LocalMiniLMEmbeddingProvider(EmbeddingProvider):
     DIM = 384
 
     def __init__(self) -> None:
+        import os
+
+        # Progress bars + tokenizers fork warnings can deadlock under pytest on Windows.
+        os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+        os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
         try:
             from sentence_transformers import SentenceTransformer
         except ImportError as exc:

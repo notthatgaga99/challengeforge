@@ -11,6 +11,7 @@ from challengeforge.retrieval.dense import (
 from challengeforge.retrieval.embeddings import (
     CurriculumConceptEmbeddingProvider,
     EmbeddingProvider,
+    LocalMiniLMEmbeddingProvider,
     StubHashEmbeddingProvider,
     cosine_similarity,
     default_experiment_provider,
@@ -43,6 +44,7 @@ __all__ = [
     "EmbeddingProvider",
     "StubHashEmbeddingProvider",
     "CurriculumConceptEmbeddingProvider",
+    "LocalMiniLMEmbeddingProvider",
     "cosine_similarity",
     "default_experiment_provider",
     "normalize_query",

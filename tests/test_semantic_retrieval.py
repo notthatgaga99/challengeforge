@@ -183,6 +183,53 @@ def test_curriculum_places_paraphrase_nearer_than_unrelated():
     )
 
 
+def test_minilm_places_paraphrase_nearer_than_unrelated():
+    """Optional: torch+MiniLM under pytest often hangs on this Windows/OneDrive setup.
+
+    Measured proof lives in ``docs/minilm-bakeoff-results.json``
+    (``scripts/minilm_bakeoff_experiment.py``). Set ``CF_RUN_MINILM=1`` to force.
+    """
+    import os
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    if os.environ.get("CF_RUN_MINILM") != "1":
+        pytest.skip("set CF_RUN_MINILM=1 to load MiniLM under pytest (see bakeoff script)")
+
+    script = r"""
+from challengeforge.retrieval.embeddings import LocalMiniLMEmbeddingProvider, cosine_similarity
+p = LocalMiniLMEmbeddingProvider()
+assert p.dimensions == 384
+assert p.embedding_version.startswith("local:all-MiniLM-L6-v2:")
+recovery = p.embed_documents(
+    ["stale RUNNING evaluations are requeued after worker failure"]
+)[0]
+paraphrase = p.embed_query(
+    "how does the system recover work after a worker crashes?"
+)
+unrelated = p.embed_documents(["upload streaming finalize multipart bodies"])[0]
+assert cosine_similarity(paraphrase, recovery) > cosine_similarity(paraphrase, unrelated)
+print("minilm_ok")
+"""
+    proc = subprocess.run(
+        [sys.executable, "-c", script],
+        capture_output=True,
+        text=True,
+        timeout=180,
+        cwd=str(Path(__file__).resolve().parents[1]),
+        env={
+            **os.environ,
+            "TOKENIZERS_PARALLELISM": "false",
+            "HF_HUB_DISABLE_PROGRESS_BARS": "1",
+            "PYTHONPATH": "src",
+        },
+    )
+    if proc.returncode != 0:
+        pytest.fail(f"MiniLM subprocess failed: {proc.stderr[-800:]}")
+    assert "minilm_ok" in proc.stdout
+
+
 def test_rrf_fuse_deterministic():
     a, b, c = uuid4(), uuid4(), uuid4()
     fused = rrf_fuse([[a, b], [b, c]])

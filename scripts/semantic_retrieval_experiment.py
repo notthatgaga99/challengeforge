@@ -46,6 +46,7 @@ from challengeforge.retrieval.dense import (  # noqa: E402
 )
 from challengeforge.retrieval.embeddings import (  # noqa: E402
     CurriculumConceptEmbeddingProvider,
+    LocalMiniLMEmbeddingProvider,
     default_experiment_provider,
 )
 from challengeforge.retrieval.lexical import RETRIEVAL_VERSION_FTS, retrieve  # noqa: E402
@@ -240,11 +241,12 @@ async def run(args) -> dict:
                     "postgresql://"
                 )
 
-    provider = (
-        CurriculumConceptEmbeddingProvider()
-        if args.curriculum_only
-        else default_experiment_provider()
-    )
+    if args.provider == "curriculum":
+        provider = CurriculumConceptEmbeddingProvider()
+    elif args.provider == "minilm":
+        provider = LocalMiniLMEmbeddingProvider()
+    else:
+        provider = default_experiment_provider()
     corpus = load_corpus()
     engine, factory = await setup(database_url)
     doc_chunks = await ingest_and_embed(factory, corpus["documents"], provider)
@@ -311,14 +313,19 @@ def main() -> None:
         "--results-path", default="docs/semantic-retrieval-results.json"
     )
     p.add_argument(
+        "--provider",
+        choices=("curriculum", "minilm", "auto"),
+        default="curriculum",
+        help="Embedding provider (default curriculum for reproducible offline runs).",
+    )
+    p.add_argument(
         "--curriculum-only",
         action="store_true",
-        help="Force curriculum:concept-v1 encoder (skip MiniLM even if installed).",
+        help="Deprecated alias for --provider curriculum.",
     )
     args = p.parse_args()
-    # Default to curriculum for reproducible laptop runs without model download.
-    if not args.curriculum_only:
-        args.curriculum_only = True
+    if args.curriculum_only:
+        args.provider = "curriculum"
     output = asyncio.run(run(args))
     path = ROOT / args.results_path
     path.write_text(json.dumps(output, indent=2, default=str), encoding="utf-8")

@@ -137,8 +137,9 @@ optional `X-Content-SHA256` ≠ deduplication. Default size cap remains 5 MiB.
 
 **Semantic retrieval (measured):** dense + `chunk_embeddings` + hybrid RRF
 (`cf-dense-1` / `cf-hybrid-rrf-1`) — `docs/semantic-retrieval-design.md` /
-ADR 0013 / results JSON. Live default remains lexical until product flip.
-No LLM/RAG answers yet.
+ADR 0013 / results JSON. MiniLM bakeoff: ADR 0014 /
+`docs/minilm-bakeoff-results.json` (preferred real encoder; live default still
+lexical). No LLM/RAG answers yet.
 
 Replacing the filesystem with object storage later should not change submission
 use cases — the dual-write problem remains behind the same protocol.
