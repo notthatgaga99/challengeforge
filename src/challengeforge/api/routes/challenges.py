@@ -8,6 +8,7 @@ from challengeforge.api.deps import (
     get_app_settings,
     get_current_user,
     get_storage,
+    leaderboard_service,
     submission_service,
 )
 from challengeforge.api.routes.hackathons import serialize_challenge
@@ -15,6 +16,8 @@ from challengeforge.api.schemas import (
     ChallengeResponse,
     EvaluationBacklogResponse,
     EvaluationResponse,
+    LeaderboardEntryResponse,
+    LeaderboardResponse,
     OrganizerEvaluationQueueResponse,
     SubmissionCreateRequest,
     SubmissionResponse,
@@ -26,6 +29,7 @@ from challengeforge.application.evaluations import (
     EvaluationService,
     ParticipantEvaluationView,
 )
+from challengeforge.application.leaderboards import LeaderboardService
 from challengeforge.application.submissions import SubmissionService
 from challengeforge.config import Settings
 from challengeforge.domain.models import Evaluation, Submission
@@ -150,6 +154,33 @@ async def close_challenge(
 ) -> ChallengeResponse:
     item = await service.close_challenge(actor, challenge_id)
     return serialize_challenge(item)
+
+
+@router.get(
+    "/challenges/{challenge_id}/leaderboard",
+    response_model=LeaderboardResponse,
+)
+async def get_challenge_leaderboard(
+    challenge_id: UUID,
+    actor: CurrentUser = Depends(get_current_user),
+    service: LeaderboardService = Depends(leaderboard_service),
+) -> LeaderboardResponse:
+    view = await service.get_challenge_leaderboard(actor, challenge_id)
+    return LeaderboardResponse(
+        challenge_id=view.challenge_id,
+        hackathon_id=view.hackathon_id,
+        entries=[
+            LeaderboardEntryResponse(
+                rank=e.rank,
+                submission_id=e.submission_id,
+                participant_id=e.participant_id,
+                score=e.score,
+                completed_at=e.completed_at,
+                evaluation_id=e.evaluation_id,
+            )
+            for e in view.entries
+        ],
+    )
 
 
 @router.get("/challenges/{challenge_id}/submissions", response_model=list[SubmissionResponse])

@@ -11,6 +11,7 @@ from challengeforge.persistence.repositories import (
     EvaluationRepository,
     HackathonRepository,
     IngestionJobRepository,
+    LeaderboardRepository,
     SubmissionRepository,
     UserRepository,
 )
@@ -50,6 +51,10 @@ class UnitOfWork:
     @property
     def document_chunks(self) -> DocumentChunkRepository:
         return DocumentChunkRepository(self.session)
+
+    @property
+    def leaderboards(self) -> LeaderboardRepository:
+        return LeaderboardRepository(self.session)
 
 
 def require_organizer(user: CurrentUser) -> None:

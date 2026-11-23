@@ -23,6 +23,7 @@ from challengeforge.retrieval.lexical import (
     RetrievedChunk,
     RetrievalFilters,
     _filter_clauses,
+    _tenancy_join_sql,
     normalize_query,
     retrieve as lexical_retrieve,
 )
@@ -103,6 +104,7 @@ async def retrieve_dense(
         "dim": len(qvec),
     }
     extra = _filter_clauses(filters, params)
+    tenancy = _tenancy_join_sql(filters)
     sql = text(
         f"""
         SELECT
@@ -124,6 +126,7 @@ async def retrieve_dense(
             e.embedding AS embedding
         FROM document_chunks c
         JOIN ingestion_jobs j ON j.id = c.ingestion_job_id
+        {tenancy}
         JOIN chunk_embeddings e
           ON e.chunk_id = c.id
          AND e.embedding_version = :embedding_version

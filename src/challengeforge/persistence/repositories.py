@@ -35,6 +35,7 @@ from challengeforge.persistence.models import (
     EvaluationSchedulerStateRow,
     HackathonRow,
     IngestionJobRow,
+    LeaderboardEntryRow,
     SubmissionRow,
     UserRow,
 )
@@ -689,7 +690,10 @@ class EvaluationRepository:
         result_metadata: dict,
         worker_id: str,
     ) -> Evaluation | None:
-        """Complete only if still RUNNING for this worker (prevents stale writes)."""
+        """Complete only if still RUNNING for this worker (prevents stale writes).
+
+        On success, upserts ``leaderboard_entries`` in the same transaction.
+        """
         now = utcnow()
         stmt = (
             update(EvaluationRow)
@@ -709,7 +713,15 @@ class EvaluationRepository:
         )
         result = await self.session.execute(stmt)
         row = result.scalar_one_or_none()
-        return evaluation_to_domain(row) if row else None
+        if row is None:
+            return None
+        await LeaderboardRepository(self.session).upsert_from_evaluation(
+            evaluation_id=row.id,
+            submission_id=row.submission_id,
+            score=score,
+            completed_at=now,
+        )
+        return evaluation_to_domain(row)
 
     async def mark_failed(
         self,
@@ -1303,3 +1315,91 @@ class ChunkEmbeddingRepository:
             )
         )
         return int(result.scalar_one())
+
+
+class LeaderboardRepository:
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def upsert_from_evaluation(
+        self,
+        *,
+        evaluation_id: UUID,
+        submission_id: UUID,
+        score: int,
+        completed_at: datetime,
+    ) -> None:
+        meta = await self.session.execute(
+            select(
+                SubmissionRow.participant_id,
+                SubmissionRow.challenge_id,
+                ChallengeRow.hackathon_id,
+            )
+            .join(ChallengeRow, ChallengeRow.id == SubmissionRow.challenge_id)
+            .where(SubmissionRow.id == submission_id)
+        )
+        row = meta.one()
+        participant_id, challenge_id, hackathon_id = row
+        now = utcnow()
+        stmt = (
+            pg_insert(LeaderboardEntryRow)
+            .values(
+                challenge_id=challenge_id,
+                submission_id=submission_id,
+                hackathon_id=hackathon_id,
+                participant_id=participant_id,
+                evaluation_id=evaluation_id,
+                score=score,
+                completed_at=completed_at,
+                updated_at=now,
+            )
+            .on_conflict_do_update(
+                index_elements=["challenge_id", "submission_id"],
+                set_={
+                    "hackathon_id": hackathon_id,
+                    "participant_id": participant_id,
+                    "evaluation_id": evaluation_id,
+                    "score": score,
+                    "completed_at": completed_at,
+                    "updated_at": now,
+                },
+            )
+        )
+        await self.session.execute(stmt)
+
+    async def list_ranked_for_challenge(
+        self, challenge_id: UUID
+    ) -> list[dict]:
+        # RANK by score only so equal scores share a rank; tie-breakers sort display.
+        sql = (
+            select(
+                LeaderboardEntryRow.submission_id,
+                LeaderboardEntryRow.participant_id,
+                LeaderboardEntryRow.score,
+                LeaderboardEntryRow.completed_at,
+                LeaderboardEntryRow.evaluation_id,
+                LeaderboardEntryRow.hackathon_id,
+                func.rank()
+                .over(order_by=LeaderboardEntryRow.score.desc())
+                .label("rank"),
+            )
+            .where(LeaderboardEntryRow.challenge_id == challenge_id)
+            .order_by(
+                LeaderboardEntryRow.score.desc(),
+                LeaderboardEntryRow.completed_at.asc(),
+                LeaderboardEntryRow.submission_id.asc(),
+            )
+        )
+        result = await self.session.execute(sql)
+        return [
+            {
+                "rank": int(r.rank),
+                "submission_id": r.submission_id,
+                "participant_id": r.participant_id,
+                "score": int(r.score),
+                "completed_at": r.completed_at,
+                "evaluation_id": r.evaluation_id,
+                "hackathon_id": r.hackathon_id,
+            }
+            for r in result.all()
+        ]

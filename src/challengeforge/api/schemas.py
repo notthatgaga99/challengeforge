@@ -138,3 +138,48 @@ class UserResponse(BaseModel):
     id: UUID
     display_name: str
     role: str
+
+
+class SearchRequest(BaseModel):
+    query: str
+    top_k: int = Field(default=10, ge=1, le=50)
+    challenge_id: UUID | None = None
+    retrieval_version: str = "cf-lex-fts-1"
+
+
+class SearchHitResponse(BaseModel):
+    chunk_id: UUID
+    submission_id: UUID
+    artifact_key: str
+    score: float
+    content: str
+    char_start: int
+    char_end: int
+    line_start: int
+    line_end: int
+    block_type: str
+    heading_path: list[str]
+    retrieval_version: str
+    content_sha256: str
+
+
+class SearchResponse(BaseModel):
+    hackathon_id: UUID
+    query: str
+    retrieval_version: str
+    hits: list[SearchHitResponse]
+
+
+class LeaderboardEntryResponse(BaseModel):
+    rank: int
+    submission_id: UUID
+    participant_id: UUID
+    score: int
+    completed_at: datetime
+    evaluation_id: UUID
+
+
+class LeaderboardResponse(BaseModel):
+    challenge_id: UUID
+    hackathon_id: UUID
+    entries: list[LeaderboardEntryResponse]

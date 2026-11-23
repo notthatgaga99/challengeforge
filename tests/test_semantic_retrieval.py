@@ -62,12 +62,14 @@ async def _prepare(_database_url: str = ""):
     import os
     from pathlib import Path
 
-    from pgserver import get_server
+    from sqlalchemy import text
 
     url = os.environ.get("TEST_DATABASE_URL") or os.environ.get(
         "EXPERIMENT_DATABASE_URL"
     )
     if not url:
+        from pgserver import get_server
+
         data = Path(__file__).resolve().parents[1] / ".pgserver-sem-exp"
         data.mkdir(exist_ok=True)
         url = _url_from_postmaster(data)
@@ -80,8 +82,10 @@ async def _prepare(_database_url: str = ""):
     if url.startswith("postgresql://"):
         url = "postgresql+asyncpg://" + url.removeprefix("postgresql://")
     engine = create_async_engine(url)
+    # CASCADE reset avoids drop_all lock hangs with leftover sessions on Windows.
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        await conn.execute(text("DROP SCHEMA public CASCADE"))
+        await conn.execute(text("CREATE SCHEMA public"))
         await conn.run_sync(Base.metadata.create_all)
     await ensure_lexical_search_schema(engine)
     factory = async_sessionmaker(engine, expire_on_commit=False)

@@ -34,11 +34,24 @@ class RetrievalVersion(StrEnum):
 
 @dataclass(frozen=True)
 class RetrievalFilters:
-    """Optional scope filters. Future tenant/challenge isolation plugs in here."""
+    """Scope filters applied in SQL (deny-by-default on the product search path)."""
 
     submission_id: UUID | None = None
     artifact_key: str | None = None
     ingestion_job_id: UUID | None = None
+    hackathon_id: UUID | None = None
+    challenge_id: UUID | None = None
+    participant_id: UUID | None = None
+
+    @property
+    def needs_submission_join(self) -> bool:
+        return any(
+            (
+                self.hackathon_id is not None,
+                self.challenge_id is not None,
+                self.participant_id is not None,
+            )
+        )
 
 
 @dataclass(frozen=True)
@@ -128,6 +141,16 @@ async def retrieve(
     raise ValueError(f"Unknown retrieval_version: {retrieval_version}")
 
 
+def _tenancy_join_sql(filters: RetrievalFilters) -> str:
+    """Join submissions/challenges when tenancy filters are present."""
+    if not filters.needs_submission_join:
+        return ""
+    return """
+        JOIN submissions s ON s.id = c.submission_id
+        JOIN challenges ch ON ch.id = s.challenge_id
+        """
+
+
 def _filter_clauses(filters: RetrievalFilters, params: dict[str, Any]) -> str:
     parts: list[str] = []
     if filters.submission_id is not None:
@@ -139,6 +162,15 @@ def _filter_clauses(filters: RetrievalFilters, params: dict[str, Any]) -> str:
     if filters.ingestion_job_id is not None:
         parts.append("AND c.ingestion_job_id = :ingestion_job_id")
         params["ingestion_job_id"] = filters.ingestion_job_id
+    if filters.hackathon_id is not None:
+        parts.append("AND ch.hackathon_id = :hackathon_id")
+        params["hackathon_id"] = filters.hackathon_id
+    if filters.challenge_id is not None:
+        parts.append("AND ch.id = :challenge_id")
+        params["challenge_id"] = filters.challenge_id
+    if filters.participant_id is not None:
+        parts.append("AND s.participant_id = :participant_id")
+        params["participant_id"] = filters.participant_id
     return "\n".join(parts)
 
 
@@ -181,6 +213,7 @@ async def _retrieve_fts(
 ) -> list[RetrievedChunk]:
     params: dict[str, Any] = {"q": query, "top_k": top_k}
     extra = _filter_clauses(filters, params)
+    tenancy = _tenancy_join_sql(filters)
     sql = text(
         f"""
         WITH qq AS (
@@ -205,6 +238,7 @@ async def _retrieve_fts(
             ts_rank_cd(c.search_tsv, qq.tsq) AS score
         FROM document_chunks c
         JOIN ingestion_jobs j ON j.id = c.ingestion_job_id
+        {tenancy}
         CROSS JOIN qq
         WHERE j.status = 'succeeded'
           AND c.search_tsv @@ qq.tsq
@@ -226,6 +260,7 @@ async def _retrieve_simple(
 ) -> list[RetrievedChunk]:
     params: dict[str, Any] = {"q": query, "top_k": top_k}
     extra = _filter_clauses(filters, params)
+    tenancy = _tenancy_join_sql(filters)
     sql = text(
         f"""
         WITH qq AS (
@@ -250,6 +285,7 @@ async def _retrieve_simple(
             ts_rank_cd(c.search_tsv_simple, qq.tsq) AS score
         FROM document_chunks c
         JOIN ingestion_jobs j ON j.id = c.ingestion_job_id
+        {tenancy}
         CROSS JOIN qq
         WHERE j.status = 'succeeded'
           AND c.search_tsv_simple @@ qq.tsq
@@ -274,6 +310,7 @@ async def _retrieve_struct(
     """Lexical score + bounded structural boosts (heading match, exact ILIKE)."""
     params: dict[str, Any] = {"q": query, "top_k": top_k}
     extra = _filter_clauses(filters, params)
+    tenancy = _tenancy_join_sql(filters)
     # Boosts are intentionally small and explicit (versioned policy).
     sql = text(
         f"""
@@ -314,6 +351,7 @@ async def _retrieve_struct(
             ) AS score
         FROM document_chunks c
         JOIN ingestion_jobs j ON j.id = c.ingestion_job_id
+        {tenancy}
         CROSS JOIN qq
         WHERE j.status = 'succeeded'
           AND (

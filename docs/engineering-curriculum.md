@@ -5,7 +5,31 @@ Rolling log of fast-build curriculum milestones.
 
 ---
 
-## MiniLM Bakeoff (current)
+## Leaderboard Consistency (current)
+
+| Field | Entry |
+|---|---|
+| Decision | **KEEP Postgres `leaderboard_entries` snapshot** upserted in same TX as eval succeed |
+| Concepts learned | Snapshot vs live query; publish gate; deterministic tie-break; `RANK()` |
+| Alternatives understood | Live ORDER BY evaluations · Redis ZSET · TX snapshot |
+| Evidence in repo | ADR 0016, `docs/leaderboard-consistency-design.md`, migration `0015` |
+| Visibility | Organizer always; participants after hackathon `closed` |
+
+---
+
+## Search Tenancy / Authz
+
+| Field | Entry |
+|---|---|
+| Decision | **KEEP deny-by-default effective SQL scope** via `resolve_retrieval_scope` |
+| Concepts learned | Tenancy in retrieval; client filters cannot widen; join-based enforcement |
+| Alternatives understood | App post-filter · Postgres RLS · deny-by-default SQL filters |
+| Evidence in repo | ADR 0015, `docs/search-tenancy-design.md`, `retrieval/authz.py`, search API |
+| Policy | Organizer = owned hackathon; participant = own submissions only |
+
+---
+
+## MiniLM Bakeoff
 
 | Field | Entry |
 |---|---|

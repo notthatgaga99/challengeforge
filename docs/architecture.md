@@ -141,6 +141,13 @@ ADR 0013 / results JSON. MiniLM bakeoff: ADR 0014 /
 `docs/minilm-bakeoff-results.json` (preferred real encoder; live default still
 lexical). No LLM/RAG answers yet.
 
+**Search tenancy:** product search is deny-by-default
+(`POST /hackathons/{id}/search`, ADR 0015) — organizers own hackathon scope;
+participants see only their own succeeded-job chunks.
+
+**Leaderboards:** `leaderboard_entries` snapshot on evaluation succeed (ADR 0016);
+`GET /challenges/{id}/leaderboard`; participants only after hackathon `closed`.
+
 Replacing the filesystem with object storage later should not change submission
 use cases — the dual-write problem remains behind the same protocol.
 

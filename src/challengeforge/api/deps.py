@@ -9,6 +9,8 @@ from challengeforge.application import UnitOfWork
 from challengeforge.application.challenges import ChallengeService
 from challengeforge.application.evaluations import EvaluationService
 from challengeforge.application.hackathons import HackathonService
+from challengeforge.application.leaderboards import LeaderboardService
+from challengeforge.application.search import SearchService
 from challengeforge.application.submissions import SubmissionService
 from challengeforge.config import Settings
 from challengeforge.domain.exceptions import Unauthenticated
@@ -87,3 +89,11 @@ def submission_service(uow: UnitOfWork = Depends(get_uow)) -> SubmissionService:
 
 def evaluation_service(uow: UnitOfWork = Depends(get_uow)) -> EvaluationService:
     return EvaluationService(uow)
+
+
+def search_service(uow: UnitOfWork = Depends(get_uow)) -> SearchService:
+    return SearchService(uow)
+
+
+def leaderboard_service(uow: UnitOfWork = Depends(get_uow)) -> LeaderboardService:
+    return LeaderboardService(uow)

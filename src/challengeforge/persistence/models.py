@@ -364,3 +364,48 @@ class ChunkEmbeddingRow(Base):
     content_sha256: Mapped[str] = mapped_column(Text, nullable=False)
     dimensions: Mapped[int] = mapped_column(Integer, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class LeaderboardEntryRow(Base):
+    """Durable rank snapshot written in the same TX as evaluation succeed."""
+
+    __tablename__ = "leaderboard_entries"
+    __table_args__ = (
+        CheckConstraint(
+            "score >= 0 AND score <= 100",
+            name="ck_leaderboard_entries_score",
+        ),
+        Index(
+            "ix_leaderboard_entries_rank",
+            "challenge_id",
+            "score",
+            "completed_at",
+            "submission_id",
+        ),
+        Index("ix_leaderboard_entries_hackathon", "hackathon_id"),
+    )
+
+    challenge_id: Mapped[UUID] = mapped_column(
+        ForeignKey("challenges.id", ondelete="CASCADE"), primary_key=True
+    )
+    submission_id: Mapped[UUID] = mapped_column(
+        ForeignKey("submissions.id", ondelete="CASCADE"), primary_key=True
+    )
+    hackathon_id: Mapped[UUID] = mapped_column(
+        ForeignKey("hackathons.id", ondelete="CASCADE"), nullable=False
+    )
+    participant_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    evaluation_id: Mapped[UUID] = mapped_column(
+        ForeignKey("evaluations.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+    )
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
+    completed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )

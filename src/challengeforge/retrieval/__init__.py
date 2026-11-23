@@ -1,5 +1,6 @@
 """Retrieval package — lexical baseline + dense/hybrid semantic retrieval."""
 
+from challengeforge.retrieval.authz import resolve_retrieval_scope
 from challengeforge.retrieval.dense import (
     RETRIEVAL_VERSION_DENSE,
     RETRIEVAL_VERSION_HYBRID_RRF,
@@ -47,6 +48,7 @@ __all__ = [
     "LocalMiniLMEmbeddingProvider",
     "cosine_similarity",
     "default_experiment_provider",
+    "resolve_retrieval_scope",
     "normalize_query",
     "retrieve",
     "retrieve_dense",

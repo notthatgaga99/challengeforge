@@ -98,6 +98,16 @@ async def publish_hackathon(
     return serialize_hackathon(item)
 
 
+@router.post("/hackathons/{hackathon_id}/close", response_model=HackathonResponse)
+async def close_hackathon(
+    hackathon_id: UUID,
+    actor: CurrentUser = Depends(get_current_user),
+    service: HackathonService = Depends(hackathon_service),
+) -> HackathonResponse:
+    item = await service.close_hackathon(actor, hackathon_id)
+    return serialize_hackathon(item)
+
+
 @router.get("/hackathons/{hackathon_id}/challenges", response_model=list[ChallengeResponse])
 async def list_challenges(
     hackathon_id: UUID,

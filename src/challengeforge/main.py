@@ -11,6 +11,7 @@ from challengeforge.api.routes import (
     hackathon_router,
     health_router,
     identity_router,
+    search_router,
 )
 from challengeforge.config import Settings, get_settings
 from challengeforge.observability import configure_logging
@@ -57,6 +58,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(identity_router, prefix="/api/v1")
     app.include_router(hackathon_router, prefix="/api/v1")
     app.include_router(challenge_router, prefix="/api/v1")
+    app.include_router(search_router, prefix="/api/v1")
     app.include_router(web_router)
 
     static_dir = WEB_DIR / "static"

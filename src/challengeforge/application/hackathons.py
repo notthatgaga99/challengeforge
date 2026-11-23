@@ -18,9 +18,11 @@ class HackathonService:
         hackathon = await self.uow.hackathons.get(hackathon_id)
         if hackathon is None:
             raise NotFoundError("Hackathon not found.")
-        if (
-            hackathon.status != HackathonStatus.PUBLISHED
-            and not actor.is_organizer
+        if actor.is_organizer:
+            return hackathon
+        if hackathon.status not in (
+            HackathonStatus.PUBLISHED,
+            HackathonStatus.CLOSED,
         ):
             raise NotFoundError("Hackathon not found.")
         return hackathon
@@ -53,3 +55,21 @@ class HackathonService:
         )
         await self.uow.session.commit()
         return published
+
+    async def close_hackathon(self, actor: CurrentUser, hackathon_id: UUID) -> Hackathon:
+        """Close publishes participant-visible leaderboards (ADR 0016)."""
+        require_organizer(actor)
+        hackathon = await self.uow.hackathons.get(hackathon_id)
+        if hackathon is None:
+            raise NotFoundError("Hackathon not found.")
+        if hackathon.organizer_id != actor.id:
+            raise PermissionDenied("Only the creating organizer may close this hackathon.")
+        if hackathon.status == HackathonStatus.CLOSED:
+            return hackathon
+        if hackathon.status != HackathonStatus.PUBLISHED:
+            raise ValidationFailed("Only published hackathons can be closed.")
+        closed = await self.uow.hackathons.save_status(
+            hackathon_id, HackathonStatus.CLOSED
+        )
+        await self.uow.session.commit()
+        return closed
