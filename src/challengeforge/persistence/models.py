@@ -16,7 +16,7 @@ from sqlalchemy import (
     UniqueConstraint,
     text,
 )
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID as PGUUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -409,3 +409,39 @@ class LeaderboardEntryRow(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False
     )
+
+
+class OutboxEventRow(Base):
+    """Transactional outbox — written in the same TX as the business mutation."""
+
+    __tablename__ = "outbox_events"
+    __table_args__ = (
+        CheckConstraint(
+            "attempt_count >= 0",
+            name="ck_outbox_events_attempt_count",
+        ),
+        UniqueConstraint("idempotency_key", name="uq_outbox_events_idempotency"),
+        Index(
+            "ix_outbox_events_pending",
+            "created_at",
+            postgresql_where=text("published_at IS NULL"),
+        ),
+    )
+
+    id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True)
+    event_type: Mapped[str] = mapped_column(Text, nullable=False)
+    aggregate_type: Mapped[str] = mapped_column(Text, nullable=False)
+    aggregate_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), nullable=False)
+    payload: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+    )
+    idempotency_key: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    published_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    attempt_count: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default=text("0")
+    )
+    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+

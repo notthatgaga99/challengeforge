@@ -1,4 +1,6 @@
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from typing import Any
 from uuid import UUID, uuid4
 
 from sqlalchemy import delete, func, select, update
@@ -36,6 +38,7 @@ from challengeforge.persistence.models import (
     HackathonRow,
     IngestionJobRow,
     LeaderboardEntryRow,
+    OutboxEventRow,
     SubmissionRow,
     UserRow,
 )
@@ -721,6 +724,37 @@ class EvaluationRepository:
             score=score,
             completed_at=now,
         )
+        # Same TX: durable notification intent (ADR 0017).
+        from challengeforge.outbox.events import (
+            EVENT_EVALUATION_SUCCEEDED,
+            evaluation_succeeded_key,
+        )
+
+        meta = await self.session.execute(
+            select(
+                SubmissionRow.participant_id,
+                SubmissionRow.challenge_id,
+                ChallengeRow.hackathon_id,
+            )
+            .join(ChallengeRow, ChallengeRow.id == SubmissionRow.challenge_id)
+            .where(SubmissionRow.id == row.submission_id)
+        )
+        participant_id, challenge_id, hackathon_id = meta.one()
+        await OutboxRepository(self.session).enqueue(
+            event_type=EVENT_EVALUATION_SUCCEEDED,
+            aggregate_type="evaluation",
+            aggregate_id=row.id,
+            payload={
+                "evaluation_id": str(row.id),
+                "submission_id": str(row.submission_id),
+                "participant_id": str(participant_id),
+                "challenge_id": str(challenge_id),
+                "hackathon_id": str(hackathon_id),
+                "score": score,
+                "completed_at": now.isoformat(),
+            },
+            idempotency_key=evaluation_succeeded_key(row.id),
+        )
         return evaluation_to_domain(row)
 
     async def mark_failed(
@@ -1403,3 +1437,125 @@ class LeaderboardRepository:
             }
             for r in result.all()
         ]
+
+
+@dataclass(frozen=True)
+class OutboxEvent:
+    id: UUID
+    event_type: str
+    aggregate_type: str
+    aggregate_id: UUID
+    payload: dict[str, Any]
+    idempotency_key: str
+    created_at: datetime
+    published_at: datetime | None
+    attempt_count: int
+    last_error: str | None
+
+
+def _outbox_to_domain(row: OutboxEventRow) -> OutboxEvent:
+    return OutboxEvent(
+        id=row.id,
+        event_type=row.event_type,
+        aggregate_type=row.aggregate_type,
+        aggregate_id=row.aggregate_id,
+        payload=dict(row.payload or {}),
+        idempotency_key=row.idempotency_key,
+        created_at=row.created_at,
+        published_at=row.published_at,
+        attempt_count=int(row.attempt_count),
+        last_error=row.last_error,
+    )
+
+
+class OutboxRepository:
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def enqueue(
+        self,
+        *,
+        event_type: str,
+        aggregate_type: str,
+        aggregate_id: UUID,
+        payload: dict[str, Any],
+        idempotency_key: str,
+    ) -> OutboxEvent:
+        """Insert pending event; no-op return existing on idempotency conflict."""
+        now = utcnow()
+        event_id = uuid4()
+        stmt = (
+            pg_insert(OutboxEventRow)
+            .values(
+                id=event_id,
+                event_type=event_type,
+                aggregate_type=aggregate_type,
+                aggregate_id=aggregate_id,
+                payload=payload,
+                idempotency_key=idempotency_key,
+                created_at=now,
+                published_at=None,
+                attempt_count=0,
+                last_error=None,
+            )
+            .on_conflict_do_nothing(index_elements=["idempotency_key"])
+            .returning(OutboxEventRow)
+        )
+        result = await self.session.execute(stmt)
+        row = result.scalar_one_or_none()
+        if row is not None:
+            return _outbox_to_domain(row)
+        existing = await self.session.execute(
+            select(OutboxEventRow).where(
+                OutboxEventRow.idempotency_key == idempotency_key
+            )
+        )
+        return _outbox_to_domain(existing.scalar_one())
+
+    async def claim_pending(self, *, limit: int = 10) -> list[OutboxEvent]:
+        """Claim unpublished rows with SKIP LOCKED (oldest first)."""
+        if limit < 1:
+            return []
+        stmt = (
+            select(OutboxEventRow)
+            .where(OutboxEventRow.published_at.is_(None))
+            .order_by(OutboxEventRow.created_at.asc())
+            .limit(limit)
+            .with_for_update(skip_locked=True)
+        )
+        result = await self.session.execute(stmt)
+        return [_outbox_to_domain(r) for r in result.scalars().all()]
+
+    async def mark_published(self, event_id: UUID) -> None:
+        now = utcnow()
+        await self.session.execute(
+            update(OutboxEventRow)
+            .where(
+                OutboxEventRow.id == event_id,
+                OutboxEventRow.published_at.is_(None),
+            )
+            .values(published_at=now, last_error=None)
+        )
+
+    async def mark_attempt_failed(self, event_id: UUID, error: str) -> None:
+        await self.session.execute(
+            update(OutboxEventRow)
+            .where(OutboxEventRow.id == event_id)
+            .values(
+                attempt_count=OutboxEventRow.attempt_count + 1,
+                last_error=error[:2000],
+            )
+        )
+
+    async def count_pending(self) -> int:
+        result = await self.session.execute(
+            select(func.count()).where(OutboxEventRow.published_at.is_(None))
+        )
+        return int(result.scalar_one())
+
+    async def get_by_idempotency_key(self, key: str) -> OutboxEvent | None:
+        result = await self.session.execute(
+            select(OutboxEventRow).where(OutboxEventRow.idempotency_key == key)
+        )
+        row = result.scalar_one_or_none()
+        return _outbox_to_domain(row) if row else None

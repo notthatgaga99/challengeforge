@@ -148,6 +148,10 @@ participants see only their own succeeded-job chunks.
 **Leaderboards:** `leaderboard_entries` snapshot on evaluation succeed (ADR 0016);
 `GET /challenges/{id}/leaderboard`; participants only after hackathon `closed`.
 
+**Transactional outbox:** `outbox_events` written in the same TX as eval succeed /
+hackathon close (ADR 0017); `OutboxRelay` delivers via pluggable sinks
+(at-least-once; sink idempotency required).
+
 Replacing the filesystem with object storage later should not change submission
 use cases — the dual-write problem remains behind the same protocol.
 

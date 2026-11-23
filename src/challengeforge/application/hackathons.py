@@ -71,5 +71,22 @@ class HackathonService:
         closed = await self.uow.hackathons.save_status(
             hackathon_id, HackathonStatus.CLOSED
         )
+        from challengeforge.outbox.events import (
+            EVENT_HACKATHON_CLOSED,
+            hackathon_closed_key,
+        )
+        from challengeforge.persistence.repositories import OutboxRepository
+
+        await OutboxRepository(self.uow.session).enqueue(
+            event_type=EVENT_HACKATHON_CLOSED,
+            aggregate_type="hackathon",
+            aggregate_id=hackathon_id,
+            payload={
+                "hackathon_id": str(hackathon_id),
+                "organizer_id": str(closed.organizer_id),
+                "status": HackathonStatus.CLOSED.value,
+            },
+            idempotency_key=hackathon_closed_key(hackathon_id),
+        )
         await self.uow.session.commit()
         return closed

@@ -5,7 +5,26 @@ Rolling log of fast-build curriculum milestones.
 
 ---
 
-## Leaderboard Consistency (current)
+## Transactional Outbox (current)
+
+| Field | Entry |
+|---|---|
+| Decision | **KEEP Postgres `outbox_events` + poll relay + pluggable sink** |
+| Concepts learned | Dual-write problem; same-TX enqueue; at-least-once; sink idempotency; SKIP LOCKED claim |
+| Alternatives understood | Sync notify after commit · external queue dual-write · CDC · outbox |
+| Evidence in repo | ADR 0017, `docs/transactional-outbox-design.md`, `challengeforge.outbox`, tests |
+| Events | `evaluation.succeeded` · `hackathon.closed` |
+
+Suggested interview prompts:
+
+1. What is the dual-write problem between a DB and a webhook?  
+2. How does a transactional outbox fix it?  
+3. Why is delivery at-least-once, and what must sinks do?  
+4. Why prefer SKIP LOCKED over a single locked poller row?
+
+---
+
+## Leaderboard Consistency
 
 | Field | Entry |
 |---|---|

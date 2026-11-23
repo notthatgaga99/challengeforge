@@ -12,6 +12,7 @@ from challengeforge.persistence.repositories import (
     HackathonRepository,
     IngestionJobRepository,
     LeaderboardRepository,
+    OutboxRepository,
     SubmissionRepository,
     UserRepository,
 )
@@ -55,6 +56,10 @@ class UnitOfWork:
     @property
     def leaderboards(self) -> LeaderboardRepository:
         return LeaderboardRepository(self.session)
+
+    @property
+    def outbox(self) -> OutboxRepository:
+        return OutboxRepository(self.session)
 
 
 def require_organizer(user: CurrentUser) -> None:
